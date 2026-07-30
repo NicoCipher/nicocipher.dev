@@ -1,0 +1,17 @@
+{
+  "studying": {
+    "label": "Google Cybersecurity Professional Certificate",
+    "detail": "Network security module — mapping OSI layers to attack types",
+    "link": "/publications/lab/threat-modeling"
+  },
+  "building": {
+    "label": "Engineering Portfolio Publication System",
+    "detail": "Next.js 15, zero-Tailwind vanilla CSS modules, evidence-first schema",
+    "link": "/publications/project/nicocipher-portfolio"
+  },
+  "thinking": {
+    "label": "Linux symbolic permissions vs numeric modes",
+    "detail": "Numeric mode 744 is instant. Symbolic mode u+x, g-w requires conscious mental translation.",
+    "link": "/publications/case-study/linux-permissions"
+  }
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "infrastructure",
+    "label": "Infrastructure",
+    "technologies": [
+      { "name": "Windows Server", "context": "Active Directory, DNS, Group Policy" },
+      { "name": "Virtualization", "context": "Hyper-V, VMware, isolated lab networks" },
+      { "name": "Linux", "context": "Ubuntu, CLI, permissions, filesystem" },
+      { "name": "Physical Security", "context": "Access control, site assessment" }
+    ]
+  },
+  {
+    "id": "networking",
+    "label": "Networking",
+    "technologies": [
+      { "name": "Cisco", "context": "CCNA path, Packet Tracer" },
+      { "name": "TCP/IP", "context": "Subnetting, routing, addressing" },
+      { "name": "DNS", "context": "Forward lookups, resolution debugging" }
+    ]
+  },
+  {
+    "id": "security",
+    "label": "Security",
+    "technologies": [
+      { "name": "Threat Modeling", "context": "STRIDE framework" },
+      { "name": "Security Frameworks", "context": "NIST, risk assessment" }
+    ]
+  },
+  {
+    "id": "development",
+    "label": "Development",
+    "technologies": [
+      { "name": "HTML / CSS / JavaScript", "context": "Semantic markup, responsive design" },
+      { "name": "React / Next.js 15", "context": "This portfolio publication system" },
+      { "name": "Technical Documentation", "context": "Architecture decisions, process documentation" }
+    ]
+  },
+  {
+    "id": "creative",
+    "label": "Creative",
+    "technologies": [
+      { "name": "Photography", "context": "Documentation, observation, composition" },
+      { "name": "Graphic Design", "context": "Visual communication, layout, typography" }
+    ]
+  }
+]
