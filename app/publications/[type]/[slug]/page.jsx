@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPublicationBySlug, getAllPublications } from "@/lib/publications";
+import { getPublicationBySlug, getAllPublications, getAdjacentPublications } from "@/lib/publications";
 import { getRelatedPublications } from "@/lib/related";
+import Breadcrumb from "@/components/layout/Breadcrumb";
+import MetaBlock from "@/components/content/MetaBlock";
+import EvidenceSection from "@/components/content/Evidence";
+import EntryNav from "@/components/content/EntryNav";
+import StatusBadge from "@/components/content/StatusBadge";
 import styles from "./page.module.css";
 
 export async function generateStaticParams() {
@@ -19,6 +24,13 @@ export async function generateMetadata({ params }) {
     return {
       title: `${pub.title} — NICOCIPHER`,
       description: pub.summary,
+      openGraph: {
+        title: pub.title,
+        description: pub.summary,
+        type: "article",
+        publishedTime: pub.date,
+        tags: pub.tags,
+      },
     };
   } catch {
     return { title: "Publication Not Found — NICOCIPHER" };
@@ -36,86 +48,31 @@ export default async function PublicationPage({ params }) {
   }
 
   const related = getRelatedPublications(pub);
+  const { prev, next } = getAdjacentPublications(type, slug);
 
   return (
     <article className={styles.container}>
-      {/* Breadcrumb Trail */}
-      <div className={styles.breadcrumb}>
-        <Link href="/publications">publications</Link>
-        <span className={styles.sep}>/</span>
-        <Link href={`/publications?type=${pub.type}`}>{pub.type}</Link>
-        <span className={styles.sep}>/</span>
-        <span className={styles.current}>{pub.slug}</span>
-      </div>
 
-      {/* Meta Header */}
+      {/* Breadcrumb */}
+      <Breadcrumb segments={[
+        { label: "publications", href: "/publications" },
+        { label: pub.type, href: `/publications?type=${pub.type}` },
+        { label: pub.slug },
+      ]} />
+
+      {/* Header */}
       <header className={styles.header}>
-        <div className={styles.typeRow}>
-          <span className={styles.typeBadge}>{pub.type}</span>
-          <span className={styles.statusBadge}>● {pub.status}</span>
-          <span className={styles.date}>{pub.date}</span>
-          {pub.effort && <span className={styles.effort}>· Effort: {pub.effort}</span>}
-        </div>
-
         <h1 className={styles.title}>{pub.title}</h1>
         {pub.summary && <p className={styles.summary}>{pub.summary}</p>}
-
-        {/* Structured Meta Grid */}
-        <div className={styles.metaGrid}>
-          <div className={styles.metaField}>
-            <span className={styles.metaLabel}>Domain</span>
-            <span className={styles.metaValue}>{pub.domain}</span>
-          </div>
-          {pub.technologies?.length > 0 && (
-            <div className={styles.metaField}>
-              <span className={styles.metaLabel}>Technologies</span>
-              <div className={styles.tagGroup}>
-                {pub.technologies.map((tech) => (
-                  <span key={tech} className={styles.techTag}>
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-          {pub.tags?.length > 0 && (
-            <div className={styles.metaField}>
-              <span className={styles.metaLabel}>Tags</span>
-              <div className={styles.tagGroup}>
-                {pub.tags.map((tag) => (
-                  <span key={tag} className={styles.tag}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
       </header>
 
-      {/* First-Class Evidence Section (if present) */}
-      {pub.evidence?.length > 0 && (
-        <section className={styles.evidenceSection}>
-          <h2 className={styles.evidenceSectionTitle}>[ Attachments & Evidence ]</h2>
-          <div className={styles.evidenceGrid}>
-            {pub.evidence.map((item) => (
-              <div key={item.id} className={styles.evidenceCard}>
-                <div className={styles.evidenceHeader}>
-                  <span className={styles.evidenceType}>{item.type}</span>
-                  <span className={styles.evidenceTitle}>{item.title}</span>
-                </div>
-                {item.content && (
-                  <pre className={styles.evidencePre}>
-                    <code>{item.content}</code>
-                  </pre>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Structured Metadata */}
+      <MetaBlock pub={pub} />
 
-      {/* Body Content */}
+      {/* Evidence — rendered before body so context is set before prose */}
+      <EvidenceSection evidence={pub.evidence} />
+
+      {/* Publication Body */}
       <div
         className={styles.prose}
         dangerouslySetInnerHTML={{ __html: pub.html }}
@@ -123,8 +80,10 @@ export default async function PublicationPage({ params }) {
 
       {/* Related Publications */}
       {related.length > 0 && (
-        <section className={styles.relatedSection}>
-          <h2 className={styles.relatedTitle}>[ Related Publications ]</h2>
+        <section className={styles.relatedSection} aria-label="Related publications">
+          <h2 className={styles.relatedTitle}>
+            <span aria-hidden="true">[ </span>Related Publications<span aria-hidden="true"> ]</span>
+          </h2>
           <div className={styles.relatedGrid}>
             {related.map((rel) => (
               <Link
@@ -132,7 +91,10 @@ export default async function PublicationPage({ params }) {
                 href={`/publications/${rel.type}/${rel.slug}`}
                 className={styles.relatedCard}
               >
-                <span className={styles.typeBadge}>{rel.type}</span>
+                <div className={styles.relatedCardMeta}>
+                  <span className={styles.relatedType}>{rel.type}</span>
+                  <StatusBadge status={rel.status} />
+                </div>
                 <h3 className={styles.relatedCardTitle}>{rel.title}</h3>
                 <p className={styles.relatedSummary}>{rel.summary}</p>
               </Link>
@@ -140,6 +102,10 @@ export default async function PublicationPage({ params }) {
           </div>
         </section>
       )}
+
+      {/* Prev / Next Navigation */}
+      <EntryNav prev={prev} next={next} />
+
     </article>
   );
 }

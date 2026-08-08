@@ -1,0 +1,30 @@
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.segment {
+  display: inline-flex;
+  align-items: center;
+}
+
+.sep {
+  margin: 0 var(--space-2);
+  color: var(--border-visible);
+}
+
+.link {
+  color: var(--text-secondary);
+}
+
+.link:hover {
+  color: var(--accent);
+}
+
+.current {
+  color: var(--text-tertiary);
+}

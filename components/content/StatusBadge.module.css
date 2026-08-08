@@ -1,0 +1,54 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+}
+
+.symbol {
+  font-size: 8px;
+  line-height: 1;
+}
+
+/* ─── Status variants ─────────────────────────────────────── */
+
+.complete {
+  color: var(--status-active);
+  background: rgba(126, 184, 138, 0.1);
+  border-color: rgba(126, 184, 138, 0.25);
+}
+
+.active {
+  color: #7eb88a;
+  background: rgba(126, 184, 138, 0.1);
+  border-color: rgba(126, 184, 138, 0.25);
+  /* Pulse — only for "active" state */
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active {
+    animation: none;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+.paused {
+  color: var(--status-warn);
+  background: rgba(212, 145, 94, 0.1);
+  border-color: rgba(212, 145, 94, 0.25);
+}
+
+.planned {
+  color: var(--text-tertiary);
+  background: var(--bg-inset);
+  border-color: var(--border-subtle);
+}

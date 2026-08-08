@@ -42,6 +42,9 @@
   border-radius: 4px;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .filterItem:hover {
@@ -56,7 +59,24 @@
 }
 
 .filterCount {
-  opacity: 0.7;
+  opacity: 0.6;
+  font-size: 10px;
+  background: var(--bg-inset);
+  padding: 0 4px;
+  border-radius: 3px;
+  line-height: 1.6;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 6px;
 }
 
 .list {
