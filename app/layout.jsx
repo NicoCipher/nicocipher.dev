@@ -25,6 +25,7 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://nicocipher.dev"),
   title: {
     template: "%s — NICOCIPHER",
     default: "NICOCIPHER — Engineering Portfolio Publication System",
@@ -34,6 +35,9 @@ export const metadata = {
   authors: [{ name: "NicoCipher", url: "https://github.com/NicoCipher" }],
   icons: {
     icon: "/favicon.svg",
+  },
+  other: {
+    "theme-color": "#111110",
   },
 };
 

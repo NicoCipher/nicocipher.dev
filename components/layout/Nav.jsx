@@ -30,6 +30,7 @@ export default function Nav() {
                 key={link.href}
                 href={link.href}
                 className={`${styles.link} ${isActive ? styles.active : ""}`}
+                aria-current={isActive ? "page" : undefined}
               >
                 {link.label}
               </Link>
