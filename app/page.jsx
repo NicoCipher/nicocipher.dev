@@ -1,15 +1,26 @@
 import Link from "next/link";
 import profile from "@/data/profile.json";
-import currently from "@/data/currently.json";
 import { getAllPublications } from "@/lib/publications";
+import CurrentlyBlock from "@/components/home/CurrentlyBlock";
+import FeaturedPublications from "@/components/home/FeaturedPublications";
 import styles from "./page.module.css";
 
 export default function HomePage() {
   const allPubs = getAllPublications();
   const featured = allPubs.filter((p) => p.featured).slice(0, 4);
 
+  // Publication stats for the briefing
+  const stats = {
+    total: allPubs.length,
+    projects: allPubs.filter((p) => p.type === "project").length,
+    caseStudies: allPubs.filter((p) => p.type === "case-study").length,
+    labs: allPubs.filter((p) => p.type === "lab").length,
+    research: allPubs.filter((p) => p.type === "research").length,
+  };
+
   return (
     <div className={styles.container}>
+
       {/* Identity Briefing */}
       <section className={styles.briefing}>
         <div className={styles.identityHeader}>
@@ -19,63 +30,57 @@ export default function HomePage() {
         <p className={styles.bio}>{profile.bio}</p>
         <div className={styles.domainTags}>
           {profile.domains.map((d) => (
-            <span key={d} className={styles.domainTag}>
-              {d}
-            </span>
+            <span key={d} className={styles.domainTag}>{d}</span>
           ))}
+        </div>
+      </section>
+
+      {/* Publication Statistics */}
+      <section className={styles.statsSection} aria-label="Publication statistics">
+        <div className={styles.statsRow}>
+          <Link href="/publications" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.total}</span>
+            <span className={styles.statLabel}>Publications</span>
+          </Link>
+          <Link href="/publications?type=project" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.projects}</span>
+            <span className={styles.statLabel}>Projects</span>
+          </Link>
+          <Link href="/publications?type=case-study" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.caseStudies}</span>
+            <span className={styles.statLabel}>Case Studies</span>
+          </Link>
+          <Link href="/publications?type=lab" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.labs}</span>
+            <span className={styles.statLabel}>Labs</span>
+          </Link>
+          <Link href="/publications?type=research" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.research}</span>
+            <span className={styles.statLabel}>Research</span>
+          </Link>
         </div>
       </section>
 
       {/* Currently Operating */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>[ Currently Operating ]</h2>
-        <div className={styles.currentlyGrid}>
-          <div className={styles.currentlyCard}>
-            <span className={styles.currentlyLabel}>Studying</span>
-            <p className={styles.currentlyValue}>{currently.studying.label}</p>
-            <p className={styles.currentlyDetail}>{currently.studying.detail}</p>
-          </div>
-          <div className={styles.currentlyCard}>
-            <span className={styles.currentlyLabel}>Building</span>
-            <p className={styles.currentlyValue}>{currently.building.label}</p>
-            <p className={styles.currentlyDetail}>{currently.building.detail}</p>
-          </div>
-          <div className={styles.currentlyCard}>
-            <span className={styles.currentlyLabel}>Thinking About</span>
-            <p className={styles.currentlyValue}>{currently.thinking.label}</p>
-            <p className={styles.currentlyDetail}>{currently.thinking.detail}</p>
-          </div>
-        </div>
-      </section>
+      <CurrentlyBlock />
 
       {/* Featured Publications */}
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>[ Featured Publications ]</h2>
-          <Link href="/publications" className={styles.viewAll}>
-            View All ({allPubs.length}) &rarr;
-          </Link>
-        </div>
+      <FeaturedPublications publications={featured} totalCount={stats.total} />
 
-        <div className={styles.publicationList}>
-          {featured.map((pub) => (
-            <Link
-              key={pub.type + pub.slug}
-              href={`/publications/${pub.type}/${pub.slug}`}
-              className={styles.pubRow}
-            >
-              <div className={styles.pubRowMeta}>
-                <span className={styles.typeBadge}>{pub.type}</span>
-                <span className={styles.pubDate}>{pub.date}</span>
-              </div>
-              <div className={styles.pubRowContent}>
-                <h3 className={styles.pubTitle}>{pub.title}</h3>
-                <p className={styles.pubSummary}>{pub.summary}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: profile.name,
+            jobTitle: profile.role,
+            url: "https://nicocipher.dev",
+            sameAs: [profile.github, profile.linkedin].filter(Boolean),
+          }),
+        }}
+      />
     </div>
   );
 }

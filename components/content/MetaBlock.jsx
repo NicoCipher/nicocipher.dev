@@ -9,6 +9,7 @@ export default function MetaBlock({ pub }) {
     date,
     effort,
     domain,
+    readingTime,
     technologies = [],
     tags = [],
   } = pub;
@@ -44,6 +45,12 @@ export default function MetaBlock({ pub }) {
         {domain && (
           <Field label="Domain">
             <span className={styles.mono}>{domain}</span>
+          </Field>
+        )}
+
+        {readingTime && (
+          <Field label="Reading Time">
+            <span className={styles.mono}>{readingTime}</span>
           </Field>
         )}
       </div>
