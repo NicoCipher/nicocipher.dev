@@ -1,74 +1,239 @@
 # nicocipher.dev
 
-Engineering Portfolio Publication System — projects, case studies, labs, and research notes.
+**Engineering Portfolio & Technical Publication System**
 
-Built with Next.js 15. Designed as a software product, not a template.
+`nicocipher.dev` is my engineering portfolio — a structured record of the systems I build, the problems I investigate, the infrastructure I operate, and the technical decisions behind the work.
+
+This is not a collection of polished project cards.
+
+It is designed as a **technical publication system** where the work itself is the evidence.
 
 ---
 
 ## What This Is
 
-An engineering publication system that documents, organizes, and presents evidence-backed work across cybersecurity, infrastructure, networking, and software engineering.
+The portfolio documents work across:
 
-This product is built for depth and credibility:
-- **Zero generic marketing fluffs** or hero banner gimmicks.
-- **Evidence-first methodology**: Terminal outputs, architecture diagrams, diffs, packet captures, and checksummed artifacts rendered alongside explanations.
-- **Strict publication types**: Projects, Case Studies, Labs, and Research Notes.
+* Cybersecurity
+* Infrastructure & networking
+* Software engineering
+* Systems architecture
+* Technical research
+* Hands-on laboratories
 
-## Architectural Principles
+The objective is simple:
 
-| Principle | Decision |
-|---|---|
-| **Next.js 15 (App Router)** | Static HTML generation, file-based routing, server components by default. Instant load performance. |
-| **CSS Modules + Custom Properties** | Zero-runtime styling. Complete design token isolation in `globals.css` with scoped CSS modules. |
-| **Zero Tailwind / Zero UI Frameworks** | Custom design system built with CSS custom properties. Maximum control, minimum dependency weight. |
-| **Minimal Dependencies** | Next.js, React, React DOM, gray-matter, marked. Zero unnecessary runtime bloat. |
-| **Client JS Budget < 50KB** | Interactivity isolated to search command palette and filters. Core reading paths are 100% server HTML. |
+> **Show how I think, build, investigate, and solve technical problems — not just what technologies I have used.**
 
-## Publication Types
+Publications can include architecture diagrams, terminal output, configuration, test results, packet captures, implementation details, troubleshooting evidence, and technical reasoning where appropriate.
 
-1. **Project** (`/publications/project`) — Macro-level system creation or major architecture builds.
-2. **Case Study** (`/publications/case-study`) — Technical investigations, troubleshooting, and production incident resolution.
-3. **Lab** (`/publications/lab`) — Hands-on experiments, learning exercises, and infrastructure builds.
-4. **Research Note** (`/publications/research`) — Technical analysis, RFC-style thinking, and threat research.
+---
 
-## Authoring Workflow
+## Evidence Over Claims
 
-Publications are written in structured Markdown + YAML in `content/publications/`.
+A conventional portfolio often says:
 
-To create a new publication interactively:
+> "Built a secure and scalable system."
+
+This portfolio is designed to answer:
+
+* What was actually built?
+* Why was it designed that way?
+* What constraints existed?
+* What failed?
+* How was it investigated?
+* What evidence supports the result?
+* What trade-offs were made?
+* What was learned?
+
+The goal is to make technical work **inspectable rather than merely presentable**.
+
+---
+
+## Publication Model
+
+The system uses four primary publication types.
+
+| Type              | Purpose                                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Project**       | Significant systems, applications, architectures, or engineering builds.                                      |
+| **Case Study**    | Technical investigations, failures, troubleshooting, and problem resolution.                                  |
+| **Lab**           | Controlled experiments, infrastructure exercises, security testing, and hands-on learning.                    |
+| **Research Note** | Technical analysis, emerging technologies, threat research, RFC-style thinking, and engineering observations. |
+
+Each publication follows a structured schema so that content remains consistent as the portfolio grows.
+
+---
+
+## Architecture
+
+The portfolio is built as a small software product rather than a static template.
+
+### Core stack
+
+* **Next.js 15**
+* **React**
+* **TypeScript**
+* **CSS Modules**
+* **CSS Custom Properties**
+* **Markdown**
+* **YAML frontmatter**
+
+### Design decisions
+
+**Server-first rendering**
+
+The primary reading experience is designed around server-rendered content. Client-side JavaScript is introduced only where interaction requires it.
+
+**Custom design system**
+
+The interface uses CSS Modules and custom properties rather than a UI framework. This keeps the visual system under direct control and avoids unnecessary abstraction.
+
+**Content as structured data**
+
+Publications are stored as Markdown documents with structured metadata rather than being hard-coded into individual pages.
+
+**Minimal dependency surface**
+
+The system intentionally avoids unnecessary libraries and abstractions. Dependencies should solve real problems rather than exist simply because they are conventional.
+
+---
+
+## Content Architecture
+
+```text
+content/
+└── publications/
+    ├── project/
+    ├── case-study/
+    ├── lab/
+    └── research/
+```
+
+A publication is the canonical source of its content.
+
+The application consumes these documents and generates the appropriate presentation, indexing, taxonomy, and cross-references.
+
+This separation keeps **content independent from presentation**.
+
+---
+
+## Project Structure
+
+```text
+app/
+├── publications/       Publication routes
+├── systems/            Technology and domain taxonomy
+├── about/              Engineering methodology and profile
+└── ...
+
+components/
+├── layout/
+├── content/
+├── home/
+└── command-palette/
+
+lib/
+├── content/
+├── search/
+└── ...
+
+content/
+└── publications/
+    ├── project/
+    ├── case-study/
+    ├── lab/
+    └── research/
+
+data/
+└── Profile and domain data
+
+scripts/
+└── new-pub.js          Publication authoring CLI
+```
+
+---
+
+## Authoring
+
+New publications can be generated through the authoring CLI:
 
 ```bash
 npm run new-pub
 ```
 
-This CLI tool prompts for type, title, and metadata, generating a strictly formatted template.
+The command collects the required metadata and generates a structured publication template.
+
+This keeps publication structure predictable while allowing the actual technical content to remain flexible.
+
+---
 
 ## Local Development
+
+Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/NicoCipher/nicocipher.dev.git
 cd nicocipher.dev
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Then open:
 
-## Project Architecture
+```text
+http://localhost:3000
+```
 
-```
-app/                    Routes (App Router)
-  publications/         Master publication routes (/projects, /case-studies, /labs, /research)
-  systems/              Technology & domain taxonomy map
-  about/                Engineering methodology & profile
-components/             UI components (layout, content, home, command-palette)
-lib/                    Core logic (markdown parsing, search index, cross-referencing)
-content/publications/   Source publication files (project, case-study, lab, research)
-data/                   Profile, current focus, and domain data
-scripts/                CLI authoring scripts (new-pub.js)
-```
+---
+
+## Engineering Philosophy
+
+The system is guided by a few principles:
+
+### 01 — Evidence over adjectives
+
+Technical credibility should come from demonstrated work rather than descriptions such as *innovative*, *scalable*, or *cutting-edge*.
+
+### 02 — Decisions matter
+
+A finished system is only part of the story. The constraints, alternatives, failures, and reasoning behind decisions are equally important.
+
+### 03 — Build in public, document responsibly
+
+The portfolio can expose engineering process without exposing secrets, credentials, private infrastructure, or sensitive information.
+
+### 04 — Learning is part of engineering
+
+Labs and experiments are treated as legitimate engineering artifacts when they demonstrate meaningful investigation and understanding.
+
+### 05 — The portfolio is itself a system
+
+The portfolio is not only documentation of engineering work.
+
+**It is also an engineering project.**
+
+Its architecture, content pipeline, authoring workflow, performance, accessibility, and maintainability are themselves subject to engineering decisions and iteration.
+
+---
+
+## Status
+
+`nicocipher.dev` is an actively evolving system.
+
+The architecture and publication model will continue to change as the portfolio grows and new engineering requirements emerge.
+
+---
 
 ## License
 
-[MIT](LICENSE)
+Copyright © 2026 NicoCipher. All rights reserved.
+
+The source code, designs, written content, graphics, and other materials in this repository are proprietary to NicoCipher.
+
+See [`LICENSE`](LICENSE) for the full terms.
