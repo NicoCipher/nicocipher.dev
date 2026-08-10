@@ -1,0 +1,149 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+  min-height: 400px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+}
+
+.preview {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: var(--space-5);
+  overflow-y: auto;
+
+  /* Prose typography — mirrors publication detail page */
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: 1.78;
+  color: var(--text-secondary);
+}
+
+/* Heading styles */
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4 {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-3);
+}
+
+.preview h2 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.preview h3 {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.preview h2:first-child,
+.preview h3:first-child {
+  margin-top: 0;
+}
+
+/* Paragraphs */
+.preview p {
+  margin-bottom: var(--space-4);
+}
+
+/* Lists */
+.preview ul,
+.preview ol {
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.preview li {
+  margin-bottom: var(--space-2);
+}
+
+/* Inline code */
+.preview code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--bg-inset);
+  color: var(--accent);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* Code blocks */
+.preview pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin-bottom: var(--space-4);
+}
+
+.preview pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Tables */
+.preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.preview th,
+.preview td {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  text-align: left;
+}
+
+.preview th {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-inset);
+}
+
+/* Strong/em */
+.preview strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Blockquote */
+.preview blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--space-4);
+  color: var(--text-tertiary);
+  font-style: italic;
+  margin-bottom: var(--space-4);
+}
+
+/* Horizontal rule */
+.preview hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--space-6) 0;
+}

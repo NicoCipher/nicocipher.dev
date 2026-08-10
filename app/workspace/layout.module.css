@@ -1,0 +1,51 @@
+.workspace {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-root);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.brand {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--status-warn);
+  background: rgba(212, 145, 94, 0.12);
+  border: 1px solid rgba(212, 145, 94, 0.25);
+  padding: 1px 7px;
+  border-radius: 3px;
+}
+
+.exitLink {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin-left: auto;
+}
+
+.exitLink:hover {
+  color: var(--text-primary);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
