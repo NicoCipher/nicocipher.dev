@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getBodyTemplate } from "@/lib/serializer";
+import { getFileContent, saveFile } from "@/lib/github";
+import { deserializePublication, serializePublication, getBodyTemplate, slugify, getPublicationPath } from "@/lib/serializer";
 import MetadataForm from "@/components/workspace/MetadataForm";
 import TagInput from "@/components/workspace/TagInput";
 import EvidenceEditor from "@/components/workspace/EvidenceEditor";
@@ -14,9 +15,8 @@ function EditorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const editType = searchParams.get("type");
-  const editSlug = searchParams.get("slug");
-  const isNew = !editType || !editSlug;
+  const editPath = searchParams.get("path");
+  const isNew = !editPath;
 
   const [data, setData] = useState({
     type: "lab",
@@ -33,34 +33,37 @@ function EditorContent() {
     evidence: [],
     body: "",
   });
+  const [fileSha, setFileSha] = useState(null);
+  const [filePath, setFilePath] = useState(null);
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState(null);
+  const [saveStatus, setSaveStatus] = useState(null); // null | "saved" | "error"
   const [showPreview, setShowPreview] = useState(false);
 
   // Load existing publication for editing
   useEffect(() => {
     if (isNew) return;
-    fetch(`/api/workspace/publications/${editType}/${editSlug}`)
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.error) throw new Error(result.error);
-        setData(result.publication);
+
+    getFileContent(editPath)
+      .then(({ content, sha, path }) => {
+        const pub = deserializePublication(content);
+        setData(pub);
+        setFileSha(sha);
+        setFilePath(path);
       })
       .catch((err) => {
         alert(`Failed to load: ${err.message}`);
         router.push("/workspace");
       })
       .finally(() => setLoading(false));
-  }, [editType, editSlug, isNew, router]);
+  }, [editPath, isNew, router]);
 
   const updateData = useCallback((updates) => {
     setData((prev) => {
       const next = typeof updates === "function" ? updates(prev) : { ...prev, ...updates };
 
-      // If type changed on a new publication with empty body, fill template
-      if (!isNew) return next;
-      if (updates.type && updates.type !== prev.type && !prev.body.trim()) {
+      // Auto-generate slug from title for new publications
+      if (isNew && updates.type && updates.type !== prev.type && !prev.body.trim()) {
         next.body = getBodyTemplate(updates.type);
       }
 
@@ -91,29 +94,30 @@ function EditorContent() {
     setSaveStatus(null);
 
     try {
-      let res;
+      const slug = data.slug || slugify(data.title);
+      const pubData = { ...data, slug };
+      const content = serializePublication(pubData);
+
+      let targetPath;
+      let commitMsg;
+
       if (isNew) {
-        res = await fetch("/api/workspace/publications", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
+        targetPath = getPublicationPath(pubData.type, slug, pubData.date);
+        commitMsg = `pub: create ${pubData.title}`;
       } else {
-        res = await fetch(`/api/workspace/publications/${editType}/${editSlug}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
+        targetPath = filePath;
+        commitMsg = `pub: update ${pubData.title}`;
       }
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error);
+      const newSha = await saveFile(targetPath, content, commitMsg, isNew ? null : fileSha);
 
+      setFileSha(newSha);
+      setFilePath(targetPath);
       setSaveStatus("saved");
 
       if (isNew) {
-        // Redirect to edit mode for the newly created publication
-        router.replace(`/workspace/editor?type=${data.type}&slug=${data.slug}`);
+        // Redirect to edit mode
+        router.replace(`/workspace/editor?path=${encodeURIComponent(targetPath)}`);
       }
     } catch (err) {
       setSaveStatus("error");
@@ -124,7 +128,7 @@ function EditorContent() {
   };
 
   if (loading) {
-    return <div className={styles.container}><div className={styles.loading}>Loading...</div></div>;
+    return <div className={styles.container}><div className={styles.loading}>Loading from GitHub...</div></div>;
   }
 
   return (
@@ -132,27 +136,35 @@ function EditorContent() {
       {/* Toolbar */}
       <div className={styles.toolbar}>
         <button className={styles.backBtn} onClick={() => router.push("/workspace")}>← Back</button>
-        <span className={styles.toolbarTitle}>{isNew ? "New Publication" : `Editing: ${data.title}`}</span>
+        <span className={styles.toolbarTitle}>{isNew ? "New Publication" : data.title}</span>
         <div className={styles.toolbarActions}>
           <button
             className={styles.previewToggle}
             onClick={() => setShowPreview(!showPreview)}
           >
-            {showPreview ? "Hide Preview" : "Show Preview"}
+            {showPreview ? "Editor" : "Preview"}
           </button>
           <button
             className={styles.saveBtn}
             onClick={handleSave}
             disabled={saving}
           >
-            {saving ? "Saving..." : saveStatus === "saved" ? "✓ Saved" : "Save"}
+            {saving ? "Committing..." : saveStatus === "saved" ? "✓ Pushed" : "Save & Push"}
           </button>
         </div>
       </div>
 
+      {/* Deployment notice */}
+      {saveStatus === "saved" && (
+        <div className={styles.deployNotice}>
+          ✓ Committed to main — Vercel will deploy in ~30s
+        </div>
+      )}
+
       {/* Editor Layout */}
       <div className={`${styles.editorLayout} ${showPreview ? styles.withPreview : ""}`}>
-        <div className={styles.formPanel}>
+        {/* Form panel — hidden on mobile when preview is active */}
+        <div className={styles.formPanel} style={showPreview ? { display: "none" } : undefined}>
           {/* Metadata */}
           <section className={styles.section}>
             <MetadataForm data={data} onChange={updateData} isNew={isNew} />
@@ -189,12 +201,23 @@ function EditorContent() {
           </section>
         </div>
 
-        {/* Preview Panel */}
+        {/* Preview Panel — on mobile, replaces form when active */}
         {showPreview && (
           <div className={styles.previewPanel}>
             <LivePreview body={data.body || ""} />
           </div>
         )}
+      </div>
+
+      {/* Mobile sticky save */}
+      <div className={styles.mobileSave}>
+        <button
+          className={styles.saveBtn}
+          onClick={handleSave}
+          disabled={saving}
+        >
+          {saving ? "Committing..." : saveStatus === "saved" ? "✓ Pushed" : "Save & Push"}
+        </button>
       </div>
     </div>
   );

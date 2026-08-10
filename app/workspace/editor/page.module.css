@@ -24,6 +24,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
+  flex-shrink: 0;
 }
 
 .backBtn:hover {
@@ -74,7 +75,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background var(--duration-fast) var(--ease-out);
-  min-width: 70px;
+  min-width: 90px;
   text-align: center;
 }
 
@@ -85,6 +86,17 @@
 .saveBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Deploy notice */
+.deployNotice {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--status-active);
+  background: rgba(126, 184, 138, 0.08);
+  border-bottom: 1px solid rgba(126, 184, 138, 0.2);
+  padding: var(--space-2) var(--space-5);
+  text-align: center;
 }
 
 /* Editor Layout */
@@ -131,6 +143,11 @@
   padding: var(--space-12);
 }
 
+/* Mobile sticky save — hidden on desktop */
+.mobileSave {
+  display: none;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .toolbar {
@@ -142,22 +159,45 @@
     font-size: var(--text-xs);
   }
 
-  .editorLayout.withPreview {
-    flex-direction: column;
+  /* Hide desktop save button on mobile */
+  .toolbarActions .saveBtn {
+    display: none;
   }
 
+  /* Preview replaces form on mobile (controlled via inline style) */
   .previewPanel {
     width: 100%;
     border-left: none;
-    border-top: 1px solid var(--border-subtle);
+    padding: var(--space-4);
   }
 
   .formPanel {
     padding: var(--space-4);
     gap: var(--space-4);
+    /* Extra bottom padding for sticky save bar */
+    padding-bottom: 72px;
   }
 
-  .previewPanel {
-    padding: var(--space-4);
+  .deployNotice {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  /* Mobile sticky save bar */
+  .mobileSave {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-subtle);
+    z-index: 50;
+  }
+
+  .mobileSave .saveBtn {
+    width: 100%;
+    padding: var(--space-3);
+    font-size: var(--text-sm);
   }
 }

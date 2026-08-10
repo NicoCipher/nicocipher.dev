@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { listPublicationFiles, getFileContent, deleteFile } from "@/lib/github";
+import { deserializePublication } from "@/lib/serializer";
 import styles from "./page.module.css";
 
 export default function WorkspaceDashboard() {
@@ -11,33 +13,54 @@ export default function WorkspaceDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/workspace/publications")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) throw new Error(data.error);
-        setPublications(data.publications || []);
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    loadPublications();
   }, []);
 
-  const handleDelete = async (pub) => {
-    if (!confirm(`Delete "${pub.title}"? This cannot be undone.`)) return;
+  async function loadPublications() {
+    setLoading(true);
+    setError(null);
 
     try {
-      const res = await fetch(`/api/workspace/publications/${pub.type}/${pub.slug}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      setPublications((prev) => prev.filter((p) => p.slug !== pub.slug || p.type !== pub.type));
+      const files = await listPublicationFiles();
+
+      // Fetch each file's content and parse frontmatter
+      const pubs = await Promise.all(
+        files.map(async (file) => {
+          try {
+            const { content, sha } = await getFileContent(file.path);
+            const pub = deserializePublication(content);
+            pub._path = file.path;
+            pub._sha = sha;
+            return pub;
+          } catch {
+            return null;
+          }
+        })
+      );
+
+      const valid = pubs.filter(Boolean);
+      valid.sort((a, b) => (a.date < b.date ? 1 : -1));
+      setPublications(valid);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleDelete = async (pub) => {
+    if (!confirm(`Delete "${pub.title}"? This will commit a deletion to the repo.`)) return;
+
+    try {
+      await deleteFile(pub._path, pub._sha, `pub: delete ${pub.title}`);
+      setPublications((prev) => prev.filter((p) => p._path !== pub._path));
     } catch (err) {
       alert(`Delete failed: ${err.message}`);
     }
   };
 
   if (loading) {
-    return <div className={styles.container}><div className={styles.loading}>Loading publications...</div></div>;
+    return <div className={styles.container}><div className={styles.loading}>Loading publications from GitHub...</div></div>;
   }
 
   if (error) {
@@ -49,7 +72,7 @@ export default function WorkspaceDashboard() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Publications</h1>
-          <p className={styles.subtitle}>{publications.length} publication{publications.length !== 1 ? "s" : ""} in system</p>
+          <p className={styles.subtitle}>{publications.length} publication{publications.length !== 1 ? "s" : ""} in repo</p>
         </div>
         <button
           className={styles.newBtn}
@@ -79,9 +102,9 @@ export default function WorkspaceDashboard() {
           <tbody>
             {publications.map((pub) => (
               <tr
-                key={`${pub.type}-${pub.slug}`}
+                key={pub._path}
                 className={styles.row}
-                onClick={() => router.push(`/workspace/editor?type=${pub.type}&slug=${pub.slug}`)}
+                onClick={() => router.push(`/workspace/editor?path=${encodeURIComponent(pub._path)}`)}
               >
                 <td className={styles.td}>
                   <span className={styles.typeBadge}>{pub.type}</span>
