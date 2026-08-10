@@ -31,11 +31,14 @@
 .dialog {
   width: 92%;
   max-width: 640px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-visible);
-  border-radius: 10px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(0,0,0,0.5),
+    0 0 40px rgba(196, 168, 130, 0.04),
     0 24px 48px rgba(0, 0, 0, 0.6),
     0 4px 12px rgba(0, 0, 0, 0.4);
   overflow: hidden;
@@ -81,6 +84,7 @@
   font-size: var(--text-base);
   outline: none;
   min-width: 0;
+  caret-color: var(--accent);
 }
 
 .input::placeholder {
@@ -200,6 +204,8 @@
 
 .resultItem.selected {
   background: var(--bg-inset);
+  border-left: 2px solid var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .resultItem.selected .resultTitle {
@@ -273,11 +279,12 @@
 /* ─── Match Highlight ─────────────────────────────────────────────────── */
 
 .mark {
-  background: rgba(196, 168, 130, 0.25);
+  background: rgba(196, 168, 130, 0.2);
   color: var(--accent);
   border-radius: 2px;
-  padding: 0 1px;
+  padding: 0 2px;
   font-style: normal;
+  box-shadow: 0 0 6px rgba(196, 168, 130, 0.15);
 }
 
 /* ─── Matched Technology Tags ─────────────────────────────────────────── */

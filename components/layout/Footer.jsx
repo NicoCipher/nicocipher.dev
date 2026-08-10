@@ -3,8 +3,8 @@ import styles from "./Footer.module.css";
 export default function Footer() {
   return (
     <footer className={styles.footer} aria-label="Site footer">
-      <div className={styles.container}>
-        <div className={styles.meta}>
+      <div className={styles.footerInner}>
+        <div className={styles.copyright}>
           <span>NICOCIPHER &copy; {new Date().getFullYear()}</span>
           <span className={styles.divider}>·</span>
           <span>Engineering Portfolio Publication System</span>

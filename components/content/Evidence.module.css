@@ -1,11 +1,11 @@
-/* Evidence.module.css — Evidence rendering styles */
+/* Evidence.module.css — Premium Evidence Block Styling */
 
-/* ─── Section Wrapper ──────────────────────────────────────────────────── */
+/* ─── Evidence Section Wrapper ────────────────────────────────────────── */
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
 .sectionTitle {
@@ -15,12 +15,14 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--space-2);
 }
 
 .sectionBracket {
   color: var(--border-visible);
+  font-family: var(--font-mono);
 }
 
 .sectionCount {
@@ -28,34 +30,53 @@
   border: 1px solid var(--border-subtle);
   color: var(--text-tertiary);
   font-size: 10px;
-  padding: 0 5px;
-  border-radius: 3px;
+  font-family: var(--font-mono);
+  padding: 0 6px;
+  border-radius: 4px;
   line-height: 1.6;
 }
 
 .evidenceList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
-/* ─── Base Card ─────────────────────────────────────────────────────────── */
+/* ─── Individual Evidence Card ────────────────────────────────────────── */
 
 .card {
   background: var(--bg-inset);
   border: 1px solid var(--border-subtle);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  animation: fadeInUp var(--duration-slow) var(--ease-out) both;
 }
+
+.card:nth-child(1) { animation-delay: 0ms; }
+.card:nth-child(2) { animation-delay: 60ms; }
+.card:nth-child(3) { animation-delay: 120ms; }
+.card:nth-child(4) { animation-delay: 180ms; }
+.card:nth-child(5) { animation-delay: 240ms; }
+.card:nth-child(6) { animation-delay: 300ms; }
+
+.card:hover {
+  border-color: var(--border-visible);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 12px var(--accent-glow);
+}
+
+/* ─── Card Header Bar ─────────────────────────────────────────────────── */
 
 .cardHeader {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle);
-  min-height: 36px;
+  min-height: 38px;
 }
 
 .cardType {
@@ -65,6 +86,7 @@
   letter-spacing: 0.1em;
   color: var(--accent);
   flex-shrink: 0;
+  font-weight: 600;
 }
 
 .cardTitle {
@@ -84,17 +106,21 @@
   flex-shrink: 0;
 }
 
-/* ─── Terminal ──────────────────────────────────────────────────────────── */
+/* ─── Terminal Specific ────────────────────────────────────────────────── */
 
 [data-type="terminal"] .cardHeader {
-  background: #1a1a17;
-  border-bottom-color: #2f2f2a;
+  background: #0d0d0c;
+  border-bottom-color: #1a1a18;
+}
+
+[data-type="terminal"] .cardType {
+  color: var(--status-active);
 }
 
 .terminalDots {
   display: flex;
-  gap: 5px;
   align-items: center;
+  gap: 6px;
   margin-right: var(--space-1);
 }
 
@@ -103,15 +129,12 @@
   height: 10px;
   border-radius: 50%;
   background: var(--border-visible);
+  flex-shrink: 0;
 }
 
 .terminalDots .dot:nth-child(1) { background: #ff5f57; }
 .terminalDots .dot:nth-child(2) { background: #febc2e; }
 .terminalDots .dot:nth-child(3) { background: #28c840; }
-
-[data-type="terminal"] .cardType {
-  color: var(--status-active);
-}
 
 .terminalPre {
   padding: var(--space-4) var(--space-5);
@@ -120,8 +143,15 @@
   line-height: 1.65;
   color: #b5cea8;
   overflow-x: auto;
-  background: #141414;
+  background: #0d0d0c;
   margin: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.01) 2px,
+    rgba(255, 255, 255, 0.01) 4px
+  );
 }
 
 .terminalCode {
@@ -133,7 +163,7 @@
   font-family: inherit;
 }
 
-/* ─── Config / Code Snippet ─────────────────────────────────────────────── */
+/* ─── Code / Config Block ─────────────────────────────────────────────── */
 
 .codePre {
   padding: var(--space-4) var(--space-5);
@@ -154,7 +184,7 @@
   font-family: inherit;
 }
 
-/* ─── Log ───────────────────────────────────────────────────────────────── */
+/* ─── Log Block ───────────────────────────────────────────────────────── */
 
 [data-type="log"] .cardType {
   color: var(--status-warn);
@@ -179,10 +209,37 @@
   font-family: inherit;
 }
 
-/* ─── Diagram ───────────────────────────────────────────────────────────── */
+/* ─── Custom Scrollbars for Pre Blocks ────────────────────────────────── */
+
+.terminalPre::-webkit-scrollbar,
+.codePre::-webkit-scrollbar,
+.logPre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.terminalPre::-webkit-scrollbar-track,
+.codePre::-webkit-scrollbar-track,
+.logPre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminalPre::-webkit-scrollbar-thumb,
+.codePre::-webkit-scrollbar-thumb,
+.logPre::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 3px;
+}
+
+.terminalPre::-webkit-scrollbar-thumb:hover,
+.codePre::-webkit-scrollbar-thumb:hover,
+.logPre::-webkit-scrollbar-thumb:hover {
+  background: var(--border-visible);
+}
+
+/* ─── Diagram Container ───────────────────────────────────────────────── */
 
 .diagramWrapper {
-  padding: var(--space-4);
+  padding: var(--space-5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,10 +260,12 @@
   text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: var(--space-2);
   padding: var(--space-8);
   border: 1px dashed var(--border-subtle);
-  border-radius: 4px;
+  border-radius: 6px;
   width: 100%;
 }
 
@@ -220,11 +279,11 @@
   font-size: var(--text-xs);
   color: var(--text-tertiary);
   text-align: center;
-  padding: var(--space-2) var(--space-4) var(--space-3);
   font-style: italic;
+  padding: var(--space-2) var(--space-4) var(--space-3);
 }
 
-/* ─── Artifact ──────────────────────────────────────────────────────────── */
+/* ─── Artifact Section ────────────────────────────────────────────────── */
 
 [data-type="artifact"] .cardType {
   color: var(--accent);
@@ -232,6 +291,7 @@
 
 .artifactBody {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-5);
@@ -246,8 +306,10 @@
 
 .artifactIcon {
   font-size: 18px;
-  color: var(--accent-dim);
+  color: var(--accent);
   line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .artifactMeta {
@@ -274,9 +336,12 @@
   color: var(--bg-root);
   background: var(--accent);
   padding: var(--space-1) var(--space-4);
-  border-radius: 4px;
+  border-radius: 5px;
   flex-shrink: 0;
-  transition: background-color var(--duration-fast) var(--ease-out);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
 }
 
 .artifactDownload:hover {
@@ -292,6 +357,7 @@
 
 .artifactChecksum {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-5);
@@ -303,6 +369,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--text-tertiary);
   flex-shrink: 0;
 }
@@ -316,24 +383,18 @@
   padding: 0;
 }
 
-/* ─── Mobile ─────────────────────────────────────────────────── */
+/* ─── Mobile Responsiveness (640px Breakpoint) ────────────────────────── */
 
 @media (max-width: 640px) {
   .cardHeader {
     padding: var(--space-2) var(--space-3);
-    gap: var(--space-2);
-  }
-
-  .cardTitle {
-    font-size: 11px;
   }
 
   .terminalPre,
   .codePre,
   .logPre {
-    padding: var(--space-3) var(--space-3);
+    padding: var(--space-3);
     font-size: 11px;
-    line-height: 1.5;
   }
 
   .dot {

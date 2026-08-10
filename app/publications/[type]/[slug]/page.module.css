@@ -1,26 +1,53 @@
+/* ==========================================================================
+   Publication Detail Module
+   nicocipher.dev
+   ========================================================================== */
+
+/* ─── Page Container & Reading Progress Bar ───────────────────────────────── */
+
 .container {
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: var(--space-8) var(--space-6);
+  padding: var(--space-10) var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-10);
+  animation: fadeInUp var(--duration-slow) var(--ease-out);
+  position: relative;
 }
 
-/* ─── Header ─────────────────────────────────────────────────── */
+.container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent), var(--accent-dim));
+  z-index: 100;
+  width: var(--progress, 0%);
+  pointer-events: none;
+  transition: width var(--duration-fast) linear;
+}
+
+/* ─── Header Section ──────────────────────────────────────────────────────── */
 
 .header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .title {
   font-family: var(--font-sans);
-  font-size: var(--text-2xl);
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.2;
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.15;
+  background: linear-gradient(135deg, var(--accent) 0%, #e8dcc8 50%, var(--accent-dim) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   letter-spacing: -0.02em;
 }
 
@@ -28,194 +55,140 @@
   font-family: var(--font-serif);
   font-size: var(--text-lg);
   color: var(--text-secondary);
-  line-height: 1.55;
-  max-width: 62ch;
+  line-height: 1.6;
+  max-width: 600px;
 }
 
-/* ─── Prose Body ─────────────────────────────────────────────── */
+/* ─── Prose Body Content ─────────────────────────────────────────────────── */
 
 .prose {
-  /* Typography */
   font-family: var(--font-serif);
   font-size: var(--text-base);
-  line-height: 1.78;
   color: var(--text-secondary);
-
-  /* Spacing context */
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  line-height: 1.8;
 }
 
-/* Headings */
-.prose :global(h1),
-.prose :global(h2),
-.prose :global(h3),
-.prose :global(h4) {
-  font-family: var(--font-sans);
-  color: var(--text-primary);
-  line-height: 1.25;
-  margin-top: var(--space-8);
-  margin-bottom: var(--space-3);
-}
-
+.prose h2,
 .prose :global(h2) {
+  font-family: var(--font-sans);
   font-size: var(--text-lg);
   font-weight: 600;
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--accent);
+  line-height: 1.3;
 }
 
+.prose h3,
 .prose :global(h3) {
+  font-family: var(--font-sans);
   font-size: var(--text-base);
   font-weight: 600;
+  color: var(--text-primary);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-3);
+  line-height: 1.35;
 }
 
-.prose :global(h4) {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-/* First heading gets no top margin */
-.prose :global(h2:first-child),
-.prose :global(h3:first-child) {
-  margin-top: 0;
-}
-
-/* Paragraphs */
+.prose p,
 .prose :global(p) {
-  margin-top: 0;
   margin-bottom: var(--space-4);
-  color: var(--text-secondary);
 }
 
-/* Lists */
-.prose :global(ul),
-.prose :global(ol) {
-  padding-left: var(--space-6);
-  margin-bottom: var(--space-4);
-  color: var(--text-secondary);
+.prose strong,
+.prose :global(strong) {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
-.prose :global(li) {
-  margin-bottom: var(--space-2);
-}
-
-.prose :global(li > p) {
-  margin-bottom: 0;
-}
-
-/* Inline code */
+.prose code,
 .prose :global(code) {
   font-family: var(--font-mono);
   font-size: 0.875em;
   background: var(--bg-inset);
   color: var(--accent);
-  padding: 1px 5px;
+  padding: 1px 6px;
   border-radius: 3px;
   border: 1px solid var(--border-subtle);
 }
 
-/* Code blocks */
+.prose pre,
 .prose :global(pre) {
   background: var(--bg-inset);
   border: 1px solid var(--border-subtle);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: var(--space-4) var(--space-5);
   overflow-x: auto;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
 }
 
+.prose pre code,
 .prose :global(pre code) {
   background: none;
   border: none;
   padding: 0;
   color: var(--text-primary);
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.6;
 }
 
-/* Blockquote */
+.prose ul,
+.prose ol,
+.prose :global(ul),
+.prose :global(ol) {
+  padding-left: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.prose li,
+.prose :global(li) {
+  margin-bottom: var(--space-2);
+}
+
+.prose blockquote,
 .prose :global(blockquote) {
   border-left: 3px solid var(--accent);
-  margin: 0 0 var(--space-6) 0;
-  padding: var(--space-3) var(--space-5);
-  background: var(--accent-subtle);
-  border-radius: 0 4px 4px 0;
-}
-
-.prose :global(blockquote p) {
-  margin-bottom: 0;
+  padding-left: var(--space-4);
+  color: var(--text-tertiary);
   font-style: italic;
-  color: var(--text-primary);
+  margin-bottom: var(--space-4);
 }
 
-/* Horizontal rule */
-.prose :global(hr) {
-  border: none;
-  border-top: 1px solid var(--border-subtle);
-  margin: var(--space-8) 0;
-}
-
-/* Links in prose */
-.prose :global(a) {
-  color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.prose :global(a:hover) {
-  color: var(--text-primary);
-}
-
-/* Tables */
+.prose table,
 .prose :global(table) {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: var(--space-6);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-4);
 }
 
+.prose th,
 .prose :global(th) {
-  background: var(--bg-surface);
-  color: var(--text-primary);
+  font-family: var(--font-sans);
   font-weight: 600;
-  text-align: left;
+  color: var(--text-primary);
+  background: var(--bg-inset);
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border-subtle);
+  text-align: left;
 }
 
+.prose td,
 .prose :global(td) {
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
-  vertical-align: top;
 }
 
-.prose :global(tr:nth-child(even) td) {
-  background: var(--bg-surface);
-}
-
-/* Strong, em */
-.prose :global(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.prose :global(em) {
-  font-style: italic;
-  color: var(--text-secondary);
-}
-
-/* ─── Related Section ────────────────────────────────────────── */
+/* ─── Related Section ────────────────────────────────────────────────────── */
 
 .relatedSection {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding-top: var(--space-6);
+  padding-top: var(--space-8);
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -229,30 +202,27 @@
 
 .relatedGrid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-3);
-}
-
-@media (min-width: 560px) {
-  .relatedGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 .relatedCard {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent);
   padding: var(--space-4);
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  transition: border-color var(--duration-fast) var(--ease-out);
+  transition: all var(--duration-base) var(--ease-out);
+  text-decoration: none;
 }
 
 .relatedCard:hover {
   border-color: var(--border-visible);
-  color: inherit;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .relatedCardMeta {
@@ -261,11 +231,11 @@
   gap: var(--space-2);
 }
 
+.relatedCardType,
 .relatedType {
   font-family: var(--font-mono);
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--accent);
 }
 
@@ -283,12 +253,11 @@
   line-height: 1.5;
 }
 
-/* ─── Mobile ─────────────────────────────────────────────────── */
+/* ─── Responsive (Mobile Breakpoint) ──────────────────────────────────────── */
 
 @media (max-width: 640px) {
   .container {
     padding: var(--space-6) var(--space-4);
-    gap: var(--space-6);
   }
 
   .title {
@@ -299,26 +268,13 @@
     font-size: var(--text-base);
   }
 
+  .prose h2,
   .prose :global(h2) {
     font-size: var(--text-base);
-    margin-top: var(--space-6);
+    border-left-width: 2px;
   }
 
-  .prose :global(h3) {
-    font-size: var(--text-sm);
-  }
-
-  .prose :global(pre) {
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-xs);
-  }
-
-  .prose :global(ul),
-  .prose :global(ol) {
-    padding-left: var(--space-5);
-  }
-
-  .relatedCard {
-    padding: var(--space-3);
+  .relatedGrid {
+    grid-template-columns: 1fr;
   }
 }

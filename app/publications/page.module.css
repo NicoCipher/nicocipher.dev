@@ -1,10 +1,15 @@
+/* ==========================================================================
+   Publications Index Module — nicocipher.dev
+   ========================================================================== */
+
 .container {
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: var(--space-8) var(--space-6);
+  padding: var(--space-10) var(--space-6);
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
+  animation: fadeInUp var(--duration-base) var(--ease-out);
 }
 
 .header {
@@ -16,67 +21,69 @@
 .title {
   font-family: var(--font-sans);
   font-size: var(--text-2xl);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
+  background: linear-gradient(135deg, var(--accent), #e8dcc8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
   font-family: var(--font-serif);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   color: var(--text-secondary);
+  line-height: 1.6;
 }
 
+.filters,
 .filterBar {
   display: flex;
-  gap: var(--space-2);
+  flex-direction: row;
   flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: var(--space-4);
 }
 
+.filterBtn,
 .filterItem {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text-tertiary);
-  padding: var(--space-1) var(--space-3);
-  border-radius: 4px;
-  background: var(--bg-surface);
+  background: transparent;
   border: 1px solid var(--border-subtle);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 20px;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
+.filterBtn:hover,
 .filterItem:hover {
   border-color: var(--border-visible);
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
+.filterActive,
 .activeFilter {
   background: var(--accent-subtle);
+  border-color: var(--accent);
   color: var(--accent);
-  border-color: rgba(196, 168, 130, 0.3);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .filterCount {
-  opacity: 0.6;
   font-size: 10px;
+  opacity: 0.75;
   background: var(--bg-inset);
-  padding: 0 4px;
+  padding: 0 5px;
   border-radius: 3px;
-  line-height: 1.6;
-}
-
-.empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-12) var(--space-6);
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--text-tertiary);
-  border: 1px dashed var(--border-subtle);
-  border-radius: 6px;
+  line-height: 1.5;
 }
 
 .list {
@@ -88,34 +95,57 @@
 .pubRow {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  padding: var(--space-5);
-  border-radius: 6px;
+  border-left: 3px solid transparent;
+  padding: var(--space-4) var(--space-5);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  transition: border-color var(--duration-fast) var(--ease-out);
+  gap: var(--space-2);
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--duration-base) var(--ease-out);
+  animation: fadeInUp var(--duration-base) var(--ease-out) both;
 }
 
 .pubRow:hover {
   border-color: var(--border-visible);
+  border-left-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
+
+.pubRow:hover .pubTitle {
+  color: var(--accent);
+}
+
+.pubRow:nth-child(1) { animation-delay: 0ms; }
+.pubRow:nth-child(2) { animation-delay: 50ms; }
+.pubRow:nth-child(3) { animation-delay: 100ms; }
+.pubRow:nth-child(4) { animation-delay: 150ms; }
+.pubRow:nth-child(5) { animation-delay: 200ms; }
+.pubRow:nth-child(6) { animation-delay: 250ms; }
+.pubRow:nth-child(7) { animation-delay: 300ms; }
+.pubRow:nth-child(8) { animation-delay: 350ms; }
 
 .pubMeta {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
+.pubType,
 .typeBadge {
   font-family: var(--font-mono);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 1px 6px;
-  border-radius: 3px;
+  padding: 2px 8px;
+  border-radius: 4px;
   background: var(--accent-subtle);
   color: var(--accent);
-  border: 1px solid rgba(196, 168, 130, 0.2);
+  border: 1px solid rgba(196, 168, 130, 0.15);
+  display: inline-block;
 }
 
 .pubDate {
@@ -138,64 +168,67 @@
 
 .pubTitle {
   font-family: var(--font-sans);
-  font-size: var(--text-lg);
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: 600;
   color: var(--text-primary);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .pubSummary {
   font-family: var(--font-serif);
   font-size: var(--text-sm);
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
+.pubTags,
 .tags {
   display: flex;
-  gap: var(--space-2);
   flex-wrap: wrap;
+  gap: var(--space-2);
   margin-top: var(--space-1);
 }
 
+.pubTag,
 .tag {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-tertiary);
   background: var(--bg-inset);
-  padding: 1px 6px;
-  border-radius: 3px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
 }
 
-/* ─── Mobile ─────────────────────────────────────────────────── */
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  padding: var(--space-12);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 8px;
+}
+
+/* ─── Mobile (640px) ─────────────────────────────────────────── */
 
 @media (max-width: 640px) {
-  .container {
-    padding: var(--space-6) var(--space-4);
-    gap: var(--space-6);
-  }
-
   .title {
     font-size: var(--text-xl);
   }
 
-  .subtitle {
-    font-size: var(--text-sm);
+  .filters,
+  .filterBar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: var(--space-3);
+    -webkit-overflow-scrolling: touch;
   }
 
   .pubRow {
-    padding: var(--space-4);
-  }
-
-  .pubMeta {
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .pubTitle {
-    font-size: var(--text-base);
-  }
-
-  .pubSummary {
-    font-size: var(--text-xs);
+    padding: var(--space-3);
   }
 }

@@ -46,14 +46,14 @@ export default async function PublicationsIndexPage({ searchParams }) {
       </header>
 
       {/* Type Filter — server-rendered Links, no JS required */}
-      <nav className={styles.filterBar} aria-label="Filter publications by type">
+      <nav className={styles.filters} aria-label="Filter publications by type">
         {filters.map((f) => {
           const isActive = selectedType === f.id;
           return (
             <Link
               key={f.id}
               href={f.id === "all" ? "/publications" : `/publications?type=${f.id}`}
-              className={`${styles.filterItem} ${isActive ? styles.activeFilter : ""}`}
+              className={`${styles.filterBtn} ${isActive ? styles.filterActive : ""}`}
               aria-current={isActive ? "page" : undefined}
             >
               {f.label}
@@ -77,7 +77,7 @@ export default async function PublicationsIndexPage({ searchParams }) {
               className={styles.pubRow}
             >
               <div className={styles.pubMeta}>
-                <span className={styles.typeBadge}>{pub.type}</span>
+                <span className={styles.pubType}>{pub.type}</span>
                 <StatusBadge status={pub.status} />
                 <time dateTime={pub.date} className={styles.pubDate}>
                   {pub.date}
@@ -90,9 +90,9 @@ export default async function PublicationsIndexPage({ searchParams }) {
                 <h2 className={styles.pubTitle}>{pub.title}</h2>
                 <p className={styles.pubSummary}>{pub.summary}</p>
                 {pub.tags?.length > 0 && (
-                  <div className={styles.tags} aria-label="Tags">
+                  <div className={styles.pubTags} aria-label="Tags">
                     {pub.tags.map((tag) => (
-                      <span key={tag} className={styles.tag}>
+                      <span key={tag} className={styles.pubTag}>
                         {tag}
                       </span>
                     ))}

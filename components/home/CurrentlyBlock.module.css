@@ -1,3 +1,74 @@
+.block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: var(--space-5);
+  animation: fadeInUp var(--duration-slow) var(--ease-out) 250ms both;
+  transition: border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
+}
+
+.block:hover {
+  border-color: var(--border-visible);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 0 12px var(--accent-glow);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-active);
+  animation: glowPulse 2s infinite;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.focusItem {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-1) 0;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.focusLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+  min-width: 50px;
+}
+
+.focusValue {
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* Backward compatibility / layout aliases */
 .section {
   display: flex;
   flex-direction: column;
@@ -28,25 +99,17 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   padding: var(--space-4);
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   position: relative;
-  transition: border-color var(--duration-fast) var(--ease-out);
+  transition: border-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 a.card:hover {
   border-color: var(--border-visible);
-  color: inherit;
-}
-
-.label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  color: var(--accent);
-  letter-spacing: 0.08em;
+  transform: translateY(-1px);
 }
 
 .value {
@@ -70,8 +133,4 @@ a.card:hover {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text-tertiary);
-}
-
-a.card:hover .arrow {
-  color: var(--accent);
 }
