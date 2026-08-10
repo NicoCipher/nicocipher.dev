@@ -87,7 +87,23 @@
     padding: var(--space-3) var(--space-4);
   }
 
+  .brand {
+    font-size: var(--text-xs);
+  }
+
   .nav {
-    gap: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .link {
+    font-size: var(--text-xs);
+  }
+
+  .paletteTrigger {
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .triggerKey {
+    font-size: 11px;
   }
 }

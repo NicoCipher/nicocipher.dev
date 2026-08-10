@@ -128,3 +128,33 @@
 .pubLink:hover {
   color: var(--accent);
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .container {
+    padding: var(--space-6) var(--space-4);
+    gap: var(--space-6);
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .subtitle {
+    font-size: var(--text-sm);
+  }
+
+  .domainCard {
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .domainTitle {
+    font-size: var(--text-base);
+  }
+
+  .techItem {
+    padding: var(--space-2);
+  }
+}

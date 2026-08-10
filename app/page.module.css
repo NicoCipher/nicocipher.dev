@@ -74,12 +74,6 @@
   gap: var(--space-2);
 }
 
-@media (max-width: 560px) {
-  .statsRow {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .statCard {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -110,4 +104,38 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-tertiary);
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .container {
+    padding: var(--space-6) var(--space-4);
+    gap: var(--space-8);
+  }
+
+  .name {
+    font-size: var(--text-2xl);
+  }
+
+  .role {
+    font-size: var(--text-xs);
+  }
+
+  .bio {
+    font-size: var(--text-sm);
+  }
+
+  .statsRow {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-1);
+  }
+
+  .statCard {
+    padding: var(--space-2);
+  }
+
+  .statValue {
+    font-size: var(--text-base);
+  }
 }

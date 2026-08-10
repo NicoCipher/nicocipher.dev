@@ -282,3 +282,43 @@
   color: var(--text-secondary);
   line-height: 1.5;
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .container {
+    padding: var(--space-6) var(--space-4);
+    gap: var(--space-6);
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .summary {
+    font-size: var(--text-base);
+  }
+
+  .prose :global(h2) {
+    font-size: var(--text-base);
+    margin-top: var(--space-6);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--text-sm);
+  }
+
+  .prose :global(pre) {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-xs);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: var(--space-5);
+  }
+
+  .relatedCard {
+    padding: var(--space-3);
+  }
+}

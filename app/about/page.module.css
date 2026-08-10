@@ -219,3 +219,50 @@
   color: var(--text-secondary);
   text-align: right;
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .container {
+    padding: var(--space-6) var(--space-4);
+    gap: var(--space-8);
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .domainRow {
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+  }
+
+  .domainTechs {
+    text-align: left;
+    font-size: 11px;
+  }
+
+  .contactItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    padding: var(--space-3);
+  }
+
+  .contactValue {
+    word-break: break-all;
+  }
+
+  .colophonItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    padding: var(--space-3);
+  }
+
+  .colophonValue {
+    text-align: left;
+    font-size: 11px;
+  }
+}
