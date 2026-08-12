@@ -37,3 +37,14 @@
 .editor::placeholder {
   color: var(--text-tertiary);
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .editor {
+    min-height: 250px;
+    font-size: 12px;
+    padding: var(--space-3);
+    line-height: 1.5;
+  }
+}

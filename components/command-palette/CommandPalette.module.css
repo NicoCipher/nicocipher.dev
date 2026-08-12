@@ -339,3 +339,81 @@
   color: var(--text-tertiary);
   font-size: 10px;
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .overlay {
+    padding-top: 8vh;
+    align-items: flex-start;
+  }
+
+  .dialog {
+    width: 96%;
+    max-width: none;
+    border-radius: 10px;
+  }
+
+  .inputWrapper {
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .prompt {
+    font-size: var(--text-base);
+  }
+
+  .input {
+    font-size: var(--text-sm);
+  }
+
+  .closeBtn {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+
+  .results {
+    max-height: 50vh;
+    padding: var(--space-1);
+  }
+
+  .resultItem {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .resultTitle {
+    font-size: var(--text-xs);
+  }
+
+  .resultExcerpt {
+    font-size: 11px;
+  }
+
+  .groupLabel {
+    font-size: 9px;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .empty {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .footer {
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-2);
+    font-size: 10px;
+  }
+
+  .footerHint:not(:first-child) {
+    display: none;
+  }
+
+  .matchedTags {
+    gap: var(--space-1);
+  }
+
+  .matchedTag {
+    font-size: 9px;
+    padding: 1px 4px;
+  }
+}

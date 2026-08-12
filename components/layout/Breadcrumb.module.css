@@ -28,3 +28,27 @@
 .current {
   color: var(--text-tertiary);
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .breadcrumb {
+    font-size: 11px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .breadcrumb::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sep {
+    margin: 0 var(--space-1);
+  }
+
+  .segment {
+    white-space: nowrap;
+  }
+}

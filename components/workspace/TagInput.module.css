@@ -72,3 +72,23 @@
 .input::placeholder {
   color: var(--text-tertiary);
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .inputArea {
+    padding: var(--space-2);
+    gap: var(--space-1);
+    min-height: 34px;
+  }
+
+  .chip {
+    font-size: 11px;
+    padding: 1px 5px;
+  }
+
+  .input {
+    min-width: 60px;
+    font-size: 12px;
+  }
+}

@@ -147,3 +147,29 @@
   border-top: 1px solid var(--border-subtle);
   margin: var(--space-6) 0;
 }
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .container {
+    min-height: 250px;
+  }
+
+  .preview {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .preview h2 {
+    font-size: var(--text-base);
+  }
+
+  .preview h3 {
+    font-size: var(--text-sm);
+  }
+
+  .preview pre {
+    padding: var(--space-3);
+    font-size: 11px;
+  }
+}
