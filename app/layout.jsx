@@ -52,6 +52,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      data-theme="dark"
       className={`${instrumentSans.variable} ${sourceSerif.variable} ${jetBrainsMono.variable}`}
     >
       <body>

@@ -3,11 +3,28 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePalette } from "@/components/command-palette/PaletteProvider";
+import { useEffect, useState } from "react";
 import styles from "./Nav.module.css";
 
 export default function Nav() {
   const pathname = usePathname();
   const { openPalette } = usePalette();
+  const [theme, setTheme] = useState("dark");
+
+  // Initialise from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("nc-theme");
+    const initial = stored || "dark";
+    setTheme(initial);
+    document.documentElement.setAttribute("data-theme", initial);
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("nc-theme", next);
+  };
 
   const links = [
     { href: "/publications", label: "publications" },
@@ -38,15 +55,27 @@ export default function Nav() {
           })}
         </nav>
 
-        <button
-          type="button"
-          onClick={openPalette}
-          className={styles.paletteTrigger}
-          aria-label="Open command palette (Press /)"
-          title="Command Palette (Press /)"
-        >
-          <span className={styles.triggerKey}>[ / ]</span>
-        </button>
+        <div className={styles.controls}>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className={styles.themeToggle}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            {theme === "dark" ? "○" : "●"}
+          </button>
+
+          <button
+            type="button"
+            onClick={openPalette}
+            className={styles.paletteTrigger}
+            aria-label="Open command palette (Press /)"
+            title="Command Palette (Press /)"
+          >
+            <span className={styles.triggerKey}>[ / ]</span>
+          </button>
+        </div>
       </div>
     </header>
   );
