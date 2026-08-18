@@ -1,13 +1,17 @@
-.container {
+.figure {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  margin: 0;
 }
+
+/* ─── Header ─────────────────────────────────────────────────── */
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
+  gap: var(--space-3);
 }
 
 .label {
@@ -24,64 +28,103 @@
   color: var(--text-tertiary);
 }
 
-.graphWrapper {
+/* ─── Graph ──────────────────────────────────────────────────── */
+
+.graphArea {
+  display: flex;
+  gap: 4px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 
-.graphWrapper::-webkit-scrollbar {
+.graphArea::-webkit-scrollbar {
   display: none;
 }
 
-.monthRow {
-  display: grid;
-  grid-auto-columns: 13px;
+/* Day labels column */
+.dayLabels {
+  display: flex;
+  flex-direction: column;
   gap: 3px;
-  margin-bottom: 4px;
-  margin-left: 0;
+  padding-top: 20px; /* aligns with grid rows, below month row */
+  flex-shrink: 0;
+}
+
+.dayLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-tertiary);
+  line-height: 1;
+  height: 11px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* Month + grid column */
+.graphColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Month label row */
+.monthRow {
+  display: flex;
+  gap: 3px;
+}
+
+.monthCell {
+  width: 11px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .monthLabel {
   font-family: var(--font-mono);
   font-size: 9px;
   color: var(--text-tertiary);
+  white-space: nowrap;
   line-height: 1;
 }
 
+/* The actual grid */
 .grid {
   display: flex;
   gap: 3px;
 }
 
-.column {
+.gridCol {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
+/* ─── Cell ───────────────────────────────────────────────────── */
+
 .cell {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 2px;
   background: var(--heatmap-empty);
+  flex-shrink: 0;
+  cursor: default;
+  transition: opacity 80ms;
 }
 
-.cell[data-level="1"] {
-  background: var(--heatmap-l1);
+.cell:hover {
+  opacity: 0.75;
 }
 
-.cell[data-level="2"] {
-  background: var(--heatmap-l2);
-}
+.cell[data-level="1"] { background: var(--heatmap-l1); }
+.cell[data-level="2"] { background: var(--heatmap-l2); }
+.cell[data-level="3"] { background: var(--heatmap-l3); }
+.cell[data-level="4"] { background: var(--heatmap-l4); }
 
-.cell[data-level="3"] {
-  background: var(--heatmap-l3);
-}
-
-.cell[data-level="4"] {
-  background: var(--heatmap-l4);
-}
+/* ─── Legend ─────────────────────────────────────────────────── */
 
 .legend {
   display: flex;
@@ -90,7 +133,7 @@
   justify-content: flex-end;
 }
 
-.legendLabel {
+.legendText {
   font-family: var(--font-mono);
   font-size: 9px;
   color: var(--text-tertiary);
@@ -100,21 +143,34 @@
 /* ─── Mobile ─────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
+  .dayLabels {
+    display: none;
+  }
+
   .cell {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 1px;
+  }
+
+  .monthCell {
+    width: 9px;
   }
 
   .grid {
     gap: 2px;
   }
 
-  .column {
+  .gridCol {
     gap: 2px;
   }
 
   .monthRow {
-    grid-auto-columns: 10px;
     gap: 2px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: var(--space-1);
   }
 }

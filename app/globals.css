@@ -7,80 +7,82 @@
 
 /* === Design Tokens === */
 :root {
-  /* Colors — Pure Monochrome */
+  /* Colors */
   --bg-root: #0a0a0a;
-  --bg-surface: #121212;
-  --bg-inset: #181818;
-  --bg-overlay: #1e1e1e;
+  --bg-surface: #111111;
+  --bg-inset: #1a1a1a;
+  --bg-overlay: #222222;
 
-  --border-subtle: #222222;
-  --border-visible: #333333;
+  --border-subtle: #252525;
+  --border-visible: #383838;
 
-  --text-primary: #e8e8e8;
-  --text-secondary: #999999;
-  --text-tertiary: #5c5c5c;
+  --text-primary: #efefef;
+  --text-secondary: #a0a0a0;
+  --text-tertiary: #555555;
 
-  --accent: #e8e8e8;
-  --accent-dim: #999999;
-  --accent-subtle: rgba(255, 255, 255, 0.06);
-  --accent-glow: rgba(255, 255, 255, 0.03);
+  /* Blue accent */
+  --accent: #3b82f6;
+  --accent-dim: #2563eb;
+  --accent-subtle: rgba(59, 130, 246, 0.10);
+  --accent-glow: rgba(59, 130, 246, 0.15);
 
-  --status-active: #e8e8e8;
-  --status-warn: #999999;
+  --status-active: #3b82f6;
+  --status-warn: #f59e0b;
 
-  /* Type Accent Colors — monochrome shades */
-  --type-project: #e8e8e8;
-  --type-case-study: #bbbbbb;
-  --type-lab: #999999;
-  --type-research: #777777;
+  /* Type colors */
+  --type-project:    #3b82f6;
+  --type-case-study: #8b5cf6;
+  --type-lab:        #10b981;
+  --type-research:   #f59e0b;
 
   /* Glass */
-  --glass-bg: rgba(10, 10, 10, 0.80);
-  --glass-border: rgba(50, 50, 50, 0.5);
+  --glass-bg: rgba(10, 10, 10, 0.82);
+  --glass-border: rgba(59, 130, 246, 0.08);
 
-  /* Heatmap */
-  --heatmap-empty: #161616;
-  --heatmap-l1: #2a2a2a;
-  --heatmap-l2: #4a4a4a;
-  --heatmap-l3: #7a7a7a;
-  --heatmap-l4: #e8e8e8;
+  /* Heatmap — GitHub green scale */
+  --heatmap-empty: #161b22;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #39d353;
 }
 
 /* === Light Mode === */
 :root[data-theme="light"] {
   --bg-root: #ffffff;
-  --bg-surface: #f5f5f5;
-  --bg-inset: #ebebeb;
-  --bg-overlay: #e0e0e0;
+  --bg-surface: #f6f8fa;
+  --bg-inset: #eaeef2;
+  --bg-overlay: #d0d7de;
 
-  --border-subtle: #d4d4d4;
-  --border-visible: #b8b8b8;
+  --border-subtle: #d0d7de;
+  --border-visible: #afb8c1;
 
-  --text-primary: #0a0a0a;
-  --text-secondary: #555555;
-  --text-tertiary: #999999;
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --text-tertiary: #9198a1;
 
-  --accent: #0a0a0a;
-  --accent-dim: #555555;
-  --accent-subtle: rgba(0, 0, 0, 0.05);
-  --accent-glow: rgba(0, 0, 0, 0.02);
+  --accent: #2563eb;
+  --accent-dim: #1d4ed8;
+  --accent-subtle: rgba(37, 99, 235, 0.08);
+  --accent-glow: rgba(37, 99, 235, 0.12);
 
-  --status-active: #0a0a0a;
-  --status-warn: #555555;
+  --status-active: #2563eb;
+  --status-warn: #d97706;
 
-  --type-project: #0a0a0a;
-  --type-case-study: #333333;
-  --type-lab: #555555;
-  --type-research: #777777;
+  --type-project:    #2563eb;
+  --type-case-study: #7c3aed;
+  --type-lab:        #059669;
+  --type-research:   #d97706;
 
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(0, 0, 0, 0.08);
 
-  --heatmap-empty: #ebebeb;
-  --heatmap-l1: #c8c8c8;
-  --heatmap-l2: #999999;
-  --heatmap-l3: #555555;
-  --heatmap-l4: #0a0a0a;
+  /* Heatmap — GitHub light green scale */
+  --heatmap-empty: #ebedf0;
+  --heatmap-l1: #9be9a8;
+  --heatmap-l2: #40c463;
+  --heatmap-l3: #30a14e;
+  --heatmap-l4: #216e39;
 }
 
 /* === Shared Tokens (font, size, spacing, motion) === */

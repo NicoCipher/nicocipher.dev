@@ -62,7 +62,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--text-primary);
+  background: var(--accent);
   transform: scaleX(0);
   transition: transform var(--duration-base) var(--ease-out);
 }
@@ -76,7 +76,7 @@
 }
 
 .active {
-  color: var(--text-primary);
+  color: var(--accent);
 }
 
 .active::after {
