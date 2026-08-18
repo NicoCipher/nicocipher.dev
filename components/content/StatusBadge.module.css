@@ -16,14 +16,26 @@
   line-height: 1;
 }
 
-/* ─── Status variants ─────────────────────────────────────── */
+/* ─── Status variants — theme-independent fixed colors ─────── */
 
 .complete {
-  color: var(--text-secondary);
+  color: #28c840;
+  border-color: rgba(40, 200, 64, 0.25);
+  background: rgba(40, 200, 64, 0.08);
+}
+
+.complete .symbol {
+  color: #28c840;
 }
 
 .active {
-  color: var(--text-primary);
+  color: #febc2e;
+  border-color: rgba(254, 188, 46, 0.25);
+  background: rgba(254, 188, 46, 0.08);
+}
+
+.active .symbol {
+  color: #febc2e;
 }
 
 .paused {
