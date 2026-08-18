@@ -65,7 +65,7 @@
 
 .themeGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--space-3);
 }
 
@@ -137,6 +137,16 @@
   height: 5px;
   width: 28%;
   border-radius: 3px;
+}
+
+.previewSpacer {
+  flex: 1;
+}
+
+.previewNavLine {
+  height: 3px;
+  width: 18px;
+  border-radius: 2px;
 }
 
 /* Label */
@@ -241,6 +251,12 @@
 }
 
 /* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .themeGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
 @media (max-width: 640px) {
   .page {

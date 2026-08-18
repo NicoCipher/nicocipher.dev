@@ -5,6 +5,9 @@ import {
   IBM_Plex_Sans, IBM_Plex_Serif, IBM_Plex_Mono,
   Space_Grotesk, Space_Mono,
   DM_Sans,
+  Geist, Geist_Mono,
+  Fraunces,
+  Fira_Code,
 } from "next/font/google";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
@@ -23,6 +26,10 @@ const ibmPlexMono    = IBM_Plex_Mono  ({ subsets: ["latin"], weight: ["400","500
 const spaceGrotesk   = Space_Grotesk  ({ subsets: ["latin"], variable: "--font-space-grotesk",  display: "swap" });
 const spaceMono      = Space_Mono     ({ subsets: ["latin"], weight: ["400","700"],             variable: "--font-space-mono",     display: "swap" });
 const dmSans         = DM_Sans        ({ subsets: ["latin"], variable: "--font-dm-sans",         display: "swap" });
+const geist          = Geist          ({ subsets: ["latin"], variable: "--font-geist",           display: "swap" });
+const geistMono      = Geist_Mono     ({ subsets: ["latin"], variable: "--font-geist-mono",      display: "swap" });
+const fraunces       = Fraunces       ({ subsets: ["latin"], variable: "--font-fraunces",        display: "swap" });
+const firaCode       = Fira_Code      ({ subsets: ["latin"], variable: "--font-fira-code",       display: "swap" });
 
 const allFontVars = [
   instrumentSans.variable, sourceSerif.variable, jetBrainsMono.variable,
@@ -30,6 +37,9 @@ const allFontVars = [
   ibmPlexSans.variable, ibmPlexSerif.variable, ibmPlexMono.variable,
   spaceGrotesk.variable, spaceMono.variable,
   dmSans.variable,
+  geist.variable, geistMono.variable,
+  fraunces.variable,
+  firaCode.variable,
 ].join(" ");
 
 /* ── Metadata ──────────────────────────────────────────────────── */

@@ -2,18 +2,22 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
 }
+
+/* ─── Toolbar ─────────────────────────────────────────────────── */
 
 .toolbar {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   padding: var(--space-3) var(--space-5);
   border-bottom: 1px solid var(--border-subtle);
   background: var(--bg-surface);
   position: sticky;
   top: 0;
   z-index: 50;
+  flex-shrink: 0;
 }
 
 .backBtn {
@@ -25,6 +29,8 @@
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
+  transition: color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
 }
 
 .backBtn:hover {
@@ -40,6 +46,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
 .toolbarActions {
@@ -57,7 +64,9 @@
   padding: var(--space-1) var(--space-3);
   border-radius: 4px;
   cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-out);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
 }
 
 .previewToggle:hover {
@@ -75,8 +84,9 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background var(--duration-fast) var(--ease-out);
-  min-width: 90px;
+  min-width: 80px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .saveBtn:hover {
@@ -84,7 +94,7 @@
 }
 
 .saveBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -93,16 +103,20 @@
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--status-active);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--accent-subtle);
   border-bottom: 1px solid var(--border-subtle);
   padding: var(--space-2) var(--space-5);
   text-align: center;
+  flex-shrink: 0;
 }
 
-/* Editor Layout */
+/* ─── Editor Layout ──────────────────────────────────────────── */
+
 .editorLayout {
   display: flex;
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .formPanel {
@@ -112,14 +126,16 @@
   flex-direction: column;
   gap: var(--space-6);
   overflow-y: auto;
+  min-width: 0;
 }
 
 .previewPanel {
-  width: 45%;
+  width: 42%;
   border-left: 1px solid var(--border-subtle);
   padding: var(--space-5);
   overflow-y: auto;
   background: var(--bg-root);
+  flex-shrink: 0;
 }
 
 .section {
@@ -143,12 +159,13 @@
   padding: var(--space-12);
 }
 
-/* Mobile sticky save — hidden on desktop */
+/* Mobile sticky save — hidden desktop */
 .mobileSave {
   display: none;
 }
 
-/* Mobile */
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
 @media (max-width: 768px) {
   .toolbar {
     padding: var(--space-2) var(--space-3);
@@ -159,30 +176,37 @@
     font-size: var(--text-xs);
   }
 
-  /* Hide desktop save button on mobile */
+  /* Hide desktop save on mobile — sticky bar handles it */
   .toolbarActions .saveBtn {
     display: none;
   }
 
-  /* Preview replaces form on mobile (controlled via inline style) */
+  .editorLayout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  /* Preview replaces form via showPreview state on parent */
   .previewPanel {
     width: 100%;
     border-left: none;
+    border-top: 1px solid var(--border-subtle);
     padding: var(--space-4);
   }
 
   .formPanel {
     padding: var(--space-4);
     gap: var(--space-4);
-    /* Extra bottom padding for sticky save bar */
-    padding-bottom: 72px;
+    /* Room for fixed save bar */
+    padding-bottom: 80px;
   }
 
   .deployNotice {
     padding: var(--space-2) var(--space-3);
+    font-size: 10px;
   }
 
-  /* Mobile sticky save bar */
+  /* Sticky save bar at bottom */
   .mobileSave {
     display: flex;
     position: fixed;
@@ -199,5 +223,12 @@
     width: 100%;
     padding: var(--space-3);
     font-size: var(--text-sm);
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .previewToggle {
+    display: none;
   }
 }

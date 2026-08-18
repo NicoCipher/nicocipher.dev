@@ -233,6 +233,147 @@
   --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
+/* === Theme: Dracula === */
+:root[data-theme="dracula"] {
+  --bg-root: #1e1f29;
+  --bg-surface: #252636;
+  --bg-inset: #2d2f42;
+  --bg-overlay: #363849;
+  --border-subtle: #3a3c52;
+  --border-visible: #4d5068;
+  --text-primary: #f8f8f2;
+  --text-secondary: #a9b1d6;
+  --text-tertiary: #6272a4;
+  --accent: #bd93f9;
+  --accent-dim: #9d79d9;
+  --accent-subtle: rgba(189, 147, 249, 0.10);
+  --accent-glow: rgba(189, 147, 249, 0.12);
+  --status-active: #50fa7b;
+  --status-warn: #ffb86c;
+  --type-project:    #8be9fd;
+  --type-case-study: #bd93f9;
+  --type-lab:        #50fa7b;
+  --type-research:   #ffb86c;
+  --glass-bg: rgba(30, 31, 41, 0.88);
+  --glass-border: rgba(189, 147, 249, 0.08);
+  --heatmap-empty: #252636;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #50fa7b;
+}
+
+/* === Theme: Catppuccin Mocha === */
+:root[data-theme="catppuccin"] {
+  --bg-root: #1e1e2e;
+  --bg-surface: #181825;
+  --bg-inset: #11111b;
+  --bg-overlay: #24273a;
+  --border-subtle: #313244;
+  --border-visible: #45475a;
+  --text-primary: #cdd6f4;
+  --text-secondary: #a6adc8;
+  --text-tertiary: #6c7086;
+  --accent: #89b4fa;
+  --accent-dim: #74a7f5;
+  --accent-subtle: rgba(137, 180, 250, 0.10);
+  --accent-glow: rgba(137, 180, 250, 0.12);
+  --status-active: #a6e3a1;
+  --status-warn: #fab387;
+  --type-project:    #89b4fa;
+  --type-case-study: #cba6f7;
+  --type-lab:        #a6e3a1;
+  --type-research:   #fab387;
+  --glass-bg: rgba(30, 30, 46, 0.88);
+  --glass-border: rgba(137, 180, 250, 0.08);
+  --heatmap-empty: #181825;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #a6e3a1;
+}
+
+/* === Theme: Gruvbox Dark === */
+:root[data-theme="gruvbox"] {
+  --bg-root: #1d2021;
+  --bg-surface: #282828;
+  --bg-inset: #32302f;
+  --bg-overlay: #3c3836;
+  --border-subtle: #3c3836;
+  --border-visible: #504945;
+  --text-primary: #ebdbb2;
+  --text-secondary: #bdae93;
+  --text-tertiary: #7c6f64;
+  --accent: #d79921;
+  --accent-dim: #b57614;
+  --accent-subtle: rgba(215, 153, 33, 0.10);
+  --accent-glow: rgba(215, 153, 33, 0.12);
+  --status-active: #98971a;
+  --status-warn: #d65d0e;
+  --type-project:    #458588;
+  --type-case-study: #b16286;
+  --type-lab:        #98971a;
+  --type-research:   #d79921;
+  --glass-bg: rgba(29, 32, 33, 0.88);
+  --glass-border: rgba(215, 153, 33, 0.08);
+  --heatmap-empty: #282828;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #b8bb26;
+}
+
+/* === Theme: Solarized Dark === */
+:root[data-theme="solarized"] {
+  --bg-root: #002b36;
+  --bg-surface: #073642;
+  --bg-inset: #094552;
+  --bg-overlay: #0d5060;
+  --border-subtle: #0f5060;
+  --border-visible: #1e6575;
+  --text-primary: #eee8d5;
+  --text-secondary: #93a1a1;
+  --text-tertiary: #657b83;
+  --accent: #268bd2;
+  --accent-dim: #1a70b5;
+  --accent-subtle: rgba(38, 139, 210, 0.10);
+  --accent-glow: rgba(38, 139, 210, 0.12);
+  --status-active: #859900;
+  --status-warn: #cb4b16;
+  --type-project:    #268bd2;
+  --type-case-study: #6c71c4;
+  --type-lab:        #859900;
+  --type-research:   #b58900;
+  --glass-bg: rgba(0, 43, 54, 0.88);
+  --glass-border: rgba(38, 139, 210, 0.08);
+  --heatmap-empty: #073642;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #859900;
+}
+
+/* === Font: Geist (Vercel, ultra-clean) === */
+[data-font="geist"] {
+  --font-sans: var(--font-geist), -apple-system, sans-serif;
+  --font-serif: var(--font-geist), -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+/* === Font: Fraunces (optical serif + JetBrains) === */
+[data-font="fraunces"] {
+  --font-sans: var(--font-instrument-sans), -apple-system, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+}
+
+/* === Font: Fira Code (mono-forward) === */
+[data-font="fira"] {
+  --font-sans: var(--font-dm-sans), sans-serif;
+  --font-serif: var(--font-dm-sans), sans-serif;
+  --font-mono: var(--font-fira-code), monospace;
+}
+
 /* === Shared Tokens (font, size, spacing, motion) === */
 :root {
   /* Typography Fonts — editorial default, overridden by [data-font] */

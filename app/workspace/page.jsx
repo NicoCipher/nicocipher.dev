@@ -74,7 +74,7 @@ export default function WorkspaceDashboard() {
           <h1 className={styles.title}>Publications</h1>
           <p className={styles.subtitle}>{publications.length} publication{publications.length !== 1 ? "s" : ""} in repo</p>
         </div>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className={styles.headerActions}>
           <button
             className={styles.settingsBtn}
             onClick={() => router.push("/workspace/settings")}
@@ -85,7 +85,7 @@ export default function WorkspaceDashboard() {
             className={styles.newBtn}
             onClick={() => router.push("/workspace/editor")}
           >
-            + New Publication
+            + New
           </button>
         </div>
       </div>
