@@ -1,16 +1,16 @@
-.block {
+.block,
+.metaBlock {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   overflow: hidden;
   animation: fadeInUp var(--duration-base) var(--ease-out) forwards;
-  transition: border-color var(--duration-base) var(--ease-out),
-              box-shadow var(--duration-base) var(--ease-out);
+  transition: border-color var(--duration-base) var(--ease-out);
 }
 
-.block:hover {
+.block:hover,
+.metaBlock:hover {
   border-color: var(--border-visible);
-  box-shadow: 0 0 16px var(--accent-glow);
 }
 
 .row {
@@ -60,6 +60,22 @@
   color: var(--text-primary);
 }
 
+.typeLink {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.typeLink:hover {
+  color: var(--text-secondary);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+}
+
 .statusValue {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -76,11 +92,41 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--status-active);
-  box-shadow: 0 0 6px var(--status-active);
+  background-color: var(--text-primary);
   flex-shrink: 0;
 }
 
+.tagRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tagRow:last-child {
+  border-bottom: none;
+}
+
+.tagLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+  user-select: none;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.tags {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.techTag,
 .tag {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -92,14 +138,13 @@
   display: inline-flex;
   align-items: center;
   transition: color var(--duration-fast) var(--ease-out),
-              border-color var(--duration-fast) var(--ease-out),
-              background-color var(--duration-fast) var(--ease-out);
+              border-color var(--duration-fast) var(--ease-out);
 }
 
+.techTag:hover,
 .tag:hover {
   color: var(--text-secondary);
   border-color: var(--border-visible);
-  background-color: var(--bg-overlay);
 }
 
 @media (max-width: 640px) {
@@ -117,5 +162,11 @@
 
   .field:last-child {
     border-bottom: none;
+  }
+
+  .tagRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
   }
 }

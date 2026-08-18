@@ -38,7 +38,6 @@
   border-radius: 12px;
   box-shadow:
     0 0 0 1px rgba(0,0,0,0.5),
-    0 0 40px rgba(196, 168, 130, 0.04),
     0 24px 48px rgba(0, 0, 0, 0.6),
     0 4px 12px rgba(0, 0, 0, 0.4);
   overflow: hidden;
@@ -204,8 +203,6 @@
 
 .resultItem.selected {
   background: var(--bg-inset);
-  border-left: 2px solid var(--accent);
-  box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .resultItem.selected .resultTitle {
@@ -232,9 +229,9 @@
 }
 
 .kind_publication {
-  background: var(--accent-subtle);
-  color: var(--accent);
-  border: 1px solid rgba(196, 168, 130, 0.2);
+  background: var(--bg-inset);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
 }
 
 .kind_page {
@@ -244,9 +241,9 @@
 }
 
 .kind_type-filter {
-  background: rgba(126, 184, 138, 0.1);
-  color: var(--status-active);
-  border: 1px solid rgba(126, 184, 138, 0.2);
+  background: var(--bg-inset);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border-subtle);
 }
 
 .resultTitle {
@@ -279,12 +276,11 @@
 /* ─── Match Highlight ─────────────────────────────────────────────────── */
 
 .mark {
-  background: rgba(196, 168, 130, 0.2);
-  color: var(--accent);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
   border-radius: 2px;
   padding: 0 2px;
   font-style: normal;
-  box-shadow: 0 0 6px rgba(196, 168, 130, 0.15);
 }
 
 /* ─── Matched Technology Tags ─────────────────────────────────────────── */
@@ -299,8 +295,8 @@
 .matchedTag {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--accent);
-  background: var(--accent-subtle);
+  color: var(--text-secondary);
+  background: var(--bg-inset);
   padding: 1px 6px;
   border-radius: 3px;
 }

@@ -14,23 +14,10 @@
   font-family: var(--font-mono);
   font-size: clamp(80px, 15vw, 140px);
   font-weight: 800;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
   letter-spacing: -0.05em;
   line-height: 1;
-  position: relative;
-  animation: glitch 3s infinite;
-}
-
-.heading {
-  font-family: var(--font-sans);
-  font-size: var(--text-xl);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  animation: fadeInUp var(--duration-slow) var(--ease-out) 100ms both;
+  opacity: 0.15;
 }
 
 .message {
@@ -38,67 +25,31 @@
   font-size: var(--text-lg);
   color: var(--text-secondary);
   max-width: 320px;
-  line-height: 1.6;
-  margin: 0 auto;
-  animation: fadeInUp var(--duration-slow) var(--ease-out) 200ms both;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-4);
-  margin-top: var(--space-2);
-  animation: fadeInUp var(--duration-slow) var(--ease-out) 300ms both;
 }
 
 .link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--accent);
-  border: 1px solid var(--accent);
+  color: var(--text-primary);
+  border: 1px solid var(--border-visible);
   padding: var(--space-2) var(--space-5);
-  border-radius: 5px;
-  transition: all var(--duration-fast) var(--ease-out);
-  text-decoration: none;
+  border-radius: 4px;
+  transition: background var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
 
 .link:hover {
-  background: var(--accent);
+  background: var(--text-primary);
   color: var(--bg-root);
-  box-shadow: 0 0 16px var(--accent-glow);
 }
 
-@keyframes glitch {
-  0%, 48%, 54%, 100% {
-    text-shadow: none;
-  }
-  50% {
-    text-shadow: 2px 0 var(--accent-glow), -2px 0 rgba(130, 168, 196, 0.2);
-  }
-  52% {
-    text-shadow: -2px 0 var(--accent-glow), 2px 0 rgba(130, 168, 196, 0.2);
-  }
-}
+/* ─── Mobile ─────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
-  .container {
-    min-height: 50vh;
-    gap: var(--space-4);
-    padding: var(--space-8) var(--space-4);
+  .code {
+    font-size: clamp(60px, 20vw, 100px);
   }
 
-  .actions {
-    flex-direction: column;
-    width: 100%;
-    max-width: 280px;
-    gap: var(--space-3);
-  }
-
-  .link {
-    width: 100%;
+  .message {
+    font-size: var(--text-base);
   }
 }

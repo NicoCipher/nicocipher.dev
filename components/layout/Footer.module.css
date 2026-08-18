@@ -1,50 +1,26 @@
 .footer {
-  width: 100%;
-  margin-top: auto;
-  background-color: var(--bg-root);
-  border-top: 1px solid;
-  border-image: linear-gradient(
-    to right,
-    transparent,
-    var(--border-visible),
-    transparent
-  ) 1;
-  animation: fadeIn var(--duration-slow) var(--ease-out) 300ms backwards;
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-6) var(--space-5);
+  animation: fadeIn var(--duration-slow) var(--ease-out) both;
+  animation-delay: 200ms;
 }
 
-.footerInner,
-.container {
+.footerInner {
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: var(--space-6) var(--space-5);
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
 }
 
-.copyright,
-.meta {
+.copyright {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-tertiary);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-  line-height: 1.5;
-}
-
-.divider {
-  color: var(--border-visible);
-  user-select: none;
 }
 
 .links {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   gap: var(--space-4);
 }
 
@@ -52,51 +28,19 @@
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text-tertiary);
-  position: relative;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.link::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: var(--accent);
-  transform: scaleX(0);
-  transform-origin: bottom right;
-  transition: transform var(--duration-base) var(--ease-out);
-}
-
 .link:hover {
-  color: var(--accent);
-  text-shadow: 0 0 8px var(--accent-glow);
+  color: var(--text-primary);
 }
 
-.link:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
+/* ─── Mobile ─────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
-  .footerInner,
-  .container {
+  .footerInner {
     flex-direction: column;
-    text-align: center;
     gap: var(--space-3);
-  }
-
-  .copyright,
-  .meta {
-    justify-content: center;
     text-align: center;
-  }
-
-  .links {
-    justify-content: center;
   }
 }

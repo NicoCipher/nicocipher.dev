@@ -1,0 +1,120 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-tertiary);
+}
+
+.graphWrapper {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.graphWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.monthRow {
+  display: grid;
+  grid-auto-columns: 13px;
+  gap: 3px;
+  margin-bottom: 4px;
+  margin-left: 0;
+}
+
+.monthLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-tertiary);
+  line-height: 1;
+}
+
+.grid {
+  display: flex;
+  gap: 3px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cell {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--heatmap-empty);
+}
+
+.cell[data-level="1"] {
+  background: var(--heatmap-l1);
+}
+
+.cell[data-level="2"] {
+  background: var(--heatmap-l2);
+}
+
+.cell[data-level="3"] {
+  background: var(--heatmap-l3);
+}
+
+.cell[data-level="4"] {
+  background: var(--heatmap-l4);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  justify-content: flex-end;
+}
+
+.legendLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-tertiary);
+  margin: 0 2px;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .cell {
+    width: 8px;
+    height: 8px;
+  }
+
+  .grid {
+    gap: 2px;
+  }
+
+  .column {
+    gap: 2px;
+  }
+
+  .monthRow {
+    grid-auto-columns: 10px;
+    gap: 2px;
+  }
+}

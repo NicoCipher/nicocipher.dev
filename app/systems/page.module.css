@@ -1,3 +1,7 @@
+/* ==========================================================================
+   Systems Architecture Page Module — nicocipher.dev
+   ========================================================================== */
+
 .container {
   max-width: var(--content-max-width);
   margin: 0 auto;
@@ -18,11 +22,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-2xl);
   font-weight: 700;
-  background: linear-gradient(135deg, var(--accent) 0%, #e8dcc8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  color: var(--text-primary);
 }
 
 .subtitle {
@@ -45,14 +45,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  border-top: 3px solid var(--accent);
   transition: transform var(--duration-base) var(--ease-out),
               box-shadow var(--duration-base) var(--ease-out),
               border-color var(--duration-base) var(--ease-out);
 }
 
 .domainCard:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  border-color: var(--border-visible);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
@@ -101,20 +101,19 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-subtle);
   transition: all var(--duration-fast) var(--ease-out);
 }
 
 .techItem:hover {
   border-color: var(--border-visible);
-  transform: scale(1.02);
-  box-shadow: 0 0 12px var(--accent-glow);
+  transform: translateY(-1px);
 }
 
 .techName {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--accent);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -154,7 +153,7 @@
 }
 
 .pubLink:hover {
-  color: var(--accent);
+  color: var(--text-primary);
 }
 
 /* ─── Mobile ─────────────────────────────────────────────────── */

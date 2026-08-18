@@ -3,6 +3,7 @@ import profile from "@/data/profile.json";
 import { getAllPublications } from "@/lib/publications";
 import CurrentlyBlock from "@/components/home/CurrentlyBlock";
 import FeaturedPublications from "@/components/home/FeaturedPublications";
+import Heatmap from "@/components/home/Heatmap";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -17,6 +18,9 @@ export default function HomePage() {
     labs: allPubs.filter((p) => p.type === "lab").length,
     research: allPubs.filter((p) => p.type === "research").length,
   };
+
+  // All publication dates for the heatmap
+  const pubDates = allPubs.map((p) => p.date);
 
   return (
     <div className={styles.container}>
@@ -33,6 +37,11 @@ export default function HomePage() {
             <span key={d} className={styles.domainTag}>{d}</span>
           ))}
         </div>
+      </section>
+
+      {/* Activity Heatmap */}
+      <section className={styles.heatmapSection} aria-label="Publication activity">
+        <Heatmap dates={pubDates} />
       </section>
 
       {/* Publication Statistics */}
