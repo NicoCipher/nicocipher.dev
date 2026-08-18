@@ -40,7 +40,7 @@
   --glass-border: rgba(59, 130, 246, 0.08);
 
   /* Heatmap — GitHub green scale */
-  --heatmap-empty: #161b22;
+  --heatmap-empty: #1a1a1a;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
@@ -108,7 +108,7 @@
   --type-research: #e3b341;
   --glass-bg: rgba(13, 17, 23, 0.85);
   --glass-border: rgba(48, 54, 61, 0.6);
-  --heatmap-empty: #161b22;
+  --heatmap-empty: #21262d;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
@@ -138,7 +138,7 @@
   --type-research: #fde68a;
   --glass-bg: rgba(11, 15, 11, 0.88);
   --glass-border: rgba(0, 208, 132, 0.08);
-  --heatmap-empty: #0d1a0d;
+  --heatmap-empty: #182018;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
@@ -168,7 +168,7 @@
   --type-research: #b45309;
   --glass-bg: rgba(247, 243, 236, 0.90);
   --glass-border: rgba(0, 0, 0, 0.08);
-  --heatmap-empty: #e8e1d5;
+  --heatmap-empty: #e0d8ca;
   --heatmap-l1: #9be9a8;
   --heatmap-l2: #40c463;
   --heatmap-l3: #30a14e;
@@ -198,7 +198,7 @@
   --type-research: #ebcb8b;
   --glass-bg: rgba(46, 52, 64, 0.88);
   --glass-border: rgba(136, 192, 208, 0.08);
-  --heatmap-empty: #2e3440;
+  --heatmap-empty: #434c5e;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
@@ -256,7 +256,7 @@
   --type-research:   #ffb86c;
   --glass-bg: rgba(30, 31, 41, 0.88);
   --glass-border: rgba(189, 147, 249, 0.08);
-  --heatmap-empty: #252636;
+  --heatmap-empty: #2d2f42;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
@@ -286,7 +286,7 @@
   --type-research:   #fab387;
   --glass-bg: rgba(30, 30, 46, 0.88);
   --glass-border: rgba(137, 180, 250, 0.08);
-  --heatmap-empty: #181825;
+  --heatmap-empty: #313244;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
@@ -316,7 +316,7 @@
   --type-research:   #d79921;
   --glass-bg: rgba(29, 32, 33, 0.88);
   --glass-border: rgba(215, 153, 33, 0.08);
-  --heatmap-empty: #282828;
+  --heatmap-empty: #32302f;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
@@ -346,7 +346,7 @@
   --type-research:   #b58900;
   --glass-bg: rgba(0, 43, 54, 0.88);
   --glass-border: rgba(38, 139, 210, 0.08);
-  --heatmap-empty: #073642;
+  --heatmap-empty: #094552;
   --heatmap-l1: #0e4429;
   --heatmap-l2: #006d32;
   --heatmap-l3: #26a641;
