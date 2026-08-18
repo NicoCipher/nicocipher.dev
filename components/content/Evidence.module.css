@@ -119,12 +119,16 @@
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--border-visible);
   flex-shrink: 0;
 }
+
+.dot:nth-child(1) { background: #ff5f57; }
+.dot:nth-child(2) { background: #febc2e; }
+.dot:nth-child(3) { background: #28c840; }
 
 .terminalPre {
   padding: var(--space-4) var(--space-5);
