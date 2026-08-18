@@ -85,9 +85,157 @@
   --heatmap-l4: #216e39;
 }
 
+/* === Theme: Midnight (GitHub Dark style) === */
+:root[data-theme="midnight"] {
+  --bg-root: #0d1117;
+  --bg-surface: #161b22;
+  --bg-inset: #21262d;
+  --bg-overlay: #2d333b;
+  --border-subtle: #30363d;
+  --border-visible: #484f58;
+  --text-primary: #e6edf3;
+  --text-secondary: #8d96a0;
+  --text-tertiary: #56626e;
+  --accent: #58a6ff;
+  --accent-dim: #388bfd;
+  --accent-subtle: rgba(88, 166, 255, 0.10);
+  --accent-glow: rgba(88, 166, 255, 0.12);
+  --status-active: #58a6ff;
+  --status-warn: #e3b341;
+  --type-project: #58a6ff;
+  --type-case-study: #a78bfa;
+  --type-lab: #3fb950;
+  --type-research: #e3b341;
+  --glass-bg: rgba(13, 17, 23, 0.85);
+  --glass-border: rgba(48, 54, 61, 0.6);
+  --heatmap-empty: #161b22;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #39d353;
+}
+
+/* === Theme: Terminal (Unix green-on-black) === */
+:root[data-theme="terminal"] {
+  --bg-root: #0b0f0b;
+  --bg-surface: #111811;
+  --bg-inset: #182018;
+  --bg-overlay: #1f281f;
+  --border-subtle: #243024;
+  --border-visible: #344034;
+  --text-primary: #d0e8d0;
+  --text-secondary: #8aaa8a;
+  --text-tertiary: #4d6a4d;
+  --accent: #00d084;
+  --accent-dim: #00a86b;
+  --accent-subtle: rgba(0, 208, 132, 0.10);
+  --accent-glow: rgba(0, 208, 132, 0.12);
+  --status-active: #00d084;
+  --status-warn: #f9a825;
+  --type-project: #00d084;
+  --type-case-study: #7dd3fc;
+  --type-lab: #86efac;
+  --type-research: #fde68a;
+  --glass-bg: rgba(11, 15, 11, 0.88);
+  --glass-border: rgba(0, 208, 132, 0.08);
+  --heatmap-empty: #0d1a0d;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #39d353;
+}
+
+/* === Theme: Paper (warm editorial cream) === */
+:root[data-theme="paper"] {
+  --bg-root: #f7f3ec;
+  --bg-surface: #f0ebe1;
+  --bg-inset: #e8e1d5;
+  --bg-overlay: #ddd5c7;
+  --border-subtle: #ccc4b4;
+  --border-visible: #b8ae9c;
+  --text-primary: #1a1614;
+  --text-secondary: #5a4f44;
+  --text-tertiary: #8a7d6e;
+  --accent: #b45309;
+  --accent-dim: #92400e;
+  --accent-subtle: rgba(180, 83, 9, 0.08);
+  --accent-glow: rgba(180, 83, 9, 0.10);
+  --status-active: #15803d;
+  --status-warn: #b45309;
+  --type-project: #1d4ed8;
+  --type-case-study: #7c3aed;
+  --type-lab: #15803d;
+  --type-research: #b45309;
+  --glass-bg: rgba(247, 243, 236, 0.90);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --heatmap-empty: #e8e1d5;
+  --heatmap-l1: #9be9a8;
+  --heatmap-l2: #40c463;
+  --heatmap-l3: #30a14e;
+  --heatmap-l4: #216e39;
+}
+
+/* === Theme: Nord (Arctic developer palette) === */
+:root[data-theme="nord"] {
+  --bg-root: #2e3440;
+  --bg-surface: #3b4252;
+  --bg-inset: #434c5e;
+  --bg-overlay: #4c566a;
+  --border-subtle: #434c5e;
+  --border-visible: #4c566a;
+  --text-primary: #eceff4;
+  --text-secondary: #d8dee9;
+  --text-tertiary: #7a8699;
+  --accent: #88c0d0;
+  --accent-dim: #5e81ac;
+  --accent-subtle: rgba(136, 192, 208, 0.12);
+  --accent-glow: rgba(136, 192, 208, 0.14);
+  --status-active: #a3be8c;
+  --status-warn: #ebcb8b;
+  --type-project: #88c0d0;
+  --type-case-study: #b48ead;
+  --type-lab: #a3be8c;
+  --type-research: #ebcb8b;
+  --glass-bg: rgba(46, 52, 64, 0.88);
+  --glass-border: rgba(136, 192, 208, 0.08);
+  --heatmap-empty: #2e3440;
+  --heatmap-l1: #0e4429;
+  --heatmap-l2: #006d32;
+  --heatmap-l3: #26a641;
+  --heatmap-l4: #39d353;
+}
+
+/* === Font: System (Inter everywhere) === */
+[data-font="system"] {
+  --font-sans: var(--font-inter), -apple-system, sans-serif;
+  --font-serif: var(--font-inter), -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+}
+
+/* === Font: IBM Plex (technical credibility) === */
+[data-font="ibm"] {
+  --font-sans: var(--font-ibm-plex-sans), sans-serif;
+  --font-serif: var(--font-ibm-plex-serif), serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
+}
+
+/* === Font: Space (geometric, distinctive) === */
+[data-font="space"] {
+  --font-sans: var(--font-space-grotesk), sans-serif;
+  --font-serif: var(--font-space-grotesk), sans-serif;
+  --font-mono: var(--font-space-mono), monospace;
+}
+
+/* === Font: DM (clean modern) === */
+[data-font="dm"] {
+  --font-sans: var(--font-dm-sans), sans-serif;
+  --font-serif: var(--font-dm-sans), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+}
+
 /* === Shared Tokens (font, size, spacing, motion) === */
 :root {
-  /* Typography Fonts */
+  /* Typography Fonts — editorial default, overridden by [data-font] */
   --font-sans: var(--font-instrument-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: var(--font-source-serif), Georgia, serif;
   --font-mono: var(--font-jetbrains-mono), SFMono-Regular, Consolas, monospace;
