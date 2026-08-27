@@ -4,6 +4,7 @@ import { getAllPublications } from "@/lib/publications";
 import CurrentlyBlock from "@/components/home/CurrentlyBlock";
 import FeaturedPublications from "@/components/home/FeaturedPublications";
 import Heatmap from "@/components/home/Heatmap";
+import TerminalHero from "@/components/home/TerminalHero";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -31,7 +32,11 @@ export default function HomePage() {
           <h1 className={styles.name}>{profile.name}</h1>
           <p className={styles.role}>{profile.role}</p>
         </div>
-        <p className={styles.bio}>{profile.bio}</p>
+        <p className={styles.bio}>
+          Most security knowledge claims are assertions. Mine are documented with terminal output,
+          packet captures, and reproducible procedures. Everything published here started with
+          something breaking.
+        </p>
         <div className={styles.domainTags}>
           {profile.domains.map((d) => (
             <span key={d} className={styles.domainTag}>{d}</span>
@@ -39,36 +44,41 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Live Terminal Evidence */}
+      <TerminalHero />
+
       {/* Activity Heatmap */}
       <section className={styles.heatmapSection} aria-label="Publication activity">
         <Heatmap dates={pubDates} />
       </section>
 
-      {/* Publication Statistics */}
-      <section className={styles.statsSection} aria-label="Publication statistics">
-        <div className={styles.statsRow}>
-          <Link href="/publications" className={styles.statCard}>
-            <span className={styles.statValue}>{stats.total}</span>
-            <span className={styles.statLabel}>Publications</span>
-          </Link>
-          <Link href="/publications?type=project" className={styles.statCard}>
-            <span className={styles.statValue}>{stats.projects}</span>
-            <span className={styles.statLabel}>Projects</span>
-          </Link>
-          <Link href="/publications?type=case-study" className={styles.statCard}>
-            <span className={styles.statValue}>{stats.caseStudies}</span>
-            <span className={styles.statLabel}>Case Studies</span>
-          </Link>
-          <Link href="/publications?type=lab" className={styles.statCard}>
-            <span className={styles.statValue}>{stats.labs}</span>
-            <span className={styles.statLabel}>Labs</span>
-          </Link>
-          <Link href="/publications?type=research" className={styles.statCard}>
-            <span className={styles.statValue}>{stats.research}</span>
-            <span className={styles.statLabel}>Research</span>
-          </Link>
-        </div>
-      </section>
+      {/* Publication Statistics — only meaningful once there's volume */}
+      {stats.total >= 10 && (
+        <section className={styles.statsSection} aria-label="Publication statistics">
+          <div className={styles.statsRow}>
+            <Link href="/publications" className={styles.statCard}>
+              <span className={styles.statValue}>{stats.total}</span>
+              <span className={styles.statLabel}>Publications</span>
+            </Link>
+            <Link href="/publications?type=project" className={styles.statCard}>
+              <span className={styles.statValue}>{stats.projects}</span>
+              <span className={styles.statLabel}>Projects</span>
+            </Link>
+            <Link href="/publications?type=case-study" className={styles.statCard}>
+              <span className={styles.statValue}>{stats.caseStudies}</span>
+              <span className={styles.statLabel}>Case Studies</span>
+            </Link>
+            <Link href="/publications?type=lab" className={styles.statCard}>
+              <span className={styles.statValue}>{stats.labs}</span>
+              <span className={styles.statLabel}>Labs</span>
+            </Link>
+            <Link href="/publications?type=research" className={styles.statCard}>
+              <span className={styles.statValue}>{stats.research}</span>
+              <span className={styles.statLabel}>Research</span>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Currently Operating */}
       <CurrentlyBlock />

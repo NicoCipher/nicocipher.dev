@@ -89,6 +89,21 @@ export default async function PublicationsIndexPage({ searchParams }) {
               <div className={styles.pubMain}>
                 <h2 className={styles.pubTitle}>{pub.title}</h2>
                 <p className={styles.pubSummary}>{pub.summary}</p>
+
+                {/* Evidence preview — first 2 lines of first terminal block */}
+                {(() => {
+                  const firstTerminal = pub.evidence?.find(e => e.type === "terminal");
+                  if (!firstTerminal) return null;
+                  const preview = firstTerminal.content?.split("\n").slice(0, 2).join("\n");
+                  if (!preview?.trim()) return null;
+                  return (
+                    <div className={styles.evidencePreview} aria-hidden="true">
+                      <span className={styles.evidencePreviewDot} />
+                      <code className={styles.evidencePreviewCode}>{preview}</code>
+                    </div>
+                  );
+                })()}
+
                 {pub.tags?.length > 0 && (
                   <div className={styles.pubTags} aria-label="Tags">
                     {pub.tags.map((tag) => (

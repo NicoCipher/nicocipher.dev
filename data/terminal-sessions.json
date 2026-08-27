@@ -1,0 +1,23 @@
+[
+  {
+    "id": "domain-controller",
+    "label": "lab · infrastructure",
+    "title": "Domain Controller DNS Verification",
+    "link": "/publications/lab/domain-controller",
+    "commands": [
+      { "prompt": "C:\\>", "command": "nslookup dc01.lab.local", "output": "Server:  UnKnown\nAddress:  192.168.50.10\n\nName:    dc01.lab.local\nAddress:  192.168.50.10" },
+      { "prompt": "C:\\>", "command": "dcdiag /test:dns", "output": "Directory Server Diagnosis\n\n.........................  dc01 passed test DNS" }
+    ]
+  },
+  {
+    "id": "linux-permissions",
+    "label": "case-study · infrastructure",
+    "title": "Debugging chmod Script Failures",
+    "link": "/publications/case-study/linux-permissions",
+    "commands": [
+      { "prompt": "$", "command": "ls -l backup.sh", "output": "-rwxr--r--  1 nico nico  220 Jun 19 09:14 backup.sh" },
+      { "prompt": "$", "command": "./backup.sh", "output": "bash: ./backup.sh: Permission denied" },
+      { "prompt": "$", "command": "chmod 744 backup.sh && ./backup.sh", "output": "Backup completed successfully." }
+    ]
+  }
+]
