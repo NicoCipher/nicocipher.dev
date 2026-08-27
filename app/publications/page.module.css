@@ -153,6 +153,17 @@
   color: var(--text-tertiary);
 }
 
+.pubEvidenceCount {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  background: var(--accent-subtle);
+  border: 1px solid transparent;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: auto;
+}
+
 .pubMain {
   display: flex;
   flex-direction: column;

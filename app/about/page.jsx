@@ -36,20 +36,22 @@ export default function AboutPage() {
           <span aria-hidden="true">[</span> Engineering Methodology <span aria-hidden="true">]</span>
         </h2>
         <div className={styles.principleGrid}>
-          <div className={styles.principleCard}>
+          <Link href="/publications/lab/domain-controller" className={styles.principleCard}>
             <h3 className={styles.principleTitle}>Learn by Building</h3>
             <p className={styles.principleText}>
               Theory is verified through practical implementation in isolated environments.
               Labs, disposable VMs, and controlled experiments produce direct evidence.
             </p>
-          </div>
-          <div className={styles.principleCard}>
+            <span className={styles.principleLink}>See: Domain Controller Lab →</span>
+          </Link>
+          <Link href="/publications/case-study/linux-permissions" className={styles.principleCard}>
             <h3 className={styles.principleTitle}>Evidence Over Assertion</h3>
             <p className={styles.principleText}>
               Claims are substantiated with terminal outputs, packet captures, diffs,
               architecture diagrams, and reproducible procedures.
             </p>
-          </div>
+            <span className={styles.principleLink}>See: chmod Case Study →</span>
+          </Link>
           <div className={styles.principleCard}>
             <h3 className={styles.principleTitle}>Document the Failures</h3>
             <p className={styles.principleText}>
@@ -57,13 +59,14 @@ export default function AboutPage() {
               of failures is more credible than polished success stories.
             </p>
           </div>
-          <div className={styles.principleCard}>
+          <Link href="/publications/project/nicocipher-portfolio" className={styles.principleCard}>
             <h3 className={styles.principleTitle}>Structured Publishing</h3>
             <p className={styles.principleText}>
               All work is published through a consistent schema — objective, implementation,
               friction points, resolution, and takeaways. Format is the discipline.
             </p>
-          </div>
+            <span className={styles.principleLink}>See: This Portfolio →</span>
+          </Link>
         </div>
       </section>
 

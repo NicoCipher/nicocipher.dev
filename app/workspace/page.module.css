@@ -167,9 +167,41 @@
   border-color: #c05050;
 }
 
+/* ─── Skeleton Loading ───────────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.skeletonHeader {
+  height: 40px;
+  width: 240px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-overlay) 50%, var(--bg-surface) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.skeletonRow {
+  height: 48px;
+  width: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-overlay) 50%, var(--bg-surface) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+
 /* ─── States ─────────────────────────────────────────────────── */
 
-.loading,
 .error,
 .empty {
   font-family: var(--font-mono);

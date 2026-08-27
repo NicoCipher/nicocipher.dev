@@ -4,12 +4,15 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { listPublicationFiles, getFileContent, deleteFile } from "@/lib/github";
 import { deserializePublication } from "@/lib/serializer";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import styles from "./page.module.css";
 
 export default function WorkspaceDashboard() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null); // pub to confirm-delete
+  const [deleteError, setDeleteError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -22,8 +25,6 @@ export default function WorkspaceDashboard() {
 
     try {
       const files = await listPublicationFiles();
-
-      // Fetch each file's content and parse frontmatter
       const pubs = await Promise.all(
         files.map(async (file) => {
           try {
@@ -37,7 +38,6 @@ export default function WorkspaceDashboard() {
           }
         })
       );
-
       const valid = pubs.filter(Boolean);
       valid.sort((a, b) => (a.date < b.date ? 1 : -1));
       setPublications(valid);
@@ -48,19 +48,27 @@ export default function WorkspaceDashboard() {
     }
   }
 
-  const handleDelete = async (pub) => {
-    if (!confirm(`Delete "${pub.title}"? This will commit a deletion to the repo.`)) return;
-
+  async function confirmDelete() {
+    const pub = deleteTarget;
+    setDeleteTarget(null);
+    setDeleteError(null);
     try {
       await deleteFile(pub._path, pub._sha, `pub: delete ${pub.title}`);
-      setPublications((prev) => prev.filter((p) => p._path !== pub._path));
+      setPublications(prev => prev.filter(p => p._path !== pub._path));
     } catch (err) {
-      alert(`Delete failed: ${err.message}`);
+      setDeleteError(err.message);
     }
-  };
+  }
 
   if (loading) {
-    return <div className={styles.container}><div className={styles.loading}>Loading publications from GitHub...</div></div>;
+    return (
+      <div className={styles.container}>
+        <div className={styles.skeleton}>
+          <div className={styles.skeletonHeader} />
+          {[1,2,3].map(i => <div key={i} className={styles.skeletonRow} />)}
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -69,22 +77,34 @@ export default function WorkspaceDashboard() {
 
   return (
     <div className={styles.container}>
+      {/* Themed confirm modal */}
+      {deleteTarget && (
+        <ConfirmModal
+          title={`Delete "${deleteTarget.title}"?`}
+          message="This will commit a deletion to the repository. Vercel will redeploy."
+          confirmLabel="Delete"
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
+
+      {/* Inline delete error */}
+      {deleteError && (
+        <div className={styles.error} style={{ marginBottom: 0 }}>
+          Delete failed: {deleteError}
+        </div>
+      )}
+
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Publications</h1>
           <p className={styles.subtitle}>{publications.length} publication{publications.length !== 1 ? "s" : ""} in repo</p>
         </div>
         <div className={styles.headerActions}>
-          <button
-            className={styles.settingsBtn}
-            onClick={() => router.push("/workspace/settings")}
-          >
+          <button className={styles.settingsBtn} onClick={() => router.push("/workspace/settings")}>
             ⚙ Settings
           </button>
-          <button
-            className={styles.newBtn}
-            onClick={() => router.push("/workspace/editor")}
-          >
+          <button className={styles.newBtn} onClick={() => router.push("/workspace/editor")}>
             + New
           </button>
         </div>
@@ -114,9 +134,7 @@ export default function WorkspaceDashboard() {
                 className={styles.row}
                 onClick={() => router.push(`/workspace/editor?path=${encodeURIComponent(pub._path)}`)}
               >
-                <td className={styles.td}>
-                  <span className={styles.typeBadge}>{pub.type}</span>
-                </td>
+                <td className={styles.td}><span className={styles.typeBadge}>{pub.type}</span></td>
                 <td className={`${styles.td} ${styles.titleCell}`}>{pub.title}</td>
                 <td className={styles.td}>{pub.date}</td>
                 <td className={styles.td}>
@@ -128,7 +146,7 @@ export default function WorkspaceDashboard() {
                 <td className={styles.td}>
                   <button
                     className={styles.deleteBtn}
-                    onClick={(e) => { e.stopPropagation(); handleDelete(pub); }}
+                    onClick={(e) => { e.stopPropagation(); setDeleteTarget(pub); }}
                     title="Delete publication"
                   >
                     ×

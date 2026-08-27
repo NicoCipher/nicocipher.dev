@@ -107,6 +107,24 @@
   line-height: 1.6;
 }
 
+.principleLink {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: var(--space-2);
+  display: block;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+a.principleCard:hover .principleLink {
+  color: var(--text-primary);
+}
+
+a.principleCard {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* ─── Domains Section ─────────────────────────────────────────────────── */
 
 .domainList {
