@@ -204,7 +204,7 @@ function EditorContent() {
         {/* Preview Panel — on mobile, replaces form when active */}
         {showPreview && (
           <div className={styles.previewPanel}>
-            <LivePreview body={data.body || ""} />
+            <LivePreview data={data} />
           </div>
         )}
       </div>

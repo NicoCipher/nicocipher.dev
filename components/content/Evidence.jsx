@@ -5,6 +5,8 @@
  */
 
 import styles from "./Evidence.module.css";
+import CopyButton from "./CopyButton";
+import ExpandablePre from "./ExpandablePre";
 
 // ─── Terminal / Shell Log ──────────────────────────────────────────────────
 
@@ -19,10 +21,9 @@ function TerminalBlock({ item }) {
         </div>
         <span className={styles.cardType}>terminal</span>
         <span className={styles.cardTitle}>{item.title}</span>
+        <CopyButton text={item.content?.trim()} />
       </div>
-      <pre className={styles.terminalPre} tabIndex={0} aria-label={`Terminal output: ${item.title}`}>
-        <code className={styles.terminalCode}>{item.content?.trim()}</code>
-      </pre>
+      <ExpandablePre content={item.content} className={styles.terminalPre} codeClassName={styles.terminalCode} label={`Terminal output: ${item.title}`} />
     </div>
   );
 }
@@ -68,6 +69,7 @@ function CodeBlock({ item }) {
         <span className={styles.cardType}>{item.type}</span>
         <span className={styles.cardTitle}>{item.title}</span>
         <span className={styles.cardLang}>{lang}</span>
+        <CopyButton text={item.content?.trim()} />
       </div>
       <pre
         className={styles.codePre}
@@ -90,10 +92,9 @@ function LogBlock({ item }) {
       <div className={styles.cardHeader}>
         <span className={styles.cardType}>log</span>
         <span className={styles.cardTitle}>{item.title}</span>
+        <CopyButton text={item.content?.trim()} />
       </div>
-      <pre className={styles.logPre} tabIndex={0} aria-label={`Log output: ${item.title}`}>
-        <code className={styles.logCode}>{item.content?.trim()}</code>
-      </pre>
+      <ExpandablePre content={item.content} className={styles.logPre} codeClassName={styles.logCode} label={`Log output: ${item.title}`} />
     </div>
   );
 }

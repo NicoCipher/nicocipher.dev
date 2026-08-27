@@ -53,6 +53,11 @@ export const metadata = {
     "An engineering portfolio documenting evidence-backed work across cybersecurity, infrastructure, networking, and software engineering.",
   authors: [{ name: "NicoCipher", url: "https://github.com/NicoCipher" }],
   icons: { icon: "/favicon.svg" },
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
 };
 
 export const viewport = {
