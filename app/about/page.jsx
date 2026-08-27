@@ -148,7 +148,7 @@ export default function AboutPage() {
           </div>
           <div className={styles.colophonItem}>
             <span className={styles.colophonLabel}>Fonts</span>
-            <span className={styles.colophonValue}>Instrument Sans · Source Serif 4 · JetBrains Mono</span>
+            <span className={styles.colophonValue}>8 configurable pairings (Instrument Sans, Geist, Inter, IBM Plex, and more)</span>
           </div>
           <div className={styles.colophonItem}>
             <span className={styles.colophonLabel}>Dependencies</span>

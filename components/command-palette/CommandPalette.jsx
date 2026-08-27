@@ -26,7 +26,7 @@ function Highlight({ text, query }) {
 
 function groupResults(results) {
   const groups = {};
-  const ORDER = ["publication", "type-filter", "page"];
+  const ORDER = ["publication", "type-filter", "page", "theme", "font"];
 
   for (const item of results) {
     if (!groups[item.kind]) groups[item.kind] = [];
@@ -38,6 +38,8 @@ function groupResults(results) {
     label:
       k === "publication" ? "Publications" :
       k === "type-filter" ? "Browse by Type" :
+      k === "theme" ? "Themes" :
+      k === "font" ? "Typography" :
       "Pages",
     items: groups[k],
   }));
@@ -82,6 +84,18 @@ export default function CommandPalette({ searchIndex: index = [], onClose }) {
 
   const navigate = useCallback(
     (item) => {
+      if (item.action) {
+        // Theme/font action — apply directly
+        if (item.action.type === "theme") {
+          localStorage.setItem("nc-theme", item.action.value);
+          document.documentElement.setAttribute("data-theme", item.action.value);
+        } else if (item.action.type === "font") {
+          localStorage.setItem("nc-font", item.action.value);
+          document.documentElement.setAttribute("data-font", item.action.value);
+        }
+        onClose();
+        return;
+      }
       router.push(item.url);
       onClose();
     },

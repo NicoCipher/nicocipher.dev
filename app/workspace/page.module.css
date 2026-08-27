@@ -1,5 +1,5 @@
 .container {
-  max-width: 960px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
   padding: var(--space-6) var(--space-5);
   display: flex;
@@ -147,7 +147,7 @@
 }
 
 .statusActive {
-  background: #28c840;
+  background: #febc2e;
 }
 
 .deleteBtn {

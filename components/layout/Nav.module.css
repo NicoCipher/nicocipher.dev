@@ -83,30 +83,7 @@
   transform: scaleX(1);
 }
 
-/* ─── Right controls ─────────────────────────────────────────── */
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex-shrink: 0;
-}
-
-.themeToggle {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--text-tertiary);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 2px 4px;
-  line-height: 1;
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.themeToggle:hover {
-  color: var(--text-primary);
-}
+/* ─── Command Palette Trigger ────────────────────────────────── */
 
 .paletteTrigger {
   font-family: var(--font-mono);

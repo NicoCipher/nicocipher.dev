@@ -127,7 +127,11 @@
   }
 
   .statsRow {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .statCard:last-child {
+    grid-column: 1 / -1;
   }
 
   .heatmapSection {

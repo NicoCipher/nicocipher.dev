@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -11,6 +12,12 @@ export default function Footer() {
         </div>
 
         <div className={styles.links}>
+          <a href="/feed.xml" className={styles.link} aria-label="RSS Feed">
+            rss
+          </a>
+          <a href="/sitemap.xml" className={styles.link}>
+            sitemap
+          </a>
           <a
             href="https://github.com/NicoCipher"
             target="_blank"

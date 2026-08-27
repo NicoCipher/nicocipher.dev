@@ -39,6 +39,9 @@
   --glass-bg: rgba(10, 10, 10, 0.82);
   --glass-border: rgba(59, 130, 246, 0.08);
 
+  /* Elevation */
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.4);
+
   /* Heatmap — GitHub green scale */
   --heatmap-empty: #1a1a1a;
   --heatmap-l1: #0e4429;
@@ -76,6 +79,8 @@
 
   --glass-bg: rgba(255, 255, 255, 0.88);
   --glass-border: rgba(0, 0, 0, 0.08);
+
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   /* Heatmap — GitHub light green scale */
   --heatmap-empty: #ebedf0;
@@ -168,6 +173,7 @@
   --type-research: #b45309;
   --glass-bg: rgba(247, 243, 236, 0.90);
   --glass-border: rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.06);
   --heatmap-empty: #e0d8ca;
   --heatmap-l1: #9be9a8;
   --heatmap-l2: #40c463;
@@ -464,7 +470,7 @@ a:hover {
 
 /* === Focus === */
 :focus-visible {
-  outline: 1px solid var(--text-tertiary);
+  outline: 2px solid var(--accent);
   outline-offset: var(--focus-ring-offset);
 }
 
