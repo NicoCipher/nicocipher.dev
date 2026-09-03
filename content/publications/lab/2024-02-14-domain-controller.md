@@ -67,6 +67,15 @@ evidence:
     language: "text"
 ---
 
+> **Quick Summary for Recruiters & Non-Technical Readers**
+> - **The Business Goal**: A Windows Domain Controller is the central nerve center for corporate IT. It manages user logins, security policies, and computer accounts for an entire office.
+> - **What I Built**: Deployed a Windows Server 2022 Domain Controller from scratch on a virtual machine and joined client workstations to the domain.
+> - **Where It Failed**: The Windows client failed to join the domain with error `DNS name does not exist`. Even though network ping was working, the client was querying the home Wi-Fi router instead of the Domain Controller's DNS service.
+> - **The Solution**: Pointed client DNS to the Domain Controller IP and flushed the DNS cache, completing the domain join on the next attempt.
+> - **Key Skills**: Windows Server 2022, Active Directory Domain Services (AD DS), DNS Server Configuration, Client Domain Enrollment, dcdiag Diagnostics.
+
+---
+
 ## 1. Objective
 
 Stand up a single Domain Controller from scratch on a clean virtual machine and prove client domain join and DNS record resolution work end-to-end.

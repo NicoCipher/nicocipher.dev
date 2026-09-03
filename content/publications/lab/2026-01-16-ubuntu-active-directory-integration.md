@@ -1,11 +1,11 @@
 ---
 type: "lab"
-title: "Integrating Ubuntu Server into Windows Active Directory: SSSD and Domain Authentication"
+title: "Connecting Ubuntu Linux to Windows Active Directory: SSSD and Authentication Troubleshooting"
 slug: "ubuntu-active-directory-integration"
 date: "2026-01-16"
 status: "complete"
 domain: "infrastructure"
-summary: "Joining an Ubuntu Server to a Windows Server 2022 Active Directory domain, debugging domain user authentication failures caused by DNS SRV lookup failures, and verifying centralized identity management via SSSD."
+summary: "How I joined a headless Ubuntu Linux server to a Windows Server 2022 Active Directory domain, tracked down why domain users couldn't log in, and fixed DNS SRV lookup errors."
 effort: "6h"
 technologies:
   - "Ubuntu Server"
@@ -98,86 +98,114 @@ evidence:
     language: "text"
 ---
 
-## 1. Objective
+> **Quick Summary for Recruiters & Non-Technical Readers**
+> - **The Business Problem**: In a company with hundreds of employees, you cannot create separate user accounts on 50 different Linux servers. Everyone should log in with their central corporate Windows Active Directory account.
+> - **What I Built**: Joined an Ubuntu Linux server to a Windows Server 2022 Active Directory domain so corporate users could log in over SSH with their normal company credentials.
+> - **Where It Failed**: The domain join appeared successful, but users were locked out with "System Error". Looking at the logs, Linux had no idea where the Domain Controller lived because it was asking the home Wi-Fi router for DNS instead of the company Domain Controller.
+> - **The Solution**: Configured Linux to use the Windows Domain Controller as its authoritative DNS server, enabling SSSD to discover the domain's Kerberos and LDAP services.
+> - **Key Skills**: Active Directory, Linux Systems Administration, DNS Troubleshooting, Kerberos Identity Management, SSSD, PAM.
 
-Integrate a headless Ubuntu Server into an existing Windows Server 2022 Active Directory forest (`lab.local`), enabling domain users to authenticate over SSH and local terminal sessions using centralized AD credentials managed by SSSD (System Security Services Daemon) and Pluggable Authentication Modules (PAM).
+---
 
-## 2. Environment Setup
+## 1. In Plain English: Why Connect Linux to Windows Active Directory?
 
-| Node | Operating System | Hostname | IP Address | Roles / Services |
-|---|---|---|---|---|
-| **Domain Controller** | Windows Server 2022 Std | `dc01.lab.local` | `192.168.50.10/24` | AD DS, AD-Integrated DNS, Kerberos KDC |
-| **Linux Client** | Ubuntu Server 22.04 LTS | `srv-ubu01.lab.local` | `192.168.50.30/24` | Headless Member Server, SSSD, Realmd |
-| **Gateway / Lab Router** | VyOS / Virtual Router | `gw.lab.local` | `192.168.50.1/24` | DHCP, NAT routing (Non-AD DNS) |
+Think of Active Directory (AD) like a company's **master employee directory and security badge office**. When a company hires an engineer, HR creates their account once in Active Directory. From then on, that single badge unlocks their email, their work laptop, and their internal tools.
 
-## 3. Implementation
+However, many backend servers run Linux (Ubuntu, Red Hat), while corporate user accounts live in Microsoft Windows Active Directory.
 
-### Initial Identity Strategy & Scope
+Without central integration, a systems administrator would have to manually create and manage local passwords for every engineer on every Linux box. If an employee leaves the company, an admin might forget to delete their account on a single server, leaving a massive security backdoor.
 
-Initial laboratory testing explored standing up a Samba 4 Active Directory Domain Controller on Linux. However, unresolvable package repository dependency conflicts and broken library bindings on Debian packages demonstrated that for production hybrid enterprise environments, Windows Server provides a more stable primary AD DS root, while Linux excels as an authenticated domain member.
+By joining Linux to Active Directory using **SSSD (System Security Services Daemon)**:
+- Employees log into Linux with their company credentials (`username@company.local`).
+- If an account is disabled in Active Directory, their access is revoked everywhere instantly.
+- Passwords and security policies are enforced centrally.
 
-### Headless Server Pruning
+## 2. The Lab Setup
 
-Early attempts utilized Ubuntu Desktop. The graphical display managers, power saving timeouts, and background NetworkManager overrides interfered with headless operations. The system was replaced with a minimal Ubuntu Server installation, stripping away desktop overhead and ensuring deterministic configuration through `systemd-resolved` and CLI tooling.
+I configured a virtual lab environment to mirror a real enterprise IT deployment:
 
-### Domain Enrollment Workflow
+| Machine | Role | Operating System | IP Address |
+|---|---|---|---|
+| **Domain Controller (`dc01`)** | Central Directory & Identity Provider | Windows Server 2022 | `192.168.50.10` |
+| **Linux Server (`srv-ubu01`)** | Application Server | Ubuntu Server 22.04 LTS (Headless) | `192.168.50.30` |
+| **Gateway Router** | Network Gateway & Default DHCP | Virtual Router | `192.168.50.1` |
 
-1. Installed required packages:
-   ```bash
-   sudo apt-get update && sudo apt-get install -y realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin krb5-user
-   ```
-2. Queried Active Directory service discovery:
-   ```bash
-   realm discover lab.local
-   ```
-3. Executed automated domain join using administrative credentials:
-   ```bash
-   sudo realm join --user=Administrator lab.local
-   ```
-4. Configured PAM home directory auto-creation so domain users automatically receive standard `/home/<user>@<domain>` directories upon initial login:
-   ```bash
-   sudo pam-auth-update --enable mkhomedir
-   ```
+## 3. How I Connected Linux to the Domain
 
-## 4. The Friction Point
+### Step 1: Choosing Minimal Server Over Desktop GUI
 
-Following the initial join command, `realm list` reported `configured: kerberos-member`. However, when attempting to authenticate any domain user via SSH or `su - adm-olumide@lab.local`, authentication failed immediately with:
+Initially, I experimented with Ubuntu Desktop. I quickly discovered that the graphical interface, desktop power savers, and background network managers created unnecessary clutter and configuration overrides. 
 
+I switched to a clean, minimal **Ubuntu Server** installation. In production environments, servers are headless (command-line only)—this minimizes resource usage and shrinks the attack surface.
+
+### Step 2: Installing SSSD & Realmd
+
+On the Ubuntu server, I installed the core identity packages:
+- `realmd`: The tool that automates domain enrollment.
+- `sssd` & `sssd-tools`: The background service that manages logins and caches credentials so users can still log in if the network dips.
+- `krb5-user`: Kerberos authentication client.
+
+I ran the discovery and join commands:
+```bash
+sudo realm discover lab.local
+sudo realm join --user=Administrator lab.local
+```
+
+The terminal returned: `Successfully enrolled machine in realm lab.local`.
+
+## 4. Where Things Broke (The Real Friction Point)
+
+The machine showed up inside Active Directory on `dc01`. Everything looked great—until I actually tried to log in as a domain user:
+
+```bash
+$ su - adm-olumide@lab.local
+Password:
+su: System error
+```
+
+Checking `/var/log/auth.log` revealed:
 ```text
 pam_sss(sshd:auth): received for user adm-olumide@lab.local: 4 (System error)
 sssd_be[1850]: No available servers for service 'AD'
 ```
 
-Running `id adm-olumide@lab.local` returned `no such user`, even though the Ubuntu computer account `SRV-UBU01$` was visible and enabled inside Active Directory Users and Computers on `dc01`.
+Even though the server was joined to the domain, SSSD insisted there were *"No available servers for service 'AD'"*.
 
-### Root Cause Analysis
+### The Root Cause: The DNS "Phonebook" Trap
 
-Inspection of `/var/log/sssd/sssd_lab.local.log` revealed that the SSSD back-end was unable to perform DNS SRV queries for `_ldap._tcp.lab.local` and `_kerberos._tcp.lab.local`.
+I assumed that because I could ping `dc01.lab.local` by IP address, name resolution was fine.
 
-The Linux host's resolver in `/etc/resolv.conf` was pointing to `192.168.50.1` (the laboratory gateway router) rather than `192.168.50.10` (the Active Directory Domain Controller). While the gateway was able to resolve external public internet domains, it had zero awareness of the private `.local` forward lookup zone. SSSD was unable to locate a single LDAP or Kerberos endpoint, resulting in total authentication lockout.
+Here was the mistake: When Windows computers join Active Directory, they don't just ask for an IP address. They query special **DNS SRV (Service Location) records** like `_ldap._tcp.lab.local` and `_kerberos._tcp.lab.local`. These records tell computers: *"The login server is located at port 389 on DC01"*.
 
-## 5. What Went Wrong
+My Ubuntu server had received its DNS settings automatically from the lab's internet router (`192.168.50.1`). The router knew how to look up google.com, but had zero knowledge of my private `lab.local` domain. SSSD was dialing the wrong phone operator!
 
-- **Relying on Default DHCP DNS Settings**: The Ubuntu server inherited its DNS server from the hypervisor DHCP pool instead of enforcing the AD Domain Controller as primary nameserver.
-- **Treating Hostname Ping as Name Resolution**: Verified that `ping dc01.lab.local` worked via a temporary `/etc/hosts` entry, mistaking static host resolution for functional Active Directory SRV record discovery. Active Directory authentication does not use `/etc/hosts`; it requires dynamic SRV queries over DNS.
-- **Samba DC Dependency Pitfall**: Attempted an ambitious Samba-based Domain Controller setup without isolated package sandboxing, which contaminated the initial image's package manager and required a clean OS redeployment.
+## 5. How I Fixed It & Verified the Solution
 
-## 6. Verification
+### The Fix
 
-The resolver was corrected by updating Netplan to explicitly define `192.168.50.10` as the authoritative DNS server and applying changes (`netplan apply`):
+I updated Netplan (`/etc/netplan/00-installer-config.yaml`) to explicitly set the Windows Domain Controller (`192.168.50.10`) as the primary DNS server, and applied the changes (`sudo netplan apply`).
 
-1. **DNS SRV Record Validation**:
-   ```bash
-   $ nslookup -type=SRV _ldap._tcp.lab.local
-   _ldap._tcp.lab.local service = 0 100 389 dc01.lab.local.
-   ```
-2. **SSSD User Resolution**:
-   `id adm-olumide@lab.local` instantly resolved UID `1844601105` and mapped AD security groups: `Domain Users` and `Domain Admins`.
-3. **Kerberos Ticket Granting (TGT)**:
-   Executed `kinit adm-olumide@lab.local`. Successfully obtained a ticket granting ticket from `dc01`, verified with `klist`.
-4. **Interactive Shell Session**:
-   Executed `su - adm-olumide@lab.local`. PAM triggered the `mkhomedir` module, provisioned `/home/adm-olumide@lab.local` with permissions `0700`, and spawned a fully functional interactive Bash session.
+Immediately, I tested the DNS SRV query:
+```bash
+$ nslookup -type=SRV _ldap._tcp.lab.local
+_ldap._tcp.lab.local service = 0 100 389 dc01.lab.local.
+```
 
-## 7. Permanent Takeaway
+The Domain Controller answered back with the LDAP port.
 
-Linux Active Directory integration is fundamentally a DNS discovery problem. When Linux joins a Windows domain, every identity mechanism—from Kerberos tickets to LDAP search filters—depends on the client's ability to query SRV locator records from the AD-integrated DNS server. Never rely on `/etc/hosts` or generic gateway routers for AD member servers: **set the Domain Controller as the primary nameserver in Netplan before attempting domain enrollment**.
+### Verification Steps
+
+1. **User Identity Lookup**:
+   Ran `id adm-olumide@lab.local`. Linux instantly pulled the user information and mapped their Windows security groups (`Domain Admins` and `Domain Users`).
+2. **Kerberos Ticket Verification**:
+   Ran `kinit adm-olumide@lab.local` followed by `klist`. The ticket cache verified that Windows had granted an encrypted Kerberos ticket (`krbtgt/LAB.LOCAL@LAB.LOCAL`).
+3. **Automatic Home Directory Creation**:
+   Enabled `pam-auth-update --enable mkhomedir` so that when a domain user logs in for the first time, Linux automatically creates their personal folder (`/home/adm-olumide@lab.local`).
+4. **Successful Login**:
+   Ran `su - adm-olumide@lab.local`. The session initialized immediately with full terminal access.
+
+## 6. What This Means for Engineering & Operations Teams
+
+- **DNS is 90% of Active Directory Troubleshooting**: When domain joins or logins fail, don't waste hours tweaking authentication files. Check your DNS resolver first. If the client isn't querying the Domain Controller, Active Directory will not work.
+- **Centralized Access Improves Security**: Managing credentials through Active Directory ensures that password policies (complexity, expiration) apply to Linux servers just as strictly as Windows workstations.
+- **Headless Servers Are the Standard**: Stripping out GUI environments saves gigabytes of RAM and prevents desktop utilities from conflicting with enterprise network services.

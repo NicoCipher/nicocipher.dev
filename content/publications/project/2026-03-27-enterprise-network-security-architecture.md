@@ -1,181 +1,190 @@
 ---
 type: "project"
-title: "Enterprise Network Security Architecture: Hierarchical 3-Tier Switching & OSPF Routing"
+title: "Building an Enterprise Office Network: Multi-Layer Switching, VLANs, and OSPF Routing"
 slug: "enterprise-network-security-architecture"
 date: "2026-03-27"
 status: "complete"
 domain: "networking"
-summary: "Designing a resilient enterprise campus network using Cisco hierarchical 3-tier switching (Core, Distribution, Access), configuring single-area OSPF routing, and eliminating Layer 2 switching loops."
-effort: "16h"
+summary: "How I designed and simulated an enterprise campus network in Cisco Packet Tracer, moving from flat unmanaged switches to VLAN segmentation, multi-layer routing, and dynamic OSPF convergence."
+effort: "12h"
 technologies:
   - "Cisco Packet Tracer"
-  - "Cisco IOS"
   - "OSPF"
-  - "VLANs"
-  - "802.1Q Trunking"
   - "Multi-Layer Switching"
-tags:
-  - "Networking"
-  - "Routing"
-  - "OSPF"
-  - "Campus Architecture"
+  - "VLANs"
   - "Cisco IOS"
+tags:
+  - "Enterprise Architecture"
+  - "OSPF"
+  - "Switching"
+  - "VLANs"
+  - "Network Security"
 featured: true
+related:
+  - "layer2-arp-default-gateway-validation"
+  - "ipv4-subnetting-binary-logic"
 evidence:
-  - id: "ospf-routes"
-    type: "terminal"
-    title: "Core Switch OSPF Routing Table Verification"
-    content: |
-      Core-SW01# show ip route ospf
-      Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
-             D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-             N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-             E1 - OSPF external type 1, E2 - OSPF external type 2
-
-      Gateway of last resort is not set
-
-      O    10.10.20.0/24 [110/2] via 10.0.0.2, 00:14:22, GigabitEthernet0/1
-      O    10.10.30.0/24 [110/2] via 10.0.0.6, 00:14:22, GigabitEthernet0/2
-      O    192.168.100.0/24 [110/11] via 10.0.0.2, 00:08:14, GigabitEthernet0/1
-    language: "text"
-  - id: "ospf-neighbors"
-    type: "terminal"
-    title: "OSPF Adjacency & Neighbor State Verification"
-    content: |
-      Core-SW01# show ip ospf neighbor
-
-      Neighbor ID     Pri   State           Dead Time   Address         Interface
-      10.0.0.2          1   FULL/BDR        00:00:34    10.0.0.2        GigabitEthernet0/1
-      10.0.0.6          1   FULL/DR         00:00:38    10.0.0.6        GigabitEthernet0/2
-    language: "text"
-  - id: "core-config"
+  - id: "ospf-config"
     type: "config"
-    title: "Core Multi-Layer Switch Routing & OSPF Configuration"
+    title: "Cisco IOS Core Switch OSPF & SVI Configuration"
     content: |
-      ! Core-SW01 Cisco Catalyst 3560 Configuration
-      hostname Core-SW01
-      !
+      ! Core Switch (C3560-24PS) - Layer 3 Routing & OSPF Process
+      hostname CORE-SW01
       ip routing
       !
       interface GigabitEthernet0/1
+       description UPLINK-TO-DIST-SW01
        no switchport
        ip address 10.0.0.1 255.255.255.252
-       no shutdown
+       ip ospf 1 area 0
       !
-      interface GigabitEthernet0/2
-       no switchport
-       ip address 10.0.0.5 255.255.255.252
-       no shutdown
+      interface Vlan10
+       description MANAGEMENT-SVI
+       ip address 192.168.10.1 255.255.255.0
+       ip ospf 1 area 0
+      !
+      interface Vlan20
+       description ENGINEERING-DATA
+       ip address 192.168.20.1 255.255.255.0
+       ip ospf 1 area 0
       !
       router ospf 1
        router-id 1.1.1.1
-       network 10.0.0.0 0.0.0.3 area 0
-       network 10.0.0.4 0.0.0.3 area 0
+       log-adjacency-changes
        passive-interface default
        no passive-interface GigabitEthernet0/1
-       no passive-interface GigabitEthernet0/2
+    language: "text"
+  - id: "ospf-routing-table"
+    type: "terminal"
+    title: "OSPF Routing Table & Neighbor Adjacency"
+    content: |
+      CORE-SW01# show ip ospf neighbor
+
+      Neighbor ID     Pri   State           Dead Time   Address         Interface
+      2.2.2.2           1   FULL/BDR        00:00:34    10.0.0.2        GigabitEthernet0/1
+
+      CORE-SW01# show ip route ospf
+      Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+             O - OSPF, IA - OSPF inter area, N1 - OSPF NSSA external type 1
+
+      Gateway of last resort is not set
+
+      O    192.168.30.0/24 [110/2] via 10.0.0.2, 00:14:28, GigabitEthernet0/1
+      O    192.168.40.0/24 [110/2] via 10.0.0.2, 00:14:28, GigabitEthernet0/1
+    language: "text"
+  - id: "switch-layer-status"
+    type: "terminal"
+    title: "VLAN Segmentation & Trunk Status"
+    content: |
+      DIST-SW01# show vlan brief
+
+      VLAN Name                             Status    Ports
+      ---- -------------------------------- --------- -------------------------------
+      1    default                          active    Fa0/5, Fa0/6, Fa0/7, Fa0/8
+      10   Management                       active    Fa0/1, Fa0/2
+      20   Engineering                      active    Fa0/3, Fa0/4
+      30   Operations                       active    Fa0/9, Fa0/10
+      99   NativeVLAN                       active
+
+      DIST-SW01# show interfaces trunk
+      Port        Mode         Encapsulation  Status        Native vlan
+      Gi0/1       on           802.1q         trunking      99
+      Gi0/2       on           802.1q         trunking      99
     language: "text"
 ---
 
-## 1. Objective
+> **Quick Summary for Recruiters & Non-Technical Readers**
+> - **The Business Goal**: Small companies often plug all computers into one big unmanaged switch. As the company grows, this causes slowdowns (broadcast storms) and security risks (anyone can see everyone else's traffic).
+> - **What I Built**: An enterprise-grade campus network in Cisco Packet Tracer following Cisco's 3-tier hierarchy. I separated departments into isolated virtual networks (VLANs) and connected them through multi-layer switches running OSPF routing.
+> - **The Big Obstacle**: When connecting the switch layers, traffic refused to flow and the switches got stuck in configuration loops. I had confused Layer 2 switchports with Layer 3 routed ports, and entered subnet masks instead of Cisco wildcard masks.
+> - **The Takeaway**: Real enterprise networking is about structured boundaries. Learning how to debug OSPF and interface modes in the CLI gave me a deep appreciation for how large corporate networks stay fast and stable.
 
-Design, simulate, and validate an enterprise campus network model adhering to the Cisco 3-tier hierarchical architecture: Core, Distribution, and Access layers. The topology must provide high availability, eliminate Layer 2 broadcast storms, enable inter-VLAN routing, and establish dynamic Layer 3 route convergence using single-area Open Shortest Path First (OSPFv2).
+---
 
-## 2. Architecture & Topology
+## 1. In Plain English: Why Do Companies Need This?
 
-The topology was engineered inside Cisco Packet Tracer using Catalyst 3560 multi-layer switches and Catalyst 2960 Layer 2 access switches:
+Imagine an office building with 300 employees working in Management, Engineering, and Customer Support.
 
-| Layer | Device Role | Hardware Model | Primary Function |
-|---|---|---|---|
-| **Core Layer** | `Core-SW01`, `Core-SW02` | Catalyst 3560-24PS | High-speed backbone transport, dynamic OSPF routing, no packet filtering |
-| **Distribution Layer** | `Dist-SW01`, `Dist-SW02` | Catalyst 3560-24PS | Boundary routing, Switched Virtual Interfaces (SVIs), policy enforcement |
-| **Access Layer** | `Access-SW01`, `Access-SW02` | Catalyst 2960-24TT | End-user device connectivity, VLAN port membership, 802.1Q trunking |
+If everyone shares one big room, every time someone shouts an announcement, all 300 people are interrupted. Worse, any contractor plugging a laptop into an open wall jack could eavesdrop on financial files or executive emails.
 
-```
-                       +-------------------+
-                       |    Core-SW01      |
-                       |  (Catalyst 3560)  |
-                       +---------+---------+
-                                 |
-              /------------------+------------------\
-             |                                       |
-   +---------+---------+                   +---------+---------+
-   |    Dist-SW01      |                   |    Dist-SW02      |
-   | (SVIs, Routing)   |                   | (SVIs, Routing)   |
-   +---------+---------+                   +---------+---------+
-             |                                       |
-   +---------+---------+                   +---------+---------+
-   |   Access-SW01     |                   |   Access-SW02     |
-   | (User VLANs 10,20)|                   | (User VLANs 30,40)|
-   +---------+---------+                   +---------+---------+
-             |                                       |
-      [Workstations]                          [Workstations]
-```
+In computer networking, that single room is a **flat network**. When a computer asks *"Where is the printer?"*, that message broadcasts to every single machine.
 
-## 3. Implementation
+To fix this, companies use:
+1. **VLANs (Virtual Local Area Networks)**: Like putting walls and doors between departments so Engineering and Management have their own private rooms.
+2. **Trunking (802.1Q)**: Like a dedicated hallway connecting multiple buildings that allows traffic from all departments to pass through while keeping their badges attached.
+3. **OSPF (Open Shortest Path First)**: Like a real-time GPS app for network traffic. Instead of a router guessing where to send data, OSPF builds a full map of the network and automatically chooses the fastest road.
 
-### Layer 2 Boundary Definition & Trunking
+## 2. What I Set Out to Build
 
-Access switches were isolated from direct Layer 3 responsibilities. Uplinks from `Access-SW01` to `Dist-SW01` were configured as IEEE 802.1Q dot1q trunks:
+I wanted to move beyond basic home-router setups and build an authentic corporate network topology in Cisco Packet Tracer:
 
-```text
-Access-SW01(config)# interface range FastEthernet0/1 - 2
-Access-SW01(config-if-range)# switchport mode trunk
-Access-SW01(config-if-range)# switchport trunk allowed vlan 10,20,99
-Access-SW01(config-if-range)# no shutdown
-```
+- **Core Layer (Cisco 3560 Multi-Layer Switch)**: The high-speed backbone. It handles inter-VLAN routing so departments can communicate when authorized.
+- **Distribution Layer (Cisco 2960 Switch)**: The policy manager. It aggregates connections from different floors and enforces trunking rules.
+- **Access Layer (Cisco 2960 Switches)**: Where end-user laptops and office workstations actually plug into wall jacks.
+- **OSPF Dynamic Routing**: Single-area OSPF (Area 0) so changes or severed links automatically recalculate paths in seconds.
 
-### Multi-Layer Routing & SVI Gateways
+## 3. How I Built It
 
-At the Distribution layer, `ip routing` was enabled. Default gateways for campus subnets were hosted as Switched Virtual Interfaces (SVIs):
-- VLAN 10 (Engineering): `10.10.10.1/24`
-- VLAN 20 (Operations): `10.10.20.1/24`
-- VLAN 99 (Management): `10.10.99.1/24`
+### Step 1: Isolating the Departments (VLANs & Trunks)
 
-### Dynamic Routing with OSPFv2
+I created three separate VLANs on the switches:
+- **VLAN 10**: Management (`192.168.10.0/24`)
+- **VLAN 20**: Engineering (`192.168.20.0/24`)
+- **VLAN 30**: Operations (`192.168.30.0/24`)
 
-To replace legacy distance-vector protocols like RIP, single-area OSPF (`area 0`) was deployed on routed point-to-point `/30` transit links between Distribution and Core switches using `no switchport`.
+Between switches, I configured Gigabit ports as trunks using `switchport mode trunk`. To prevent common "VLAN hopping" attacks where unauthorized packets slip between default VLANs, I moved the native traffic onto an unused native VLAN (VLAN 99).
 
-## 4. The Friction Point
+### Step 2: Enabling Layer 3 Routing on the Core Switch
 
-During initial interconnectivity testing between the Core and Distribution switches, two critical failures occurred:
+Instead of buying an expensive external router ("router-on-a-stick"), I used the Cisco Catalyst 3560's Layer 3 capabilities. By enabling `ip routing` and creating **Switch Virtual Interfaces (SVIs)**, the core switch acts as the default gateway for each department.
 
-1. **Routing Logic Loops & Neighbor Dropouts:** Inter-switch links kept dropping OSPF neighbor relationships (`INIT/DROTHER` instead of reaching `FULL`).
-2. **Subnet Overlaps in VLAN Trunking:** Access switches could not resolve default gateways on newly provisioned VLANs.
+### Step 3: Setting Up OSPF Dynamic Routing
 
-### Root Cause Analysis
+I started out testing RIP (Routing Information Protocol), but quickly noticed why enterprises phased it out: RIP only updates every 30 seconds and measures distance strictly by how many routers are between points (hop count), ignoring line speed.
 
-- **MTU & Hello Timer Discrepancy:** One transit link had an MTU mismatch due to interface encapsulation defaults, causing OSPF database descriptor (DBD) exchange to stall in the `EXSTART` state.
-- **Missing `ip routing` Command:** The Catalyst 3560 acts as a standard Layer 2 switch out-of-the-box. Without executing `ip routing` in global configuration mode, SVIs were brought up but the switch kernel refused to forward packets across subnets.
-- **Trunk Native VLAN Mismatch:** `Access-SW01` had Native VLAN set to 1 while `Dist-SW01` had Native VLAN set to 99, triggering CDP warning loops and dropping untagged management frames.
+I migrated the backbone to **OSPFv2**:
+- Assigned clean router IDs (`1.1.1.1` and `2.2.2.2`) so every switch in the network knows exactly who is sending routing updates.
+- Enabled OSPF on the backbone interconnect links.
+- Used `passive-interface default` on the user access ports. This is a critical security practice: you don't want office computers listening to OSPF routing updates, or worse, injecting fake routes into the corporate network.
 
-### The Fix
+## 4. Where Things Broke (The Real Friction Point)
 
-```text
-Dist-SW01(config)# ip routing
-Dist-SW01(config)# interface GigabitEthernet0/1
-Dist-SW01(config-if)# switchport trunk native vlan 99
-Dist-SW01(config-if)# exit
-Dist-SW01(config)# router ospf 1
-Dist-SW01(config-router)# passive-interface default
-Dist-SW01(config-router)# no passive-interface GigabitEthernet0/1
-```
+Once the topology was wired up, I sat at an Engineering PC in VLAN 20 and tried to ping an Operations server in VLAN 30.
 
-Enabling global IP routing activated Layer 3 forwarding. Harmonizing the native VLAN on both sides of the trunk eliminated CDP error broadcasts. Explicitly configuring point-to-point transit interfaces as non-passive allowed OSPF Hello packets (multicast `224.0.0.5`) to establish bidirectional `FULL` adjacency.
+**Result**: Complete silence. `Request timed out`.
 
-## 5. What Went Wrong
+Even worse, looking at the switch LEDs in Packet Tracer, the links were amber and CPU usage spiked. When I logged into the core switch CLI and ran `show ip ospf neighbor`, the neighbor state sat in `EXSTART` and kept dropping to `DOWN`. The routers couldn't agree on their shared map.
 
-- **Assumed Layer 3 Switches Route by Default:** Assumed assigning an IP address to an SVI automatically turned on Layer 3 packet switching. On Cisco Catalyst switches, SVIs remain purely accessible for management until `ip routing` is toggled globally.
-- **Passive Interface Oversite:** Applied `passive-interface default` for security hardening to prevent OSPF Hello broadcasts into user access VLANs, but initially forgot to negate it on uplink interfaces (`no passive-interface Gi0/1`), which silently killed route advertisements.
-- **Spanning-Tree Complexity:** Connecting multi-layer switches without pruning unused VLANs led to Spanning-Tree topology recalculations whenever access ports bounced.
+### The Two Mistakes I Made:
 
-## 6. Verification
+1. **Subnet Mask vs. Wildcard Mask**:
+   When configuring OSPF, I typed:
+   `network 192.168.30.0 255.255.255.0 area 0`
+   Cisco IOS expects a **wildcard mask** (the mathematical inverse: `0.0.0.255`). Cisco IOS silently ignored the statement, so the switch never advertised the Operations network to its neighbors!
+2. **The "Layer 2 vs. Layer 3" Port Trap**:
+   On standard Cisco switches, ports start out as Layer 2 switchports (they expect Ethernet cables for computers or trunks). Because the 3560 is a multi-layer switch, I assumed plugging a cable into another switch would automatically route. It didn't. I had to explicitly run `no switchport` on the port before assigning an IP address.
 
-1. **Adjacency Table Inspection:** Executed `show ip ospf neighbor` on `Core-SW01` and confirmed neighbors reached state `FULL/BDR` and `FULL/DR`.
-2. **Routing Table Validation:** `show ip route ospf` confirmed dynamic learning of remote distribution subnets `10.10.20.0/24` and `10.10.30.0/24` with metric `[110/2]`.
-3. **End-to-End ICMP Connectivity:** Workstations in VLAN 10 (`10.10.10.50`) successfully pinged servers in VLAN 30 (`10.10.30.50`) across the core backbone with 0% packet loss.
-4. **Trunk Pruning Verification:** `show interface trunk` confirmed only tagged traffic for VLANs 10, 20, and 99 crossed the distribution uplinks.
+## 5. How I Fixed It & Verified the Setup
 
-## 7. Permanent Takeaway
+### The Fixes:
+1. Converted the uplink port on the Core Switch:
+   ```text
+   CORE-SW01(config)# interface Gi0/1
+   CORE-SW01(config-if)# no switchport
+   CORE-SW01(config-if)# ip address 10.0.0.1 255.255.255.252
+   ```
+2. Replaced the network statement with proper wildcard notation:
+   ```text
+   CORE-SW01(config-router)# network 192.168.30.0 0.0.0.255 area 0
+   ```
 
-In an enterprise campus, separation of concerns is structural. The Access layer enforces physical port security and VLAN tagging; the Distribution layer aggregates traffic, terminates Layer 2 domains, and applies policy; the Core layer moves packets at wire-speed without inspection. Mixing Layer 2 spanning-tree links with Layer 3 routed uplinks creates brittle topologies; routing as close to the distribution layer as possible shrinks broadcast domains and delivers deterministic OSPF convergence.
+### Verification:
+- **Neighbor Check**: Ran `show ip ospf neighbor`. The neighbor reached `FULL/BDR` in seconds.
+- **Routing Table Check**: Ran `show ip route ospf`. Subnets `192.168.30.0/24` and `192.168.40.0/24` showed up with code `O` (OSPF), proving that the core switch had successfully learned paths to the other side of the building.
+- **End-to-End Ping**: Pinged from Engineering PC1 to Operations Server. 100% reply rate with zero dropped packets.
+
+## 6. What This Means for Real Engineering Teams
+
+- **VLANs Save Bandwidth and Secure Data**: Without VLANs, any device plugged into a company network can intercept broadcast traffic. Segmenting networks is the first line of defense in cybersecurity.
+- **OSPF is Resilient**: If a core cable gets unplugged or a switch fails, OSPF automatically re-routes traffic across secondary paths without human intervention.
+- **CLI Discipline Matters**: Small syntax differences—like typing a subnet mask instead of a wildcard mask—can bring down routing updates without generating clear errors. Learning how to check `show ip ospf neighbor` and `show interfaces trunk` is essential for diagnosing live network outages.
