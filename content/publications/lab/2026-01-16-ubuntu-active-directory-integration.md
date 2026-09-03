@@ -153,7 +153,7 @@ sudo realm join --user=Administrator lab.local
 
 The terminal returned: `Successfully enrolled machine in realm lab.local`.
 
-## 4. Where Things Broke (The Real Friction Point)
+## 4. Where Things Broke (What Went Wrong)
 
 The machine showed up inside Active Directory on `dc01`. Everything looked great—until I actually tried to log in as a domain user:
 

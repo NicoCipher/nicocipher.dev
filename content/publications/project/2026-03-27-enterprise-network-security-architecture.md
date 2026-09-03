@@ -5,7 +5,7 @@ slug: "enterprise-network-security-architecture"
 date: "2026-03-27"
 status: "complete"
 domain: "networking"
-summary: "How I designed and simulated an enterprise campus network in Cisco Packet Tracer, moving from flat unmanaged switches to VLAN segmentation, multi-layer routing, and dynamic OSPF convergence."
+summary: "How I built an office network in Cisco Packet Tracer, separated departments using VLANs, and set up multi-layer switches so traffic automatically finds the fastest path using OSPF."
 effort: "12h"
 technologies:
   - "Cisco Packet Tracer"
@@ -147,7 +147,7 @@ I migrated the backbone to **OSPFv2**:
 - Enabled OSPF on the backbone interconnect links.
 - Used `passive-interface default` on the user access ports. This is a critical security practice: you don't want office computers listening to OSPF routing updates, or worse, injecting fake routes into the corporate network.
 
-## 4. Where Things Broke (The Real Friction Point)
+## 4. Where Things Broke (What Went Wrong)
 
 Once the topology was wired up, I sat at an Engineering PC in VLAN 20 and tried to ping an Operations server in VLAN 30.
 

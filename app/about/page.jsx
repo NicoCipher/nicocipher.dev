@@ -63,8 +63,8 @@ export default function AboutPage() {
           <Link href="/publications/project/nicocipher-portfolio" className={styles.principleCard}>
             <h3 className={styles.principleTitle}>Structured Publishing</h3>
             <p className={styles.principleText}>
-              All work is published through a consistent schema — objective, implementation,
-              friction points, resolution, and takeaways. Format is the discipline.
+              All work is published through a consistent schema — what I built,
+              what broke, how it was fixed, and what I learned. Format is the discipline.
             </p>
             <span className={styles.principleLink}>See: This Portfolio →</span>
           </Link>

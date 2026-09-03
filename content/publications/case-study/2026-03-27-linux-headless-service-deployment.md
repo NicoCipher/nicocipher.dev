@@ -77,7 +77,7 @@ evidence:
 > **Quick Summary for Recruiters & Non-Technical Readers**
 > - **The Business Challenge**: Real enterprise servers don't have monitors, mice, or desktop screens. They are "headless" black terminal boxes locked in a server room or cloud data center. When you need to install proprietary enterprise software, you can't just download it through a web browser.
 > - **What We Did**: My team had to deploy Jumpoint (an infrastructure management agent) onto an isolated Linux server. We set up an encrypted OpenSSH tunnel, pushed the installation files using Secure Copy (`scp`), resolved execution permissions, and scaled the setup into a two-node cluster.
-> - **The Stumbling Blocks**: We couldn't get the file onto the server at first because no transfer service was listening. Once transferred, the script failed with `Permission denied` and threw library dependency errors. When we cloned a second server to test high availability, the cluster crashed because both servers had identical machine IDs!
+> - **Where We Ran Into Problems**: We couldn't get the file onto the server at first because no transfer service was listening. Once transferred, the script failed with `Permission denied` and threw library dependency errors. When we cloned a second server to test high availability, the cluster crashed because both servers had identical machine IDs!
 > - **The Takeaway**: Real DevOps and systems administration requires disciplined staging pipelines. Understanding SSH, file permissions, and virtual machine cloning is essential for keeping backend servers running smoothly.
 
 ---
@@ -129,9 +129,9 @@ scp jumpoint-installer-linux-x64.bin admin@192.168.50.35:/tmp/
 
 Once transferred, I moved the installer to its permanent enterprise home under `/opt/jumpoint/` (the standard Linux folder for third-party software packages).
 
-## 4. Where Things Broke (The Three Roadblocks)
+## 4. Where Things Broke (The Three Problems We Faced)
 
-### Roadblock 1: `bash: Permission denied`
+### Problem 1: `bash: Permission denied`
 I tried to run the installer:
 ```bash
 $ ./jumpoint-installer-linux-x64.bin
@@ -141,12 +141,12 @@ When files are copied over SSH, Linux transfers them without execute permissions
 
 **The Fix**: I ran `sudo chmod 755 jumpoint-installer-linux-x64.bin`, granting read and execute rights to the binary without dangerously opening it to everyone with `777`.
 
-### Roadblock 2: The Silent Terminal Hang
+### Problem 2: The Silent Terminal Hang
 When I ran the installer again, the terminal simply froze with no output.
 **The Cause**: The installer was trying to spawn an interactive X11 graphical setup window! Because the server had no screen, it hung forever waiting for a mouse click.
 **The Fix**: Running the installer with the `--silent` flag forced it to install quietly in the background without needing a screen.
 
-### Roadblock 3: The Cloned Server Conflict
+### Problem 3: The Cloned Server Conflict
 Once the first server was running, we needed high availability. In production, if one server reboots for updates, you don't want the whole service going dark.
 
 I spun up a second Linux server (`srv-infra02`) by cloning the first virtual machine. But when I tried to link it to the cluster, the cluster software refused connection.

@@ -123,7 +123,7 @@ The login page vanished. The Incognito window refreshed directly into the user's
 - **No MFA phone prompt was ever triggered**.
 - The server looked at the cookie string, saw that it matched an active session in its database, and granted full user access.
 
-This demonstrates why session hijacking is one of the most dangerous attack vectors in modern cybersecurity. In real-world breaches, attackers use infostealer malware or phishing proxies (like Evilginx) specifically to steal cookies rather than passwords, because cookies allow them to effortlessly bypass multi-factor authentication.
+This shows why cookie theft is one of the most common ways hackers take over accounts today. In real-world breaches, attackers use infostealer malware or fake login links (like Evilginx) specifically to steal cookies rather than guessing passwords, because a stolen cookie lets them bypass two-factor authentication completely.
 
 ## 4. How Web Developers and Security Teams Stop This
 

@@ -5,7 +5,7 @@ slug: "layer2-arp-default-gateway-validation"
 date: "2026-02-13"
 status: "complete"
 domain: "networking"
-summary: "An experiment in Cisco Packet Tracer testing how computers actually talk over a local network, proving why devices don't need a default gateway to ping local peers, and dissecting off-boundary subnet timeouts."
+summary: "An experiment in Cisco Packet Tracer showing how computers talk on a local network, why you don't need a default gateway for local pings, and why entering an off-boundary IP causes an instant timeout."
 effort: "4h"
 technologies:
   - "Cisco Packet Tracer"

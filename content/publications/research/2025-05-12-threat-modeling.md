@@ -5,7 +5,7 @@ slug: "threat-modeling"
 date: "2025-05-12"
 status: "complete"
 domain: "security"
-summary: "Evaluating authentication attack vectors, repudiation evidence requirements, and CIA triad mappings using the STRIDE framework."
+summary: "How to use Microsoft's STRIDE framework to find security holes in a login system before writing code, and how to defend against common authentication attacks."
 effort: "3h"
 technologies:
   - "Threat Modeling"
@@ -53,56 +53,56 @@ evidence:
 
 ## 1. Objective
 
-Apply the STRIDE framework to a standard web application authentication flow to systematically identify threat boundaries and mitigation requirements, rather than relying on ad-hoc security thinking.
+Apply the STRIDE framework to a standard login flow to systematically find security weaknesses and plan defenses early, rather than guessing.
 
 ## 2. STRIDE Breakdown
 
-### Spoofing (Authenticity)
+### Spoofing (Pretending to be someone else)
 
-The primary spoofing vector is credential theft — an attacker presenting valid credentials obtained through phishing, credential stuffing, or database breach. Mitigations:
+The most common spoofing attack is stolen passwords (from phishing or database leaks). How to prevent it:
 
-- Multi-factor authentication eliminates single-credential spoofing
-- Rate limiting on login endpoints prevents automated credential stuffing
-- TLS 1.3 prevents man-in-the-middle credential interception
+- Multi-factor authentication (MFA) so a stolen password alone isn't enough
+- Rate limiting on login pages to block automated password guessing
+- TLS encryption (HTTPS) so passwords can't be spied on over Wi-Fi
 
-### Tampering (Integrity)
+### Tampering (Modifying data in transit or memory)
 
-Session tokens and cookies are the primary tampering surface. If an attacker can modify a session token to change the user ID or role, they gain unauthorized access. Mitigations:
+Session tokens and cookies are the primary target. If an attacker can edit a cookie to change their role from "user" to "admin", they take over the system. How to prevent it:
 
-- HMAC-signed or encrypted session tokens prevent modification
-- `HttpOnly` and `Secure` cookie flags prevent client-side access
-- Content Security Policy headers prevent injection attacks that could modify in-flight data
+- Cryptographically signed tokens (like HMAC) that cannot be altered
+- `HttpOnly` and `Secure` cookie flags so browser scripts cannot tamper with tokens
+- Content Security Policy (CSP) headers to block malicious scripts
 
-### Repudiation (Non-repudiation)
+### Repudiation (Denying that an action occurred)
 
-This is the most misunderstood STRIDE element. Repudiation is not about data theft — it's about whether an actor can deny performing an action. In authentication flows:
+Repudiation is about audit logs. If an admin deletes a database, can they claim *"It wasn't me, someone else did it"*? In login flows:
 
-- Failed login attempts must be logged with timestamp, source IP, and target account
-- Password reset requests must be logged and linked to the requesting session
-- Administrative privilege changes must produce immutable audit records
+- Failed logins must be logged with time, IP address, and username
+- Password resets must be logged and tied to the active session
+- Admin permission changes must create unchangeable audit logs
 
-Without these logs, a compromised account cannot be forensically investigated.
+Without good logs, you cannot investigate a breach.
 
-### Information Disclosure (Confidentiality)
+### Information Disclosure (Leaking private data)
 
-Authentication flows handle the most sensitive data in any application — credentials. Disclosure vectors:
+Login forms handle credentials. Common ways data leaks:
 
-- Error messages that reveal whether a username exists ("Invalid password" vs. "Invalid credentials")
-- Password reset flows that confirm email registration status
-- Session tokens exposed in URL parameters or referrer headers
-- Server-side logs that store plaintext credentials
+- Error messages that reveal if an email exists ("Wrong password" vs. "Invalid login details")
+- Password reset pages that confirm whether an account exists
+- Session IDs exposed in URL links
+- Server logs accidentally recording plaintext passwords
 
-### Denial of Service (Availability)
+### Denial of Service (Taking the service down)
 
-Authentication endpoints are natural DoS targets because they involve expensive operations (password hashing, database lookups). Mitigations:
+Login endpoints are common targets because checking passwords requires heavy server computation (like hashing). How to prevent it:
 
-- Rate limiting per IP and per account
-- CAPTCHA on repeated failures
-- Separate authentication infrastructure from application serving
+- Limit login attempts per IP address and per user account
+- Show CAPTCHAs after repeated failed attempts
+- Async processing for password reset emails
 
-### Elevation of Privilege (Authorization)
+### Elevation of Privilege (Gaining unauthorized powers)
 
-The most dangerous authentication threat. Vectors include:
+The most dangerous threat. Common ways it happens:
 
 - Insecure Direct Object References (IDOR) in session management
 - JWT tokens with modifiable role claims and insufficient signature verification
@@ -110,14 +110,14 @@ The most dangerous authentication threat. Vectors include:
 
 ## 3. Key Insight
 
-STRIDE is most useful as a structured checklist, not a creative exercise. The value is in systematically covering all six categories for every component in the authentication flow, rather than trying to imagine novel attacks. Most real-world authentication breaches exploit well-known vectors that a STRIDE analysis would have identified.
+STRIDE is most useful as a structured checklist, not a creative guessing game. The value is in systematically checking all six categories for every piece of the login flow, rather than trying to invent wild attack scenarios. Most real-world account breaches exploit well-known weaknesses that a STRIDE checklist easily catches.
 
 ## 4. What Went Wrong
 
-- Initially confused Repudiation with Information Disclosure. Repudiation is about auditability and evidence, not data secrecy. A system with no audit logs has a repudiation problem even if all data is encrypted.
-- Underestimated the Information Disclosure risk of error messages. Generic error messages feel like bad UX, but they eliminate a significant enumeration vector.
-- Tried to apply STRIDE to the entire application at once instead of decomposing into components first. The framework works best at the component level.
+- Initially confused Repudiation with Information Disclosure. Repudiation is about audit logs and proof, not secret data. A system with no audit logs has a repudiation problem even if everything is encrypted.
+- Underestimated the data leakage risk of helpful error messages. Generic error messages feel inconvenient, but saying "Username not found" gives attackers a list of valid accounts to target.
+- Tried to analyze the whole application at once instead of breaking it down into small parts first. The framework works best when applied component by component.
 
 ## 5. Permanent Takeaway
 
-STRIDE is a classification tool, not a detection tool. It tells you *what categories of threats to look for*, not *whether your system is vulnerable*. The threat matrix (see evidence) is the practical output — a per-component assessment that maps directly to implementation requirements. Every cell marked HIGH needs a concrete mitigation before deployment.
+STRIDE is a roadmap, not a scanner. It tells you *what categories of threats to look for*, not *whether your code is safe*. The threat matrix (see evidence above) is the practical output—a checklist that maps directly to what developers must build. Every item marked HIGH needs a clear security fix before launch.
