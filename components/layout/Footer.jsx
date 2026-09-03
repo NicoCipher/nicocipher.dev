@@ -26,6 +26,14 @@ export default function Footer() {
           >
             github
           </a>
+          <a
+            href="https://linkedin.com/in/nicocipher"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.link}
+          >
+            linkedin
+          </a>
           <a href="mailto:nicocipherr@gmail.com" className={styles.link}>
             email
           </a>

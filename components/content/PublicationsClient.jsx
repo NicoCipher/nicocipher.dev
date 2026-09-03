@@ -86,6 +86,7 @@ export default function PublicationsClient({ publications, initialType = "all" }
                   <StatusBadge status={pub.status} />
                   <time dateTime={pub.date} className={styles.pubDate}>{pub.date}</time>
                   {pub.effort && <span className={styles.pubEffort}>· {pub.effort}</span>}
+                  <span className={styles.recruiterBadge}>Recruiter Briefing</span>
                   {pub.evidence?.length > 0 && (
                     <span className={styles.pubEvidenceCount}>
                       {pub.evidence.length} evidence item{pub.evidence.length !== 1 ? "s" : ""}

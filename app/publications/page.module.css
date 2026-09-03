@@ -32,6 +32,29 @@
   line-height: 1.6;
 }
 
+.readerNote {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 12px;
+  border-radius: 4px;
+  display: inline-block;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+.recruiterBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
 .filters,
 .filterBar {
   display: flex;

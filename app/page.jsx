@@ -42,6 +42,68 @@ export default function HomePage() {
             <span key={d} className={styles.domainTag}>{d}</span>
           ))}
         </div>
+
+        <div className={styles.socialRow}>
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialBadge}
+          >
+            GitHub ↗
+          </a>
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialBadge}
+          >
+            LinkedIn ↗
+          </a>
+          <a
+            href={`mailto:${profile.email}`}
+            className={styles.socialBadge}
+          >
+            Email Me →
+          </a>
+          <Link
+            href="/publications"
+            className={styles.socialBadge}
+          >
+            Browse All ({stats.total}) Publications →
+          </Link>
+        </div>
+      </section>
+
+      {/* Recruiter & Non-Technical Visitor Guide */}
+      <section className={styles.guideSection} aria-label="Visitor and Recruiter Guide">
+        <div className={styles.guideHeader}>
+          <span className={styles.guideTag}>For Recruiters & Non-Technical Visitors</span>
+          <h2 className={styles.guideTitle}>How to evaluate my engineering work in 60 seconds</h2>
+        </div>
+        <div className={styles.guideGrid}>
+          <div className={styles.guideCard}>
+            <span className={styles.guideNum}>01</span>
+            <h3 className={styles.guideCardTitle}>Real Systems, Not Just Code</h3>
+            <p className={styles.guideCardText}>
+              Configured real Windows Server 2022 Active Directory, headless Ubuntu servers, and enterprise Cisco switches. Every project is verified in functional lab environments.
+            </p>
+          </div>
+          <div className={styles.guideCard}>
+            <span className={styles.guideNum}>02</span>
+            <h3 className={styles.guideCardTitle}>The &quot;What Broke&quot; Rule</h3>
+            <p className={styles.guideCardText}>
+              Every publication documents the mistakes, error messages, and how they were fixed. It proves troubleshooting persistence under pressure rather than textbook memorization.
+            </p>
+          </div>
+          <div className={styles.guideCard}>
+            <span className={styles.guideNum}>03</span>
+            <h3 className={styles.guideCardTitle}>Plain-English Summaries</h3>
+            <p className={styles.guideCardText}>
+              You don&apos;t need a networking degree to understand what I built. Every publication begins with a 30-second summary and everyday analogies explaining why the work matters to a business.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Live Terminal Evidence */}
@@ -85,6 +147,38 @@ export default function HomePage() {
 
       {/* Featured Publications */}
       <FeaturedPublications publications={featured} totalCount={stats.total} />
+
+      {/* Closing Call to Action */}
+      <section className={styles.ctaSection} aria-label="Contact and collaboration">
+        <div className={styles.ctaCard}>
+          <span className={styles.ctaTag}>Available for Opportunities</span>
+          <h2 className={styles.ctaTitle}>Let&apos;s build dependable infrastructure.</h2>
+          <p className={styles.ctaText}>
+            I am actively open to engineering roles across Infrastructure, Networking, and Cybersecurity. If you need someone who learns fast, documents thoroughly, and solves real problems, let&apos;s connect.
+          </p>
+          <div className={styles.ctaActions}>
+            <a href={`mailto:${profile.email}`} className={styles.ctaPrimary}>
+              Email Me ({profile.email}) →
+            </a>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.ctaSecondary}
+            >
+              LinkedIn ↗
+            </a>
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.ctaSecondary}
+            >
+              GitHub ↗
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* JSON-LD Structured Data */}
       <script

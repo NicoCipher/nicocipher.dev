@@ -8,6 +8,41 @@ export const metadata = {
   description: "Map of engineering domains, technologies, and cross-linked publications.",
 };
 
+const DECODER_ITEMS = [
+  {
+    term: "Active Directory & Kerberos",
+    analogy: "The company's master pass and employee directory. Lets staff log into computers and file shares securely without typing 50 different passwords.",
+  },
+  {
+    term: "OSPF & Dynamic Routing",
+    analogy: "Like a real-time GPS app for network traffic. If one network wire is cut, data instantly reroutes around the failure in milliseconds.",
+  },
+  {
+    term: "VLANs (Virtual LANs)",
+    analogy: "Virtual office drywall. Keeps guest Wi-Fi, HR payroll records, and server traffic completely isolated even though they share the same physical switch.",
+  },
+  {
+    term: "IPv4 Subnetting",
+    analogy: "Carving a large parcel of real estate into clearly numbered private office lots, preventing computer address collisions.",
+  },
+  {
+    term: "Headless Linux & SSH",
+    analogy: "Managing high-performance cloud servers with no monitor or mouse attached, controlling them securely across the internet through encrypted command lines.",
+  },
+  {
+    term: "Session Cookie Security",
+    analogy: "Protecting digital wristbands at an event. Ensuring hackers cannot copy a user's temporary browser token to bypass the login screen.",
+  },
+  {
+    term: "Threat Modeling (STRIDE)",
+    analogy: "A safety inspection before building a house. Finding structural security vulnerabilities in software blueprints before hackers can exploit them.",
+  },
+  {
+    term: "Layer 2 ARP vs. Default Gateway",
+    analogy: "Deciding whether to walk over and hand a letter to your desk neighbor directly (Layer 2 ARP) or drop it in the outgoing mail slot for the post office (Gateway).",
+  },
+];
+
 export default function SystemsPage() {
   const publications = getAllPublications();
 
@@ -19,6 +54,25 @@ export default function SystemsPage() {
           Taxonomy of engineering domains, tools, and technical contexts cross-linked to verified publications.
         </p>
       </header>
+
+      {/* Non-Technical Decoder */}
+      <section className={styles.decoderSection} aria-label="Non-Technical Technology Decoder">
+        <div className={styles.decoderHeader}>
+          <span className={styles.decoderTag}>Non-Technical Decoder</span>
+          <h2 className={styles.decoderTitle}>What these systems actually do in plain English</h2>
+          <p className={styles.decoderSubtitle}>
+            A quick reference for recruiters and hiring managers translating infrastructure jargon into practical business value.
+          </p>
+        </div>
+        <div className={styles.decoderGrid}>
+          {DECODER_ITEMS.map((item) => (
+            <div key={item.term} className={styles.decoderCard}>
+              <span className={styles.decoderTerm}>{item.term}</span>
+              <p className={styles.decoderAnalogy}>{item.analogy}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className={styles.domainGrid}>
         {domains.map((domain) => {

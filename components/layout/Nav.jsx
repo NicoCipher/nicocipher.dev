@@ -38,15 +38,37 @@ export default function Nav() {
           })}
         </nav>
 
-        <button
-          type="button"
-          onClick={openPalette}
-          className={styles.paletteTrigger}
-          aria-label="Open command palette (Press /)"
-          title="Command Palette (Press /)"
-        >
-          <span className={styles.triggerKey}>[ / ]</span>
-        </button>
+        <div className={styles.rightGroup}>
+          <a
+            href="https://github.com/NicoCipher"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialLink}
+            aria-label="GitHub Profile"
+            title="GitHub"
+          >
+            gh ↗
+          </a>
+          <a
+            href="https://linkedin.com/in/nicocipher"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialLink}
+            aria-label="LinkedIn Profile"
+            title="LinkedIn"
+          >
+            in ↗
+          </a>
+          <button
+            type="button"
+            onClick={openPalette}
+            className={styles.paletteTrigger}
+            aria-label="Open command palette (Press /)"
+            title="Command Palette (Press /)"
+          >
+            <span className={styles.triggerKey}>[ / ]</span>
+          </button>
+        </div>
       </div>
     </header>
   );
