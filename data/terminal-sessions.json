@@ -19,5 +19,36 @@
       { "prompt": "$", "command": "./backup.sh", "output": "bash: ./backup.sh: Permission denied" },
       { "prompt": "$", "command": "chmod 744 backup.sh && ./backup.sh", "output": "Backup completed successfully." }
     ]
+  },
+  {
+    "id": "enterprise-network-security-architecture",
+    "label": "project · networking",
+    "title": "Cisco IOS OSPF Dynamic Routing & Neighbors",
+    "link": "/publications/project/enterprise-network-security-architecture",
+    "commands": [
+      { "prompt": "CORE-SW01#", "command": "show ip ospf neighbor", "output": "Neighbor ID     Pri   State           Dead Time   Address         Interface\n2.2.2.2           1   FULL/BDR        00:00:34    10.0.0.2        GigabitEthernet0/1" },
+      { "prompt": "CORE-SW01#", "command": "show ip route ospf", "output": "O    192.168.30.0/24 [110/2] via 10.0.0.2, 00:14:28, GigabitEthernet0/1\nO    192.168.40.0/24 [110/2] via 10.0.0.2, 00:14:28, GigabitEthernet0/1" }
+    ]
+  },
+  {
+    "id": "ubuntu-active-directory-integration",
+    "label": "lab · infrastructure",
+    "title": "Linux SSSD & Active Directory Domain Auth",
+    "link": "/publications/lab/ubuntu-active-directory-integration",
+    "commands": [
+      { "prompt": "$", "command": "realm list", "output": "lab.local\n  type: kerberos\n  realm-name: LAB.LOCAL\n  domain-name: lab.local\n  configured: kerberos-member\n  client-software: sssd" },
+      { "prompt": "$", "command": "id adm-olumide@lab.local", "output": "uid=1844601105(adm-olumide@lab.local) gid=1844600513(domain users@lab.local) groups=1844600513(domain users@lab.local),1844600512(domain admins@lab.local)" },
+      { "prompt": "$", "command": "klist", "output": "Ticket cache: FILE:/tmp/krb5cc_1000\nDefault principal: adm-olumide@lab.local\nValid starting       Expires              Service principal\n01/16/2026 14:22:10  01/17/2026 00:22:10  krbtgt/LAB.LOCAL@LAB.LOCAL" }
+    ]
+  },
+  {
+    "id": "linux-headless-service-deployment",
+    "label": "case-study · infrastructure",
+    "title": "Headless SCP Staging & Service Execution",
+    "link": "/publications/case-study/linux-headless-service-deployment",
+    "commands": [
+      { "prompt": "$", "command": "scp jumpoint-installer.bin admin@192.168.50.35:/tmp/", "output": "jumpoint-installer.bin          100%   48MB  24.2MB/s   00:02" },
+      { "prompt": "srv-infra01:~$", "command": "sudo chmod 755 /opt/jumpoint/jumpoint-installer.bin && sudo systemctl status jumpoint", "output": "● jumpoint.service - Jumpoint Management Agent\n     Loaded: loaded (/etc/systemd/system/jumpoint.service; enabled)\n     Active: active (running) since Fri 2026-03-27 15:42:10 UTC" }
+    ]
   }
 ]

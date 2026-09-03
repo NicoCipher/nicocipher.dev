@@ -52,13 +52,14 @@ export default function AboutPage() {
             </p>
             <span className={styles.principleLink}>See: chmod Case Study →</span>
           </Link>
-          <div className={styles.principleCard}>
+          <Link href="/publications/lab/ubuntu-active-directory-integration" className={styles.principleCard}>
             <h3 className={styles.principleTitle}>Document the Failures</h3>
             <p className={styles.principleText}>
               Every publication includes a "What Went Wrong" section. Honest documentation
               of failures is more credible than polished success stories.
             </p>
-          </div>
+            <span className={styles.principleLink}>See: Ubuntu AD Integration Lab →</span>
+          </Link>
           <Link href="/publications/project/nicocipher-portfolio" className={styles.principleCard}>
             <h3 className={styles.principleTitle}>Structured Publishing</h3>
             <p className={styles.principleText}>
