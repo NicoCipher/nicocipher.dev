@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -8,34 +8,29 @@ export default function Footer() {
         <div className={styles.copyright}>
           <span>NICOCIPHER &copy; {new Date().getFullYear()}</span>
           <span className={styles.divider}>·</span>
-          <span>Engineering Portfolio Publication System</span>
+          <span>Systems &amp; Security Engineering</span>
         </div>
 
         <div className={styles.links}>
-          <a href="/feed.xml" className={styles.link} aria-label="RSS Feed">
-            rss
-          </a>
-          <a href="/sitemap.xml" className={styles.link}>
-            sitemap
-          </a>
           <a
             href="https://github.com/NicoCipher"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.link}
+            aria-label="GitHub Profile"
           >
-            github
+            <GitHubIcon size={14} />
+            <span>GitHub</span>
           </a>
           <a
             href="https://linkedin.com/in/nicocipher"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.link}
+            aria-label="LinkedIn Profile"
           >
-            linkedin
-          </a>
-          <a href="mailto:nicocipherr@gmail.com" className={styles.link}>
-            email
+            <LinkedInIcon size={14} />
+            <span>LinkedIn</span>
           </a>
         </div>
       </div>

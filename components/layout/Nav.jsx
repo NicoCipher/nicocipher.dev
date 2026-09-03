@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePalette } from "@/components/command-palette/PaletteProvider";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import styles from "./Nav.module.css";
 
 export default function Nav() {
@@ -43,21 +44,21 @@ export default function Nav() {
             href="https://github.com/NicoCipher"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.socialLink}
+            className={styles.iconLink}
             aria-label="GitHub Profile"
             title="GitHub"
           >
-            gh ↗
+            <GitHubIcon size={16} />
           </a>
           <a
             href="https://linkedin.com/in/nicocipher"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.socialLink}
+            className={styles.iconLink}
             aria-label="LinkedIn Profile"
             title="LinkedIn"
           >
-            in ↗
+            <LinkedInIcon size={16} />
           </a>
           <button
             type="button"

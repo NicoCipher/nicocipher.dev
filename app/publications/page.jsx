@@ -23,9 +23,6 @@ export default async function PublicationsIndexPage({ searchParams }) {
           Structured, evidence-backed documentation across infrastructure, cybersecurity,
           networking, and software engineering.
         </p>
-        <div className={styles.readerNote}>
-          💡 <strong>Recruiter &amp; Non-Technical Quick Tip:</strong> Every publication opens with a 30-second executive summary and everyday analogy explaining the business impact before the technical terminal logs.
-        </div>
       </header>
 
       {/* Client component handles instant filtering + URL sync */}

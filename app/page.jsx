@@ -5,6 +5,7 @@ import CurrentlyBlock from "@/components/home/CurrentlyBlock";
 import FeaturedPublications from "@/components/home/FeaturedPublications";
 import Heatmap from "@/components/home/Heatmap";
 import TerminalHero from "@/components/home/TerminalHero";
+import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -49,16 +50,20 @@ export default function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialBadge}
+            aria-label="GitHub Profile"
           >
-            GitHub ↗
+            <GitHubIcon size={14} />
+            <span>GitHub</span>
           </a>
           <a
             href={profile.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialBadge}
+            aria-label="LinkedIn Profile"
           >
-            LinkedIn ↗
+            <LinkedInIcon size={14} />
+            <span>LinkedIn</span>
           </a>
           <a
             href={`mailto:${profile.email}`}
@@ -75,32 +80,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Recruiter & Non-Technical Visitor Guide */}
-      <section className={styles.guideSection} aria-label="Visitor and Recruiter Guide">
+      {/* Engineering Standards & Verification */}
+      <section className={styles.guideSection} aria-label="Engineering Standards and Principles">
         <div className={styles.guideHeader}>
-          <span className={styles.guideTag}>For Recruiters & Non-Technical Visitors</span>
-          <h2 className={styles.guideTitle}>How to evaluate my engineering work in 60 seconds</h2>
+          <span className={styles.guideTag}>Engineering Standards</span>
+          <h2 className={styles.guideTitle}>How I approach, verify, and document systems</h2>
         </div>
         <div className={styles.guideGrid}>
           <div className={styles.guideCard}>
             <span className={styles.guideNum}>01</span>
-            <h3 className={styles.guideCardTitle}>Real Systems, Not Just Code</h3>
+            <h3 className={styles.guideCardTitle}>Real Environments, Not Just Code</h3>
             <p className={styles.guideCardText}>
               Configured real Windows Server 2022 Active Directory, headless Ubuntu servers, and enterprise Cisco switches. Every project is verified in functional lab environments.
             </p>
           </div>
           <div className={styles.guideCard}>
             <span className={styles.guideNum}>02</span>
-            <h3 className={styles.guideCardTitle}>The &quot;What Broke&quot; Rule</h3>
+            <h3 className={styles.guideCardTitle}>The &quot;What Broke&quot; Standard</h3>
             <p className={styles.guideCardText}>
               Every publication documents the mistakes, error messages, and how they were fixed. It proves troubleshooting persistence under pressure rather than textbook memorization.
             </p>
           </div>
           <div className={styles.guideCard}>
             <span className={styles.guideNum}>03</span>
-            <h3 className={styles.guideCardTitle}>Plain-English Summaries</h3>
+            <h3 className={styles.guideCardTitle}>Plain-English Business Clarity</h3>
             <p className={styles.guideCardText}>
-              You don&apos;t need a networking degree to understand what I built. Every publication begins with a 30-second summary and everyday analogies explaining why the work matters to a business.
+              Every technical build is accompanied by clear takeaways, everyday analogies, and the real-world business reason why the architecture matters.
             </p>
           </div>
         </div>
@@ -165,16 +170,20 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.ctaSecondary}
+              aria-label="LinkedIn Profile"
             >
-              LinkedIn ↗
+              <LinkedInIcon size={14} />
+              <span>LinkedIn</span>
             </a>
             <a
               href={profile.github}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.ctaSecondary}
+              aria-label="GitHub Profile"
             >
-              GitHub ↗
+              <GitHubIcon size={14} />
+              <span>GitHub</span>
             </a>
           </div>
         </div>
