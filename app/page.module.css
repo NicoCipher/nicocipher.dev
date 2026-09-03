@@ -8,7 +8,7 @@
   animation: fadeInUp var(--duration-slow) var(--ease-out) both;
 }
 
-/* ─── Identity ────────────────────────────────────────────────── */
+/* ─── Identity Briefing ────────────────────────────────────────── */
 
 .briefing {
   display: flex;
@@ -19,7 +19,14 @@
 .identityHeader {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
 .name {
@@ -29,6 +36,17 @@
   color: var(--text-primary);
   letter-spacing: -0.03em;
   line-height: 1.1;
+}
+
+.handleBadge {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  border: 1px solid var(--border-subtle);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
 }
 
 .role {
@@ -43,26 +61,61 @@
   font-size: var(--text-base);
   color: var(--text-secondary);
   line-height: 1.7;
-  max-width: 560px;
+  max-width: 620px;
 }
 
-.domainTags {
+/* ─── Quick Actions Row ────────────────────────────────────────── */
+
+.actionsRow {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+  align-items: center;
+  margin-top: var(--space-1);
 }
 
-.domainTag {
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  padding: 2px 8px;
-  border-radius: 3px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) var(--ease-out);
 }
 
-/* ─── Heatmap ────────────────────────────────────────────────── */
+.actionBtn:hover {
+  border-color: var(--border-visible);
+  color: var(--text-primary);
+}
+
+.actionPrimary {
+  color: var(--text-primary);
+  border-color: var(--border-visible);
+  background: var(--bg-inset);
+}
+
+.actionPrimary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.arrow {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.actionBtn:hover .arrow {
+  transform: translateX(2px);
+}
+
+/* ─── Heatmap ──────────────────────────────────────────────────── */
 
 .heatmapSection {
   padding: var(--space-5);
@@ -71,7 +124,7 @@
   border-radius: 6px;
 }
 
-/* ─── Stats ──────────────────────────────────────────────────── */
+/* ─── Stats ────────────────────────────────────────────────────── */
 
 .statsRow {
   display: grid;
@@ -110,107 +163,7 @@
   letter-spacing: 0.06em;
 }
 
-/* ─── Hero Social Actions ────────────────────────────────────── */
-
-.socialRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-.socialBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  padding: 4px 10px;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: border-color var(--duration-fast) var(--ease-out),
-              color var(--duration-fast) var(--ease-out);
-}
-
-.socialBadge:hover {
-  border-color: var(--accent);
-  color: var(--text-primary);
-}
-
-/* ─── Recruiter & Non-Technical Guide ────────────────────────── */
-
-.guideSection {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  padding: var(--space-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.guideHeader {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.guideTag {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.guideTitle {
-  font-family: var(--font-sans);
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-  letter-spacing: -0.01em;
-}
-
-.guideGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-}
-
-.guideCard {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4);
-  background: var(--bg-root);
-  border: 1px solid var(--border-subtle);
-  border-radius: 4px;
-}
-
-.guideNum {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--text-tertiary);
-}
-
-.guideCardTitle {
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.guideCardText {
-  font-family: var(--font-serif);
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-/* ─── Call to Action Section ─────────────────────────────────── */
+/* ─── Call to Action Section ───────────────────────────────────── */
 
 .ctaSection {
   margin-top: var(--space-2);
@@ -308,7 +261,7 @@
   color: var(--text-primary);
 }
 
-/* ─── Mobile ─────────────────────────────────────────────────── */
+/* ─── Mobile ───────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
   .container {
@@ -324,8 +277,12 @@
     font-size: var(--text-sm);
   }
 
-  .guideGrid {
-    grid-template-columns: 1fr;
+  .actionsRow {
+    gap: var(--space-2);
+  }
+
+  .actionBtn {
+    padding: 6px 10px;
   }
 
   .statsRow {

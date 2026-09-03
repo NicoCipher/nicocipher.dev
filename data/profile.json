@@ -1,9 +1,10 @@
 {
-  "name": "Taiwo Olumide (NicoCipher)",
+  "name": "Taiwo Olumide",
+  "handle": "nicocipher",
   "role": "Cybersecurity & Systems Engineer",
   "email": "nicocipherr@gmail.com",
   "github": "https://github.com/NicoCipher",
   "linkedin": "https://linkedin.com/in/nicocipher",
-  "bio": "I document, build, and troubleshoot systems across networking, cybersecurity, infrastructure, and software engineering. I learn by building real projects, breaking things on purpose, and explaining how to fix them in plain English.",
+  "bio": "I design, secure, and troubleshoot enterprise systems across networking, Linux/Windows administration, and identity architecture. Every publication here is backed by reproducible terminal sessions, sanitized configurations, and root-cause postmortems.",
   "domains": ["Infrastructure", "Networking", "Security", "Development", "Creative"]
 }

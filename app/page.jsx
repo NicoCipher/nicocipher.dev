@@ -30,26 +30,23 @@ export default function HomePage() {
       {/* Identity Briefing */}
       <section className={styles.briefing}>
         <div className={styles.identityHeader}>
-          <h1 className={styles.name}>{profile.name}</h1>
+          <div className={styles.titleRow}>
+            <h1 className={styles.name}>{profile.name}</h1>
+            <span className={styles.handleBadge}>@{profile.handle}</span>
+          </div>
           <p className={styles.role}>{profile.role}</p>
         </div>
-        <p className={styles.bio}>
-          Most security knowledge claims are assertions. Mine are documented with terminal output,
-          packet captures, and reproducible procedures. Everything published here started with
-          something breaking.
-        </p>
-        <div className={styles.domainTags}>
-          {profile.domains.map((d) => (
-            <span key={d} className={styles.domainTag}>{d}</span>
-          ))}
-        </div>
 
-        <div className={styles.socialRow}>
+        <p className={styles.bio}>
+          {profile.bio}
+        </p>
+
+        <div className={styles.actionsRow}>
           <a
             href={profile.github}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.socialBadge}
+            className={styles.actionBtn}
             aria-label="GitHub Profile"
           >
             <GitHubIcon size={14} />
@@ -59,7 +56,7 @@ export default function HomePage() {
             href={profile.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.socialBadge}
+            className={styles.actionBtn}
             aria-label="LinkedIn Profile"
           >
             <LinkedInIcon size={14} />
@@ -67,51 +64,21 @@ export default function HomePage() {
           </a>
           <a
             href={`mailto:${profile.email}`}
-            className={styles.socialBadge}
+            className={styles.actionBtn}
           >
-            Email Me →
+            <span>Email</span>
           </a>
           <Link
             href="/publications"
-            className={styles.socialBadge}
+            className={`${styles.actionBtn} ${styles.actionPrimary}`}
           >
-            Browse All ({stats.total}) Publications →
+            <span>Publications ({stats.total})</span>
+            <span className={styles.arrow} aria-hidden="true">→</span>
           </Link>
         </div>
       </section>
 
-      {/* Engineering Standards & Verification */}
-      <section className={styles.guideSection} aria-label="Engineering Standards and Principles">
-        <div className={styles.guideHeader}>
-          <span className={styles.guideTag}>Engineering Standards</span>
-          <h2 className={styles.guideTitle}>How I approach, verify, and document systems</h2>
-        </div>
-        <div className={styles.guideGrid}>
-          <div className={styles.guideCard}>
-            <span className={styles.guideNum}>01</span>
-            <h3 className={styles.guideCardTitle}>Real Environments, Not Just Code</h3>
-            <p className={styles.guideCardText}>
-              Configured real Windows Server 2022 Active Directory, headless Ubuntu servers, and enterprise Cisco switches. Every project is verified in functional lab environments.
-            </p>
-          </div>
-          <div className={styles.guideCard}>
-            <span className={styles.guideNum}>02</span>
-            <h3 className={styles.guideCardTitle}>The &quot;What Broke&quot; Standard</h3>
-            <p className={styles.guideCardText}>
-              Every publication documents the mistakes, error messages, and how they were fixed. It proves troubleshooting persistence under pressure rather than textbook memorization.
-            </p>
-          </div>
-          <div className={styles.guideCard}>
-            <span className={styles.guideNum}>03</span>
-            <h3 className={styles.guideCardTitle}>Plain-English Business Clarity</h3>
-            <p className={styles.guideCardText}>
-              Every technical build is accompanied by clear takeaways, everyday analogies, and the real-world business reason why the architecture matters.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Live Terminal Evidence */}
+      {/* Live Terminal Evidence — Instant Proof */}
       <TerminalHero />
 
       {/* Activity Heatmap */}
@@ -119,7 +86,7 @@ export default function HomePage() {
         <Heatmap dates={pubDates} />
       </section>
 
-      {/* Publication Statistics — only meaningful once there's volume */}
+      {/* Publication Statistics */}
       {stats.total >= 10 && (
         <section className={styles.statsSection} aria-label="Publication statistics">
           <div className={styles.statsRow}>
