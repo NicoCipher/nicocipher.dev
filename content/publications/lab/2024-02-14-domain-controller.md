@@ -68,11 +68,11 @@ evidence:
 ---
 
 > **Quick Summary**
-> - **The Business Goal**: A Windows Domain Controller is the central nerve center for corporate IT. It manages user logins, security policies, and computer accounts for an entire office.
-> - **What I Built**: Deployed a Windows Server 2022 Domain Controller from scratch on a virtual machine and joined client workstations to the domain.
-> - **Where It Failed**: The Windows client failed to join the domain with error `DNS name does not exist`. Even though network ping was working, the client was querying the home Wi-Fi router instead of the Domain Controller's DNS service.
-> - **The Solution**: Pointed client DNS to the Domain Controller IP and flushed the DNS cache, completing the domain join on the next attempt.
-> - **Key Skills**: Windows Server 2022, Active Directory Domain Services (AD DS), DNS Server Configuration, Client Domain Enrollment, dcdiag Diagnostics.
+> - **Goal**: Deploy a Windows Server 2022 Domain Controller to manage centralized authentication, DNS, and computer accounts in a local lab environment.
+> - **What I Built**: Configured Active Directory Domain Services (AD DS) and AD-integrated DNS on Windows Server 2022, then enrolled client workstations into the domain.
+> - **What Went Wrong**: Workstations failed to join the domain with error `DNS name does not exist` because their DNS was pointed at the default router rather than the DC's integrated DNS.
+> - **Resolution**: Corrected the client DNS target to the Domain Controller IP and flushed cache, validating with `dcdiag /test:dns`.
+> - **Technologies & Concepts**: Windows Server 2022, Active Directory Domain Services (AD DS), DNS Server Configuration, Client Domain Enrollment, dcdiag Diagnostics.
 
 ---
 
@@ -112,7 +112,7 @@ The forward lookup zone `lab.local` was created automatically during promotion. 
 - `_kerberos._tcp.lab.local` — Kerberos authentication
 - `_gc._tcp.lab.local` — Global Catalog
 
-## 4. The Friction Point
+## 4. Troubleshooting Domain Join Failure
 
 The Windows 10 client failed to join the domain with the error: *"DNS name does not exist."* The client could ping `192.168.50.10` by IP — network connectivity was fine — but domain name resolution was failing.
 

@@ -99,19 +99,19 @@ evidence:
 ---
 
 > **Quick Summary**
-> - **The Business Problem**: In a company with hundreds of employees, you cannot create separate user accounts on 50 different Linux servers. Everyone should log in with their central corporate Windows Active Directory account.
-> - **What I Built**: Joined an Ubuntu Linux server to a Windows Server 2022 Active Directory domain so corporate users could log in over SSH with their normal company credentials.
-> - **Where It Failed**: The domain join appeared successful, but users were locked out with "System Error". Looking at the logs, Linux had no idea where the Domain Controller lived because it was asking the home Wi-Fi router for DNS instead of the company Domain Controller.
-> - **The Solution**: Configured Linux to use the Windows Domain Controller as its authoritative DNS server, enabling SSSD to discover the domain's Kerberos and LDAP services.
-> - **Key Skills**: Active Directory, Linux Systems Administration, DNS Troubleshooting, Kerberos Identity Management, SSSD, PAM.
+> - **Problem**: Managing independent local accounts across disparate Linux servers creates operational overhead and security risk when revoking access. Enterprise environments require centralized identity management through Active Directory.
+> - **What I Built**: Joined a headless Ubuntu Linux server to a Windows Server 2022 Active Directory domain so corporate accounts could authenticate over SSH with Kerberos tickets.
+> - **What Went Wrong**: Domain enrollment succeeded, but user logins threw `su: System error` and `No available servers for service 'AD'` because Linux DHCP DNS pointed at the default gateway instead of the Domain Controller.
+> - **Resolution**: Configured Netplan to point primary DNS at the Domain Controller, resolving Active Directory SRV records (`_ldap._tcp`, `_kerberos._tcp`) and enabling SSSD authentication.
+> - **Technologies & Concepts**: Active Directory, Ubuntu Server, SSSD, Kerberos, DNS SRV Records, PAM.
 
 ---
 
-## 1. In Plain English: Why Connect Linux to Windows Active Directory?
+## 1. Why Integrate Linux with Active Directory
 
-Think of Active Directory (AD) like a company's **master employee directory and security badge office**. When a company hires an engineer, HR creates their account once in Active Directory. From then on, that single badge unlocks their email, their work laptop, and their internal tools.
+Active Directory (AD) serves as the central identity provider and directory service in enterprise environments. When an organization provisions employee credentials, policies are enforced domain-wide from the Domain Controller.
 
-However, many backend servers run Linux (Ubuntu, Red Hat), while corporate user accounts live in Microsoft Windows Active Directory.
+However, many backend production servers run Linux (Ubuntu, Red Hat), while corporate user accounts live in Active Directory.
 
 Without central integration, a systems administrator would have to manually create and manage local passwords for every engineer on every Linux box. If an employee leaves the company, an admin might forget to delete their account on a single server, leaving a massive security backdoor.
 
@@ -153,7 +153,7 @@ sudo realm join --user=Administrator lab.local
 
 The terminal returned: `Successfully enrolled machine in realm lab.local`.
 
-## 4. Where Things Broke (What Went Wrong)
+## 4. Failure Analysis & Diagnostics
 
 The machine showed up inside Active Directory on `dc01`. Everything looked great—until I actually tried to log in as a domain user:
 
@@ -171,15 +171,15 @@ sssd_be[1850]: No available servers for service 'AD'
 
 Even though the server was joined to the domain, SSSD insisted there were *"No available servers for service 'AD'"*.
 
-### The Root Cause: The DNS "Phonebook" Trap
+### The Root Cause: Active Directory SRV Resolution Failure
 
 I assumed that because I could ping `dc01.lab.local` by IP address, name resolution was fine.
 
-Here was the mistake: When Windows computers join Active Directory, they don't just ask for an IP address. They query special **DNS SRV (Service Location) records** like `_ldap._tcp.lab.local` and `_kerberos._tcp.lab.local`. These records tell computers: *"The login server is located at port 389 on DC01"*.
+Here was the mistake: When hosts join Active Directory, authentication requires querying **DNS SRV (Service Location) records** such as `_ldap._tcp.lab.local` and `_kerberos._tcp.lab.local` to discover domain controller ports.
 
-My Ubuntu server had received its DNS settings automatically from the lab's internet router (`192.168.50.1`). The router knew how to look up google.com, but had zero knowledge of my private `lab.local` domain. SSSD was dialing the wrong phone operator!
+The Ubuntu server was assigned its default DNS settings from the local gateway (`192.168.50.1`). The gateway router resolved public DNS but had no knowledge of the private `lab.local` authoritative zone. As a result, SSSD failed to discover domain services.
 
-## 5. How I Fixed It & Verified the Solution
+## 5. Resolution & Verification
 
 ### The Fix
 
@@ -204,8 +204,8 @@ The Domain Controller answered back with the LDAP port.
 4. **Successful Login**:
    Ran `su - adm-olumide@lab.local`. The session initialized immediately with full terminal access.
 
-## 6. What This Means for Engineering & Operations Teams
+## 6. Engineering Takeaways
 
-- **DNS is 90% of Active Directory Troubleshooting**: When domain joins or logins fail, don't waste hours tweaking authentication files. Check your DNS resolver first. If the client isn't querying the Domain Controller, Active Directory will not work.
+- **DNS Underpins Active Directory**: When domain joins or logins fail, check the DNS resolver first. Without direct access to the Domain Controller's SRV records, SSSD cannot locate Kerberos and LDAP services.
 - **Centralized Access Improves Security**: Managing credentials through Active Directory ensures that password policies (complexity, expiration) apply to Linux servers just as strictly as Windows workstations.
-- **Headless Servers Are the Standard**: Stripping out GUI environments saves gigabytes of RAM and prevents desktop utilities from conflicting with enterprise network services.
+- **Headless Servers Are the Standard**: Stripping out GUI environments saves memory and prevents desktop utilities from conflicting with enterprise network services.

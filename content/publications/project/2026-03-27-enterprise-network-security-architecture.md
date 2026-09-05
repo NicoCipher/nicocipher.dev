@@ -94,14 +94,15 @@ evidence:
 ---
 
 > **Quick Summary**
-> - **The Business Goal**: Small companies often plug all computers into one big unmanaged switch. As the company grows, this causes slowdowns (broadcast storms) and security risks (anyone can see everyone else's traffic).
-> - **What I Built**: An enterprise-grade campus network in Cisco Packet Tracer following Cisco's 3-tier hierarchy. I separated departments into isolated virtual networks (VLANs) and connected them through multi-layer switches running OSPF routing.
-> - **The Big Obstacle**: When connecting the switch layers, traffic refused to flow and the switches got stuck in configuration loops. I had confused Layer 2 switchports with Layer 3 routed ports, and entered subnet masks instead of Cisco wildcard masks.
-> - **The Takeaway**: Real enterprise networking is about structured boundaries. Learning how to debug OSPF and interface modes in the CLI gave me a deep appreciation for how large corporate networks stay fast and stable.
+> - **Problem**: Unsegmented corporate networks suffer from broadcast storm degradation and lateral movement security risks. Production enterprise networks require structured VLAN segmentation, trunking, and dynamic routing.
+> - **What I Built**: An enterprise-grade campus network architecture modeled after Cisco's hierarchical 3-tier model (Core, Distribution, Access) in Cisco Packet Tracer, configuring 802.1Q VLAN trunking and single-area OSPF routing.
+> - **What Went Wrong**: Inter-VLAN traffic stalled with OSPF neighbor states stuck in `EXSTART`/`DOWN` due to invalid wildcard mask syntax in network statements and unrouted Layer 2 switchport defaults.
+> - **Resolution**: Converted inter-switch links to routed interfaces with `no switchport`, corrected OSPF wildcard masks, and verified convergence via `show ip ospf neighbor` (FULL state).
+> - **Technologies & Concepts**: Cisco IOS, 3-Tier Campus Architecture, 802.1Q VLAN Trunking, OSPFv2 Dynamic Routing, Packet Tracer.
 
 ---
 
-## 1. In Plain English: Why Do Companies Need This?
+## 1. Network Segmentation & Design Motivation
 
 Imagine an office building with 300 employees working in Management, Engineering, and Customer Support.
 
@@ -147,7 +148,7 @@ I migrated the backbone to **OSPFv2**:
 - Enabled OSPF on the backbone interconnect links.
 - Used `passive-interface default` on the user access ports. This is a critical security practice: you don't want office computers listening to OSPF routing updates, or worse, injecting fake routes into the corporate network.
 
-## 4. Where Things Broke (What Went Wrong)
+## 4. Failure Analysis & Diagnostics
 
 Once the topology was wired up, I sat at an Engineering PC in VLAN 20 and tried to ping an Operations server in VLAN 30.
 
@@ -164,7 +165,7 @@ Even worse, looking at the switch LEDs in Packet Tracer, the links were amber an
 2. **The "Layer 2 vs. Layer 3" Port Trap**:
    On standard Cisco switches, ports start out as Layer 2 switchports (they expect Ethernet cables for computers or trunks). Because the 3560 is a multi-layer switch, I assumed plugging a cable into another switch would automatically route. It didn't. I had to explicitly run `no switchport` on the port before assigning an IP address.
 
-## 5. How I Fixed It & Verified the Setup
+## 5. Resolution & Verification
 
 ### The Fixes:
 1. Converted the uplink port on the Core Switch:
@@ -183,7 +184,7 @@ Even worse, looking at the switch LEDs in Packet Tracer, the links were amber an
 - **Routing Table Check**: Ran `show ip route ospf`. Subnets `192.168.30.0/24` and `192.168.40.0/24` showed up with code `O` (OSPF), proving that the core switch had successfully learned paths to the other side of the building.
 - **End-to-End Ping**: Pinged from Engineering PC1 to Operations Server. 100% reply rate with zero dropped packets.
 
-## 6. What This Means for Real Engineering Teams
+## 6. Engineering Takeaways
 
 - **VLANs Save Bandwidth and Secure Data**: Without VLANs, any device plugged into a company network can intercept broadcast traffic. Segmenting networks is the first line of defense in cybersecurity.
 - **OSPF is Resilient**: If a core cable gets unplugged or a switch fails, OSPF automatically re-routes traffic across secondary paths without human intervention.

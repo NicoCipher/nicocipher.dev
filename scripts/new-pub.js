@@ -89,7 +89,7 @@ Document the exact steps, commands, and architecture.
 
 Reference evidence blocks and detail empirical findings.
 
-## 5. What Went Wrong (The Friction Point)
+## 5. What Went Wrong
 
 Detail the error, failure mode, or misconfiguration encountered and how it was diagnosed.
 

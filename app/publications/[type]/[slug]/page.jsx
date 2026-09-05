@@ -75,15 +75,15 @@ export default async function PublicationPage({ params }) {
         dangerouslySetInnerHTML={{ __html: pub.html }}
       />
 
-      {/* Empirical Evidence & Verification Artifacts */}
+      {/* Technical Evidence & Verification Artifacts */}
       {pub.evidence?.length > 0 && (
         <section className={styles.evidenceSectionWrapper} aria-label="Technical evidence and verification artifacts">
           <div className={styles.evidenceSectionHeader}>
             <h2 className={styles.evidenceSectionTitle}>
-              <span aria-hidden="true">[ </span>Empirical Evidence &amp; Verification Logs<span aria-hidden="true"> ]</span>
+              <span aria-hidden="true">[ </span>Technical Evidence &amp; Logs<span aria-hidden="true"> ]</span>
             </h2>
             <p className={styles.evidenceSectionSubtitle}>
-              Sanitized configuration files, terminal execution logs, and network verification outputs confirming this build.
+              Configuration files, terminal execution logs, and verification outputs from this build.
             </p>
           </div>
           <EvidenceSection evidence={pub.evidence} />

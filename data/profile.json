@@ -5,6 +5,6 @@
   "email": "nicocipherr@gmail.com",
   "github": "https://github.com/NicoCipher",
   "linkedin": "https://linkedin.com/in/nicocipher",
-  "bio": "I document, build, and troubleshoot systems across networking, cybersecurity, infrastructure, and software engineering. I learn by building real projects and verifying hypotheses with empirical evidence.",
+  "bio": "Most security knowledge claims are assertions. Mine are documented with terminal output, packet captures, and reproducible procedures. Everything published here started with something breaking.",
   "domains": ["Infrastructure", "Networking", "Security", "Development"]
 }

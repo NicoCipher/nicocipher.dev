@@ -8,38 +8,38 @@ export const metadata = {
   description: "Map of engineering domains, technologies, and cross-linked publications.",
 };
 
-const DECODER_ITEMS = [
+const CORE_CONCEPTS = [
   {
     term: "Active Directory & Kerberos",
-    analogy: "The company's master pass and employee directory. Lets staff log into computers and file shares securely without typing 50 different passwords.",
+    description: "Centralized identity management and ticket-based authentication. Eliminates fragmented per-machine credentials by enforcing single-sign-on and domain-wide access control.",
   },
   {
     term: "OSPF & Dynamic Routing",
-    analogy: "Like a real-time GPS app for network traffic. If one network wire is cut, data instantly reroutes around the failure in milliseconds.",
+    description: "Link-state interior gateway protocol that maintains topological maps of the network and automatically recalculates optimal forwarding paths during link failures.",
   },
   {
-    term: "VLANs (Virtual LANs)",
-    analogy: "Virtual office drywall. Keeps guest Wi-Fi, HR payroll records, and server traffic completely isolated even though they share the same physical switch.",
+    term: "VLANs (802.1Q)",
+    description: "Logical Layer 2 segmentation within shared physical switches, isolating broadcast domains and enforcing traffic separation between departmental networks.",
   },
   {
     term: "IPv4 Subnetting",
-    analogy: "Carving a large parcel of real estate into clearly numbered private office lots, preventing computer address collisions.",
+    description: "Hierarchical IP address space allocation using variable-length subnet masks (VLSM) to optimize routing boundaries and prevent address space exhaustion.",
   },
   {
-    term: "Headless Linux & SSH",
-    analogy: "Managing high-performance cloud servers with no monitor or mouse attached, controlling them securely across the internet through encrypted command lines.",
+    term: "Headless Linux Administration",
+    description: "Managing remote server instances via authenticated OpenSSH without graphical desktop overhead, enforcing least-privilege command-line workflows.",
   },
   {
     term: "Session Cookie Security",
-    analogy: "Protecting digital wristbands at an event. Ensuring hackers cannot copy a user's temporary browser token to bypass the login screen.",
+    description: "Browser state authorization secured with HttpOnly, Secure, and SameSite directives to prevent credential hijacking and cross-site script theft.",
   },
   {
     term: "Threat Modeling (STRIDE)",
-    analogy: "A safety inspection before building a house. Finding structural security vulnerabilities in software blueprints before hackers can exploit them.",
+    description: "Structured evaluation of software and network architectures to identify trust boundaries, threat actors, and attack surfaces before deployment.",
   },
   {
     term: "Layer 2 ARP vs. Default Gateway",
-    analogy: "Deciding whether to walk over and hand a letter to your desk neighbor directly (Layer 2 ARP) or drop it in the outgoing mail slot for the post office (Gateway).",
+    description: "Host-level routing logic determining whether destination traffic resolves via local Layer 2 broadcast resolution or forwards through a Layer 3 default gateway.",
   },
 ];
 
@@ -55,20 +55,20 @@ export default function SystemsPage() {
         </p>
       </header>
 
-      {/* Non-Technical Decoder */}
-      <section className={styles.decoderSection} aria-label="Non-Technical Technology Decoder">
+      {/* Architecture & Protocol Reference */}
+      <section className={styles.decoderSection} aria-label="Architecture & Protocol Reference">
         <div className={styles.decoderHeader}>
-          <span className={styles.decoderTag}>Non-Technical Decoder</span>
-          <h2 className={styles.decoderTitle}>What these systems actually do in plain English</h2>
+          <span className={styles.decoderTag}>Core Concepts</span>
+          <h2 className={styles.decoderTitle}>Architecture &amp; Protocol Reference</h2>
           <p className={styles.decoderSubtitle}>
-            A quick reference for recruiters and hiring managers translating infrastructure jargon into practical business value.
+            A concise reference for core protocols, directory services, and network boundaries implemented across these publications.
           </p>
         </div>
         <div className={styles.decoderGrid}>
-          {DECODER_ITEMS.map((item) => (
+          {CORE_CONCEPTS.map((item) => (
             <div key={item.term} className={styles.decoderCard}>
               <span className={styles.decoderTerm}>{item.term}</span>
-              <p className={styles.decoderAnalogy}>{item.analogy}</p>
+              <p className={styles.decoderDescription}>{item.description}</p>
             </div>
           ))}
         </div>

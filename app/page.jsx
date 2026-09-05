@@ -118,14 +118,14 @@ export default function HomePage() {
       {/* Closing Call to Action */}
       <section className={styles.ctaSection} aria-label="Contact and collaboration">
         <div className={styles.ctaCard}>
-          <span className={styles.ctaTag}>Available for Opportunities</span>
-          <h2 className={styles.ctaTitle}>Let&apos;s build dependable infrastructure.</h2>
+          <span className={styles.ctaTag}>Contact</span>
+          <h2 className={styles.ctaTitle}>Get in Touch</h2>
           <p className={styles.ctaText}>
-            I am actively open to engineering roles across Infrastructure, Networking, and Cybersecurity. If you need someone who learns fast, documents thoroughly, and solves real problems, let&apos;s connect.
+            Have a project or opportunity to discuss, a technical question, or want to connect? Reach out directly via email or find me on GitHub and LinkedIn.
           </p>
           <div className={styles.ctaActions}>
             <a href={`mailto:${profile.email}`} className={styles.ctaPrimary}>
-              Email Me ({profile.email}) →
+              Email ({profile.email}) →
             </a>
             <a
               href={profile.linkedin}

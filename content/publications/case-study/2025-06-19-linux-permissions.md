@@ -53,10 +53,10 @@ evidence:
 ---
 
 > **Quick Summary**
-> - **The Problem**: In Linux systems, incorrect file permissions cause scripts to fail with `Permission denied`. A dangerous rookie habit is running `chmod 777` to make it work, which removes all security locks and exposes sensitive files to every user on the system.
+> - **Problem**: In Linux systems, incorrect file permissions cause scripts to fail with `Permission denied`. Running `chmod 777` as a quick fix removes all access restrictions and violates the principle of least privilege by exposing files to every local account.
 > - **What I Did**: Set up disposable Ubuntu environments to test failure modes under different user accounts (`root`, standard user, guest user), analyzing octal numeric modes (`755`, `744`) vs. symbolic notation (`u+x`).
-> - **The Core Takeaway**: Permissions are not arbitrary numbers; they are binary bitmasks (read=4, write=2, execute=1). Understanding the math behind permissions ensures systems are secured following the Principle of Least Privilege.
-> - **Key Skills**: Linux (Ubuntu), Bash Scripting, File Permissions & Security, Access Control Lists (ACLs), Least Privilege Administration.
+> - **Takeaway**: Permissions are not arbitrary numbers; they are binary bitmasks (read=4, write=2, execute=1). Understanding the math behind permissions ensures systems are secured following the Principle of Least Privilege.
+> - **Technologies & Concepts**: Linux (Ubuntu), Bash Scripting, File Permissions, Access Control Lists (ACLs), Least Privilege Administration.
 
 ---
 
@@ -75,7 +75,7 @@ Working in a disposable Ubuntu VM, I created several test scripts and intentiona
 
 The key experiment was running a script as the file owner vs. as `testuser` (who falls under "other") to see where permission boundaries actually bite.
 
-## 3. The Friction Point
+## 3. Failure Mode: The chmod 777 Anti-Pattern
 
 Hit a permission denied error on `backup.sh` and reflexively ran `chmod 777` to unblock myself. It worked immediately, which was the problem — I had learned nothing about *why* it failed, and I had opened full read/write/execute permissions to every account on the system.
 

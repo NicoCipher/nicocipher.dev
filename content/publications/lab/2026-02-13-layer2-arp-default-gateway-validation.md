@@ -86,15 +86,15 @@ evidence:
 ---
 
 > **Quick Summary**
-> - **The Common Misconception**: Many people assume a computer cannot send any network traffic without a Default Gateway (the internet router).
-> - **What I Tested**: In Cisco Packet Tracer, I connected two PCs to a basic switch with no internet, no router, and no default gateway configured (`0.0.0.0`). They communicated instantly.
-> - **Where I Broke It**: I changed the IP address of the second PC to `.70` under a `/28` mask. Suddenly, the ping completely died with `Request timed out`—even though both computers were plugged into the exact same switch with green link lights.
-> - **The Discovery**: Your computer's own operating system makes the decision to drop packets before they ever leave the network card if the destination IP falls outside its subnet mask.
-> - **Key Skills**: Layer 2 Ethernet Switching, ARP (Address Resolution Protocol), Subnet Boundary Troubleshooting, Packet Analysis.
+> - **Context**: Host operating systems determine whether destination traffic is local or remote by performing a bitwise AND on the destination IP and the local subnet mask.
+> - **What I Tested**: In Cisco Packet Tracer, connected two endpoints to a Layer 2 switch with no router and no default gateway configured (`0.0.0.0`). Local ICMP pings succeeded via ARP resolution.
+> - **Failure Scenario**: Moving the destination IP to `.70` under a `/28` mask caused pings to immediately fail with `Request timed out`, despite physical link status remaining active on the switch.
+> - **Core Finding**: Packet drops occurred in the sender's local network stack: because the destination fell outside the local subnet mask and no default gateway was configured, the host dropped packets without sending ARP queries.
+> - **Technologies & Concepts**: Layer 2 Ethernet Switching, ARP (Address Resolution Protocol), Subnet Boundary Diagnostics, Packet Analysis.
 
 ---
 
-## 1. In Plain English: How Computers Talk on a Local Network
+## 1. Local Network Communication vs. Gateway Routing
 
 Think of a local office network like a **single open floor in an office building**:
 
@@ -175,7 +175,7 @@ The moment I moved PC2 back to an IP address inside PC1's subnet (`192.168.1.60`
 3. PC2 replied with its MAC address.
 4. The pings succeeded with 0% packet loss.
 
-## 6. What This Means for Real-World Troubleshooting
+## 6. Troubleshooting Takeaways
 
 - **Don't Blame the Switch**: When two computers plugged into the same switch cannot talk, it's almost always a host configuration error (mismatched subnet masks or wrong gateway) rather than a hardware failure.
 - **Understand the Default Gateway's True Purpose**: A gateway is not a magic requirement for all networking. It is simply the door to the outside world. If you are troubleshooting a closed, local industrial network or isolated lab, you don't need a gateway at all.
