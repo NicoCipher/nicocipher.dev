@@ -85,7 +85,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Common Misconception**: Many people assume a computer cannot send any network traffic without a Default Gateway (the internet router).
 > - **What I Tested**: In Cisco Packet Tracer, I connected two PCs to a basic switch with no internet, no router, and no default gateway configured (`0.0.0.0`). They communicated instantly.
 > - **Where I Broke It**: I changed the IP address of the second PC to `.70` under a `/28` mask. Suddenly, the ping completely died with `Request timed out`—even though both computers were plugged into the exact same switch with green link lights.

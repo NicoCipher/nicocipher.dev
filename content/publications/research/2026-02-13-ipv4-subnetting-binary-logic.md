@@ -66,7 +66,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Problem**: An IP address is like a house address. If a company puts all 500 computers on one giant network, network traffic gets clogged with background chatter. Subnetting is how network engineers split a big network into small, private office rooms.
 > - **What I Solved**: Standard networking courses force students to convert 32 numbers into ones and zeros on paper. It takes forever and leads to calculation mistakes. I learned a simple shortcut called the "Magic Number" that lets you find the start and end of any network block in 10 seconds.
 > - **Where I Struggled**: When I first started, converting numbers like 172 or 34 into binary was slowing me down. Once I learned the 8 basic numbers (128, 64, 32, 16, 8, 4, 2, 1), the math became simple addition.

@@ -93,7 +93,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Business Goal**: Small companies often plug all computers into one big unmanaged switch. As the company grows, this causes slowdowns (broadcast storms) and security risks (anyone can see everyone else's traffic).
 > - **What I Built**: An enterprise-grade campus network in Cisco Packet Tracer following Cisco's 3-tier hierarchy. I separated departments into isolated virtual networks (VLANs) and connected them through multi-layer switches running OSPF routing.
 > - **The Big Obstacle**: When connecting the switch layers, traffic refused to flow and the switches got stuck in configuration loops. I had confused Layer 2 switchports with Layer 3 routed ports, and entered subnet masks instead of Cisco wildcard masks.

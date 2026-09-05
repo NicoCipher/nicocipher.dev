@@ -30,27 +30,6 @@ export default function AboutPage() {
         <p className={styles.text}>{profile.bio}</p>
       </section>
 
-      {/* Career Positioning & Target Roles */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>
-          <span aria-hidden="true">[</span> Career Focus &amp; Target Roles <span aria-hidden="true">]</span>
-        </h2>
-        <div className={styles.targetCard}>
-          <div className={styles.targetItem}>
-            <span className={styles.targetLabel}>Target Roles:</span>
-            <div className={styles.roleBadges}>
-              {profile.targetRoles?.map((r) => (
-                <span key={r} className={styles.roleBadge}>{r}</span>
-              ))}
-            </div>
-          </div>
-          <div className={styles.targetItem}>
-            <span className={styles.targetLabel}>Location &amp; Availability:</span>
-            <span className={styles.targetValue}>{profile.location}</span>
-          </div>
-        </div>
-      </section>
-
       {/* Education & Certifications */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>

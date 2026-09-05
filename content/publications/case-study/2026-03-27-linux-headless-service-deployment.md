@@ -74,7 +74,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Business Challenge**: Real enterprise servers don't have monitors, mice, or desktop screens. They are "headless" black terminal boxes locked in a server room or cloud data center. When you need to install proprietary enterprise software, you can't just download it through a web browser.
 > - **What We Did**: My team had to deploy Jumpoint (an infrastructure management agent) onto an isolated Linux server. We set up an encrypted OpenSSH tunnel, pushed the installation files using Secure Copy (`scp`), resolved execution permissions, and scaled the setup into a two-node cluster.
 > - **Where We Ran Into Problems**: We couldn't get the file onto the server at first because no transfer service was listening. Once transferred, the script failed with `Permission denied` and threw library dependency errors. When we cloned a second server to test high availability, the cluster crashed because both servers had identical machine IDs!

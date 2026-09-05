@@ -98,7 +98,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Business Problem**: In a company with hundreds of employees, you cannot create separate user accounts on 50 different Linux servers. Everyone should log in with their central corporate Windows Active Directory account.
 > - **What I Built**: Joined an Ubuntu Linux server to a Windows Server 2022 Active Directory domain so corporate users could log in over SSH with their normal company credentials.
 > - **Where It Failed**: The domain join appeared successful, but users were locked out with "System Error". Looking at the logs, Linux had no idea where the Domain Controller lived because it was asking the home Wi-Fi router for DNS instead of the company Domain Controller.

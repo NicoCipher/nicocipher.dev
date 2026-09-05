@@ -76,7 +76,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Common Assumption**: Most people believe that if an account has a strong password and Multi-Factor Authentication (MFA), it is virtually impossible to hack without having the user's phone.
 > - **The Eye-Opening Reality**: When you log into a website, the server gives your browser a temporary digital ticket called a **session cookie**. If a hacker steals that ticket, they can bypass your password and your phone MFA completely.
 > - **What I Tested**: In a controlled security lab environment (Hack The Box), I copied an active session cookie from my browser into a fresh, private Incognito window. The application opened my account immediately with no login prompts.

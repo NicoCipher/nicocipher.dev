@@ -52,7 +52,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Problem**: In Linux systems, incorrect file permissions cause scripts to fail with `Permission denied`. A dangerous rookie habit is running `chmod 777` to make it work, which removes all security locks and exposes sensitive files to every user on the system.
 > - **What I Did**: Set up disposable Ubuntu environments to test failure modes under different user accounts (`root`, standard user, guest user), analyzing octal numeric modes (`755`, `744`) vs. symbolic notation (`u+x`).
 > - **The Core Takeaway**: Permissions are not arbitrary numbers; they are binary bitmasks (read=4, write=2, execute=1). Understanding the math behind permissions ensures systems are secured following the Principle of Least Privilege.

@@ -49,27 +49,11 @@
   letter-spacing: 0.02em;
 }
 
-.roleRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
 .role {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   color: var(--text-secondary);
   letter-spacing: 0.02em;
-}
-
-.locationTag {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--text-tertiary);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .bio {

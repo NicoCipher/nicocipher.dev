@@ -43,7 +43,7 @@ evidence:
     language: "text"
 ---
 
-> **Quick Summary for Recruiters & Non-Technical Readers**
+> **Quick Summary**
 > - **The Business Value**: Waiting until software is built before thinking about security leads to costly emergency patches and data breaches. Threat modeling is how engineering teams identify and fix architectural weaknesses *before* writing code.
 > - **What I Did**: Applied Microsoft's STRIDE framework (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) to a standard web application authentication flow.
 > - **The Core Takeaway**: Security is not a checkbox added at the end; it is an architectural discipline. Mapping threats early helps development teams build secure authentication and audit logging from day one.

@@ -30,14 +30,13 @@ export default function HomePage() {
             <h1 className={styles.name}>{profile.name}</h1>
             <span className={styles.handleBadge}>@{profile.handle}</span>
           </div>
-          <div className={styles.roleRow}>
-            <p className={styles.role}>{profile.role}</p>
-            <span className={styles.locationTag}>📍 {profile.location}</span>
-          </div>
+          <p className={styles.role}>{profile.role}</p>
         </div>
 
         <p className={styles.bio}>
-          {profile.bio}
+          Most security knowledge claims are assertions. Mine are documented with terminal output,
+          packet captures, and reproducible procedures. Everything published here started with
+          something breaking.
         </p>
 
         <div className={styles.actionsRow}>
