@@ -3,7 +3,6 @@ import profile from "@/data/profile.json";
 import { getAllPublications } from "@/lib/publications";
 import CurrentlyBlock from "@/components/home/CurrentlyBlock";
 import FeaturedPublications from "@/components/home/FeaturedPublications";
-import Heatmap from "@/components/home/Heatmap";
 import TerminalHero from "@/components/home/TerminalHero";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import styles from "./page.module.css";
@@ -21,9 +20,6 @@ export default function HomePage() {
     research: allPubs.filter((p) => p.type === "research").length,
   };
 
-  // All publication dates for the heatmap
-  const pubDates = allPubs.map((p) => p.date);
-
   return (
     <div className={styles.container}>
 
@@ -34,7 +30,10 @@ export default function HomePage() {
             <h1 className={styles.name}>{profile.name}</h1>
             <span className={styles.handleBadge}>@{profile.handle}</span>
           </div>
-          <p className={styles.role}>{profile.role}</p>
+          <div className={styles.roleRow}>
+            <p className={styles.role}>{profile.role}</p>
+            <span className={styles.locationTag}>📍 {profile.location}</span>
+          </div>
         </div>
 
         <p className={styles.bio}>
@@ -72,7 +71,7 @@ export default function HomePage() {
             href="/publications"
             className={`${styles.actionBtn} ${styles.actionPrimary}`}
           >
-            <span>Publications ({stats.total})</span>
+            <span>Projects &amp; Labs ({stats.total})</span>
             <span className={styles.arrow} aria-hidden="true">→</span>
           </Link>
         </div>
@@ -81,38 +80,35 @@ export default function HomePage() {
       {/* Live Terminal Evidence — Instant Proof */}
       <TerminalHero />
 
-      {/* Activity Heatmap */}
-      <section className={styles.heatmapSection} aria-label="Publication activity">
-        <Heatmap dates={pubDates} />
+      {/* Verified Engineering Output Breakdown */}
+      <section className={styles.statsSection} aria-label="Verified engineering output breakdown">
+        <div className={styles.statsHeader}>
+          <span className={styles.statsTag}>Verified Output</span>
+          <span className={styles.statsMeta}>{stats.total} Complete Artifacts</span>
+        </div>
+        <div className={styles.statsRow}>
+          <Link href="/publications" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.total}</span>
+            <span className={styles.statLabel}>All Work</span>
+          </Link>
+          <Link href="/publications?type=project" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.projects}</span>
+            <span className={styles.statLabel}>Projects</span>
+          </Link>
+          <Link href="/publications?type=lab" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.labs}</span>
+            <span className={styles.statLabel}>Hands-on Labs</span>
+          </Link>
+          <Link href="/publications?type=case-study" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.caseStudies}</span>
+            <span className={styles.statLabel}>Case Studies</span>
+          </Link>
+          <Link href="/publications?type=research" className={styles.statCard}>
+            <span className={styles.statValue}>{stats.research}</span>
+            <span className={styles.statLabel}>Research Notes</span>
+          </Link>
+        </div>
       </section>
-
-      {/* Publication Statistics */}
-      {stats.total >= 10 && (
-        <section className={styles.statsSection} aria-label="Publication statistics">
-          <div className={styles.statsRow}>
-            <Link href="/publications" className={styles.statCard}>
-              <span className={styles.statValue}>{stats.total}</span>
-              <span className={styles.statLabel}>Publications</span>
-            </Link>
-            <Link href="/publications?type=project" className={styles.statCard}>
-              <span className={styles.statValue}>{stats.projects}</span>
-              <span className={styles.statLabel}>Projects</span>
-            </Link>
-            <Link href="/publications?type=case-study" className={styles.statCard}>
-              <span className={styles.statValue}>{stats.caseStudies}</span>
-              <span className={styles.statLabel}>Case Studies</span>
-            </Link>
-            <Link href="/publications?type=lab" className={styles.statCard}>
-              <span className={styles.statValue}>{stats.labs}</span>
-              <span className={styles.statLabel}>Labs</span>
-            </Link>
-            <Link href="/publications?type=research" className={styles.statCard}>
-              <span className={styles.statValue}>{stats.research}</span>
-              <span className={styles.statLabel}>Research</span>
-            </Link>
-          </div>
-        </section>
-      )}
 
       {/* Currently Operating */}
       <CurrentlyBlock />

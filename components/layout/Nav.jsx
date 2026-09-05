@@ -11,9 +11,9 @@ export default function Nav() {
   const { openPalette } = usePalette();
 
   const links = [
-    { href: "/publications", label: "publications" },
-    { href: "/systems",      label: "systems"      },
-    { href: "/about",        label: "about"        },
+    { href: "/publications", label: "projects & labs" },
+    { href: "/systems",      label: "systems & skills" },
+    { href: "/about",        label: "about"            },
   ];
 
   return (

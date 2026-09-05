@@ -18,10 +18,9 @@ export default async function PublicationsIndexPage({ searchParams }) {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Publications</h1>
+        <h1 className={styles.title}>Projects &amp; Engineering Labs</h1>
         <p className={styles.subtitle}>
-          Structured, evidence-backed documentation across infrastructure, cybersecurity,
-          networking, and software engineering.
+          Structured, evidence-backed projects, hands-on infrastructure labs, troubleshooting case studies, and security research.
         </p>
       </header>
 

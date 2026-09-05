@@ -3,8 +3,15 @@
   "handle": "nicocipher",
   "role": "Cybersecurity & Systems Engineer",
   "email": "nicocipherr@gmail.com",
+  "location": "Lagos, Nigeria · Open to Remote (Worldwide) & Relocation",
   "github": "https://github.com/NicoCipher",
   "linkedin": "https://linkedin.com/in/nicocipher",
-  "bio": "I design, secure, and troubleshoot enterprise systems across networking, Linux/Windows administration, and identity architecture. Every publication here is backed by reproducible terminal sessions, sanitized configurations, and root-cause postmortems.",
-  "domains": ["Infrastructure", "Networking", "Security", "Development", "Creative"]
+  "bio": "I design, secure, and troubleshoot enterprise systems across networking, Linux/Windows administration, and identity architecture. Every project here is backed by reproducible terminal sessions, sanitized configurations, and root-cause postmortems.",
+  "targetRoles": [
+    "Junior Systems Administrator",
+    "Network Support Engineer / NOC Technician",
+    "Security Operations Analyst (SOC Tier 1)",
+    "Cloud & Infrastructure Associate"
+  ],
+  "domains": ["Infrastructure", "Networking", "Security", "Development"]
 }

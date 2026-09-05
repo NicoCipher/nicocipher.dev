@@ -49,11 +49,27 @@
   letter-spacing: 0.02em;
 }
 
+.roleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
 .role {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
   letter-spacing: 0.02em;
+}
+
+.locationTag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .bio {
@@ -115,16 +131,38 @@
   transform: translateX(2px);
 }
 
-/* ─── Heatmap ──────────────────────────────────────────────────── */
+/* ─── Stats Section ────────────────────────────────────────────── */
 
-.heatmapSection {
+.statsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
   padding: var(--space-5);
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
 }
 
-/* ─── Stats ────────────────────────────────────────────────────── */
+.statsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-1);
+}
+
+.statsTag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.statsMeta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
 
 .statsRow {
   display: grid;
@@ -138,10 +176,11 @@
   align-items: center;
   gap: 2px;
   padding: var(--space-3);
-  background: var(--bg-surface);
+  background: var(--bg-root);
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
   transition: border-color var(--duration-fast) var(--ease-out);
+  text-decoration: none;
 }
 
 .statCard:hover {

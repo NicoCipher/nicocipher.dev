@@ -58,6 +58,33 @@
   border-radius: 3px;
 }
 
+/* ─── Context Sub-Bar ────────────────────────────────────────────────────── */
+
+.contextBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px var(--space-4);
+  background: var(--bg-root);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+
+.contextDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.contextText {
+  color: var(--text-secondary);
+}
+
 /* ─── Body ───────────────────────────────────────────────────────────────── */
 
 .body {

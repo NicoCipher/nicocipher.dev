@@ -1,46 +1,41 @@
 [
   {
     "id": "infrastructure",
-    "label": "Infrastructure",
+    "label": "Infrastructure & Systems",
     "technologies": [
-      { "name": "Windows Server", "context": "Active Directory, DNS, Group Policy" },
-      { "name": "Virtualization", "context": "Hyper-V, VMware, isolated lab networks" },
-      { "name": "Linux", "context": "Ubuntu, CLI, permissions, filesystem" },
-      { "name": "Physical Security", "context": "Access control, site assessment" }
+      { "name": "Windows Server 2022", "context": "Active Directory, DNS, Kerberos, Domain Services" },
+      { "name": "Linux (Ubuntu Server)", "context": "SSSD integration, CLI administration, systemd services" },
+      { "name": "Virtualization", "context": "Hyper-V, VMware, isolated lab environments" },
+      { "name": "Identity & Access", "context": "PAM, Kerberos tickets, realm authentication" }
     ]
   },
   {
     "id": "networking",
-    "label": "Networking",
+    "label": "Networking & Routing",
     "technologies": [
-      { "name": "Cisco", "context": "CCNA path, Packet Tracer" },
-      { "name": "TCP/IP", "context": "Subnetting, routing, addressing" },
-      { "name": "DNS", "context": "Forward lookups, resolution debugging" }
+      { "name": "Cisco IOS", "context": "3-tier enterprise campus switching, VLANs, trunking" },
+      { "name": "Dynamic Routing (OSPF)", "context": "Area 0 backbone, neighbor adjacencies, metric convergence" },
+      { "name": "TCP/IP & Subnetting", "context": "IPv4 CIDR, binary math, magic number allocation" },
+      { "name": "Layer 2 & ARP", "context": "MAC tables, broadcast domains, default gateway routing" }
     ]
   },
   {
     "id": "security",
-    "label": "Security",
+    "label": "Cybersecurity & Hardening",
     "technologies": [
-      { "name": "Threat Modeling", "context": "STRIDE framework" },
-      { "name": "Security Frameworks", "context": "NIST, risk assessment" }
+      { "name": "Threat Modeling", "context": "STRIDE methodology, attack surface analysis" },
+      { "name": "Session & Web Security", "context": "Pass-the-Cookie, HttpOnly/Secure flags, token hijacking" },
+      { "name": "Permissions & Access Control", "context": "Linux numeric/symbolic chmod, least privilege enforcement" },
+      { "name": "Security Frameworks", "context": "NIST CSF, defensible architecture, audit logging" }
     ]
   },
   {
     "id": "development",
-    "label": "Development",
+    "label": "Development & Tooling",
     "technologies": [
-      { "name": "HTML / CSS / JavaScript", "context": "Semantic markup, responsive design" },
-      { "name": "React / Next.js 15", "context": "This portfolio publication system" },
-      { "name": "Technical Documentation", "context": "Architecture decisions, process documentation" }
-    ]
-  },
-  {
-    "id": "creative",
-    "label": "Creative",
-    "technologies": [
-      { "name": "Photography", "context": "Documentation, observation, composition" },
-      { "name": "Graphic Design", "context": "Visual communication, layout, typography" }
+      { "name": "Bash & Shell Scripting", "context": "Headless staging, SCP pipelines, process automation" },
+      { "name": "Next.js 15 / React 19", "context": "Static site generation, zero-Tailwind scoped styling" },
+      { "name": "Technical Documentation", "context": "Root-cause postmortems, configuration runbooks" }
     ]
   }
 ]

@@ -105,6 +105,15 @@ export default function TerminalHero() {
           <span className={styles.sessionMeta}>{session.label}</span>
         </div>
 
+        {/* Context bar — explains what this command proves */}
+        {session.description && (
+          <div className={styles.contextBar}>
+            <span className={styles.contextDot} aria-hidden="true" />
+            <span>Replay: </span>
+            <span className={styles.contextText}>{session.description}</span>
+          </div>
+        )}
+
         {/* Terminal body */}
         <div className={styles.body} aria-live="polite">
           {committedLines.map((line, i) =>

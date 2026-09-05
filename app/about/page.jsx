@@ -30,6 +30,50 @@ export default function AboutPage() {
         <p className={styles.text}>{profile.bio}</p>
       </section>
 
+      {/* Career Positioning & Target Roles */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>
+          <span aria-hidden="true">[</span> Career Focus &amp; Target Roles <span aria-hidden="true">]</span>
+        </h2>
+        <div className={styles.targetCard}>
+          <div className={styles.targetItem}>
+            <span className={styles.targetLabel}>Target Roles:</span>
+            <div className={styles.roleBadges}>
+              {profile.targetRoles?.map((r) => (
+                <span key={r} className={styles.roleBadge}>{r}</span>
+              ))}
+            </div>
+          </div>
+          <div className={styles.targetItem}>
+            <span className={styles.targetLabel}>Location &amp; Availability:</span>
+            <span className={styles.targetValue}>{profile.location}</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Education & Certifications */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>
+          <span aria-hidden="true">[</span> Education &amp; Certifications <span aria-hidden="true">]</span>
+        </h2>
+        <div className={styles.certGrid}>
+          <div className={styles.certCard}>
+            <span className={styles.certStatus}>In Progress</span>
+            <h3 className={styles.certTitle}>Google Cybersecurity Professional Certificate</h3>
+            <p className={styles.certDetail}>
+              Comprehensive credential covering network security architecture, Linux command-line defense, SIEM analysis, Python automation, and risk mitigation.
+            </p>
+          </div>
+          <div className={styles.certCard}>
+            <span className={styles.certStatus}>Active Study</span>
+            <h3 className={styles.certTitle}>Cisco Certified Network Associate (CCNA)</h3>
+            <p className={styles.certDetail}>
+              Hands-on enterprise curriculum focusing on 3-tier switching, OSPF dynamic routing, 802.1Q VLAN trunking, and IP subnetting.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Engineering Methodology */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>

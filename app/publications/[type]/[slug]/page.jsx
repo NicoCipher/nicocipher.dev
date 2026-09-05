@@ -69,14 +69,26 @@ export default async function PublicationPage({ params }) {
       {/* Structured Metadata */}
       <MetaBlock pub={pub} />
 
-      {/* Evidence — rendered before body so context is set before prose */}
-      <EvidenceSection evidence={pub.evidence} />
-
-      {/* Publication Body */}
+      {/* Publication Body & Executive Summary */}
       <div
         className={styles.prose}
         dangerouslySetInnerHTML={{ __html: pub.html }}
       />
+
+      {/* Empirical Evidence & Verification Artifacts */}
+      {pub.evidence?.length > 0 && (
+        <section className={styles.evidenceSectionWrapper} aria-label="Technical evidence and verification artifacts">
+          <div className={styles.evidenceSectionHeader}>
+            <h2 className={styles.evidenceSectionTitle}>
+              <span aria-hidden="true">[ </span>Empirical Evidence &amp; Verification Logs<span aria-hidden="true"> ]</span>
+            </h2>
+            <p className={styles.evidenceSectionSubtitle}>
+              Sanitized configuration files, terminal execution logs, and network verification outputs confirming this build.
+            </p>
+          </div>
+          <EvidenceSection evidence={pub.evidence} />
+        </section>
+      )}
 
       {/* Related Publications */}
       {related.length > 0 && (

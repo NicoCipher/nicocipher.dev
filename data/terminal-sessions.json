@@ -3,6 +3,7 @@
     "id": "domain-controller",
     "label": "lab · infrastructure",
     "title": "Domain Controller DNS Verification",
+    "description": "Validating Windows Server 2022 Active Directory DNS records and running domain controller diagnostics.",
     "link": "/publications/lab/domain-controller",
     "commands": [
       { "prompt": "C:\\>", "command": "nslookup dc01.lab.local", "output": "Server:  UnKnown\nAddress:  192.168.50.10\n\nName:    dc01.lab.local\nAddress:  192.168.50.10" },
@@ -13,6 +14,7 @@
     "id": "linux-permissions",
     "label": "case-study · infrastructure",
     "title": "Debugging chmod Script Failures",
+    "description": "Diagnosing permission denied script errors on Linux and repairing execution rights with chmod.",
     "link": "/publications/case-study/linux-permissions",
     "commands": [
       { "prompt": "$", "command": "ls -l backup.sh", "output": "-rwxr--r--  1 nico nico  220 Jun 19 09:14 backup.sh" },
@@ -24,6 +26,7 @@
     "id": "enterprise-network-security-architecture",
     "label": "project · networking",
     "title": "Cisco IOS OSPF Dynamic Routing & Neighbors",
+    "description": "Verifying Cisco OSPF router neighbor adjacencies (FULL state) and dynamic route propagation.",
     "link": "/publications/project/enterprise-network-security-architecture",
     "commands": [
       { "prompt": "CORE-SW01#", "command": "show ip ospf neighbor", "output": "Neighbor ID     Pri   State           Dead Time   Address         Interface\n2.2.2.2           1   FULL/BDR        00:00:34    10.0.0.2        GigabitEthernet0/1" },
@@ -34,6 +37,7 @@
     "id": "ubuntu-active-directory-integration",
     "label": "lab · infrastructure",
     "title": "Linux SSSD & Active Directory Domain Auth",
+    "description": "Confirming headless Ubuntu domain join via SSSD and Kerberos ticket issuance for Active Directory users.",
     "link": "/publications/lab/ubuntu-active-directory-integration",
     "commands": [
       { "prompt": "$", "command": "realm list", "output": "lab.local\n  type: kerberos\n  realm-name: LAB.LOCAL\n  domain-name: lab.local\n  configured: kerberos-member\n  client-software: sssd" },
@@ -45,6 +49,7 @@
     "id": "linux-headless-service-deployment",
     "label": "case-study · infrastructure",
     "title": "Headless SCP Staging & Service Execution",
+    "description": "Securely staging binary payloads to screenless Linux servers via SCP and verifying systemd service status.",
     "link": "/publications/case-study/linux-headless-service-deployment",
     "commands": [
       { "prompt": "$", "command": "scp jumpoint-installer.bin admin@192.168.50.35:/tmp/", "output": "jumpoint-installer.bin          100%   48MB  24.2MB/s   00:02" },
