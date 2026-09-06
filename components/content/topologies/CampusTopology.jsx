@@ -3,604 +3,705 @@
 import { useState } from "react";
 import styles from "./CampusTopology.module.css";
 
-const NODES = {
+const NODES_DATA = {
   "core-sw01": {
     id: "core-sw01",
-    name: "CORE-SW01 (Cisco Catalyst 3560-24PS)",
-    tier: "Core Layer (L3)",
-    tierId: "core",
-    role: "High-Speed Backbone Routing & Inter-VLAN Default Gateway",
-    ipInfo: "SVIs: 192.168.10.1/24 (V10), 192.168.20.1/24 (V20), 192.168.30.1/24 (V30)",
-    interfaces: "Gi0/1 (10.0.0.1/30 Routed Transit), Vlan10, Vlan20, Vlan30",
-    protocols: "OSPFv2 (Router-ID 1.1.1.1, Area 0), ip routing, 802.1Q",
-    diagnostic: "Required 'no switchport' on Gi0/1 to convert L2 switchport to routed interface. OSPF network statement required inverse wildcard mask (0.0.0.255) rather than subnet mask.",
+    name: "CORE-SW01",
+    model: "Cisco Catalyst 3560-24PS",
+    tier: "Core Layer",
+    role: "L3 Inter-VLAN Routing & OSPF Area 0 Backbone",
+    interfaces: "Gi0/1 (10.0.0.1/30 Routed Transit), Vlan10 (.10.1), Vlan20 (.20.1), Vlan30 (.30.1)",
     vlans: ["vlan10", "vlan20", "vlan30", "transit"],
+    protocols: "OSPFv2 (Router-ID 1.1.1.1, Area 0), SVI Routing (ip routing)",
+    status: "ACTIVE · 3 SVIs UP · OSPF FULL",
+    cli: `CORE-SW01(config)# ip routing
+CORE-SW01(config)# interface GigabitEthernet0/1
+CORE-SW01(config-if)# no switchport
+CORE-SW01(config-if)# ip address 10.0.0.1 255.255.255.252
+CORE-SW01(config)# router ospf 1
+CORE-SW01(config-router)# router-id 1.1.1.1
+CORE-SW01(config-router)# network 192.168.30.0 0.0.0.255 area 0`,
+    note: "Key Lesson: 'no switchport' is required to convert a Layer 2 switchport to a routed Layer 3 port. OSPF network statements expect inverse wildcard masks (0.0.0.255).",
   },
   "transit-link": {
     id: "transit-link",
-    name: "CORE <-> DIST Backbone Transit Link",
-    tier: "Transit Link",
-    tierId: "core",
-    role: "Point-to-Point Layer 3 Routed Interconnect (OSPF Area 0)",
-    ipInfo: "Subnet: 10.0.0.0/30 (Usable: 10.0.0.1 - 10.0.0.2)",
+    name: "Transit Link (10.0.0.0/30)",
+    model: "Point-to-Point /30 Routed Interconnect",
+    tier: "Backbone",
+    role: "OSPF Adjacency & Inter-Switch Transit Trunk",
     interfaces: "CORE: Gi0/1 (10.0.0.1/30) <---> DIST: Gi0/1 (10.0.0.2/30)",
-    protocols: "OSPFv2 Point-to-Point Adjacency (State: FULL/BDR)",
-    diagnostic: "Neighbor relationship stalled in EXSTART until mismatched MTU and network wildcard statement were corrected.",
     vlans: ["transit"],
+    protocols: "OSPFv2 Point-to-Point Adjacency (State: FULL/BDR)",
+    status: "CONNECTED · 0% PACKET LOSS",
+    cli: `CORE-SW01# show ip ospf neighbor
+Neighbor ID   Pri   State      Dead Time   Address   Interface
+2.2.2.2         1   FULL/BDR   00:00:34    10.0.0.2  Gi0/1
+
+CORE-SW01# show ip route ospf
+O   192.168.30.0/24 [110/2] via 10.0.0.2, 00:14:28, Gi0/1`,
+    note: "Point-to-point /30 mask wastes no addresses (only 2 host IPs: .1 and .2). Sub-second convergence upon physical link severance.",
   },
   "dist-sw01": {
     id: "dist-sw01",
-    name: "DIST-SW01 (Cisco Catalyst 2960-24TT)",
-    tier: "Distribution Layer (L2/L3)",
-    tierId: "distribution",
-    role: "802.1Q Trunk Aggregation & Departmental Traffic Boundary",
-    ipInfo: "Management IP: 192.168.10.2/24",
+    name: "DIST-SW01",
+    model: "Cisco Catalyst 2960-24TT",
+    tier: "Distribution Layer",
+    role: "802.1Q Trunk Aggregation & Security Boundary Enforcement",
     interfaces: "Gi0/1 (Uplink to Core), Gi0/2 (Trunk to ACC-01), Gi0/3 (Trunk to ACC-02)",
-    protocols: "802.1Q Trunking, DTP Nonegotiate, Native VLAN 99",
-    diagnostic: "Native VLAN changed from default VLAN 1 to unused VLAN 99 to eliminate double-tagging VLAN hopping vulnerabilities.",
     vlans: ["vlan10", "vlan20", "vlan30", "transit"],
+    protocols: "802.1Q Trunking, Native VLAN 99, DTP Nonegotiate",
+    status: "TRUNKING · NATIVE VLAN 99",
+    cli: `DIST-SW01(config)# interface range Gi0/1 - 3
+DIST-SW01(config-if-range)# switchport mode trunk
+DIST-SW01(config-if-range)# switchport trunk native vlan 99
+DIST-SW01(config-if-range)# switchport trunk allowed vlan 10,20,30,99
+DIST-SW01(config-if-range)# switchport nonegotiate`,
+    note: "Security Hardening: Native traffic moved from default VLAN 1 to unused VLAN 99 to prevent VLAN hopping (double-tagging attacks). DTP disabled.",
   },
   "acc-sw01": {
     id: "acc-sw01",
-    name: "ACC-SW01 (Cisco Catalyst 2960)",
+    name: "ACC-SW01",
+    model: "Cisco Catalyst 2960",
     tier: "Access Layer",
-    tierId: "access",
     role: "Workstation Edge Access (Floors 1 & 2: Mgmt + Engineering)",
-    ipInfo: "Management IP: 192.168.10.11/24",
-    interfaces: "Gi0/1 (Trunk to Dist), Fa0/1-2 (VLAN 10 Access), Fa0/3-4 (VLAN 20 Access)",
-    protocols: "Spanning Tree PortFast, BPDU Guard, 802.1Q Trunking",
-    diagnostic: "Access switchports enabled with spanning-tree portfast and bpduguard to bring ports up instantly without topology loops.",
+    interfaces: "Gi0/1 (Trunk to Dist), Fa0/1-2 (VLAN 10 Mgmt), Fa0/3-4 (VLAN 20 Eng)",
     vlans: ["vlan10", "vlan20"],
+    protocols: "Spanning Tree PortFast, BPDU Guard, 802.1Q",
+    status: "ACCESS UP · PORTFAST ENABLED",
+    cli: `ACC-SW01(config)# interface range Fa0/1 - 4
+ACC-SW01(config-if-range)# switchport mode access
+ACC-SW01(config-if-range)# spanning-tree portfast
+ACC-SW01(config-if-range)# spanning-tree bpduguard enable
+ACC-SW01(config)# interface range Fa0/1 - 2
+ACC-SW01(config-if-range)# switchport access vlan 10`,
+    note: "Edge ports transition to forwarding state immediately via PortFast; BPDU Guard auto-disables ports if an unauthorized switch is plugged in.",
   },
   "acc-sw02": {
     id: "acc-sw02",
-    name: "ACC-SW02 (Cisco Catalyst 2960)",
+    name: "ACC-SW02",
+    model: "Cisco Catalyst 2960",
     tier: "Access Layer",
-    tierId: "access",
     role: "Server & Operations Edge Access (Floor 3: Operations)",
-    ipInfo: "Management IP: 192.168.10.12/24",
-    interfaces: "Gi0/1 (Trunk to Dist), Fa0/9-10 (VLAN 30 Access)",
-    protocols: "Spanning Tree PortFast, BPDU Guard, 802.1Q Trunking",
-    diagnostic: "Separates server farm broadcast traffic from user desktop access switches.",
+    interfaces: "Gi0/1 (Trunk to Dist), Fa0/9-10 (VLAN 30 Ops)",
     vlans: ["vlan30"],
+    protocols: "Spanning Tree PortFast, BPDU Guard, 802.1Q",
+    status: "ACCESS UP · PORTFAST ENABLED",
+    cli: `ACC-SW02(config)# interface range Fa0/9 - 10
+ACC-SW02(config-if-range)# switchport mode access
+ACC-SW02(config-if-range)# switchport access vlan 30
+ACC-SW02(config-if-range)# spanning-tree portfast
+ACC-SW02(config-if-range)# spanning-tree bpduguard enable`,
+    note: "Dedicated access switch isolating high-volume server traffic in VLAN 30 from client desktop broadcast storms.",
   },
   "pc-mgmt": {
     id: "pc-mgmt",
-    name: "ADMIN-PC01 (Management)",
-    tier: "VLAN 10 Endpoint",
-    tierId: "access",
-    role: "Network Administration & Infrastructure Monitoring Host",
-    ipInfo: "IP: 192.168.10.50/24 | Gateway: 192.168.10.1 (CORE-SW01 SVI)",
-    interfaces: "FastEthernet 0 connected to ACC-SW01 [Fa0/1]",
-    protocols: "Static IP, SSH/HTTPS Management Access",
-    diagnostic: "Directly accesses network device management SVIs across VLAN 10.",
+    name: "ADMIN-PC01",
+    model: "Management Workstation",
+    tier: "Endpoint (VLAN 10)",
+    role: "Network Administration & Device Management Station",
+    interfaces: "192.168.10.50/24 (Default Gateway: 192.168.10.1)",
     vlans: ["vlan10"],
+    protocols: "VLAN 10 Access Port, SSH/HTTPS Management Access",
+    status: "CONNECTED · PORT Fa0/1",
+    cli: `ADMIN-PC01:~$ ip addr show eth0
+inet 192.168.10.50/24 brd 192.168.10.255
+ADMIN-PC01:~$ ssh admin@192.168.10.1
+Password: ***********
+CORE-SW01#`,
+    note: "Management network segmented into private VLAN 10 to restrict CLI and SNMP access to authorized administrative devices only.",
   },
   "pc-eng": {
     id: "pc-eng",
-    name: "ENG-WS01 (Engineering)",
-    tier: "VLAN 20 Endpoint",
-    tierId: "access",
-    role: "Engineering Workstation (Source of cross-VLAN test ping)",
-    ipInfo: "IP: 192.168.20.50/24 | Gateway: 192.168.20.1 (CORE-SW01 SVI)",
-    interfaces: "FastEthernet 0 connected to ACC-SW01 [Fa0/3]",
-    protocols: "VLAN 20 Client Segment, ICMP Diagnostics",
-    diagnostic: "Initiated ping to OPS-SRV01 (192.168.30.50) to verify inter-VLAN routing across Core SVI gateways.",
+    name: "ENG-WS01",
+    model: "Engineering Workstation",
+    tier: "Endpoint (VLAN 20)",
+    role: "Engineering Team Workstation (Source of Ping Validation)",
+    interfaces: "192.168.20.50/24 (Default Gateway: 192.168.20.1)",
     vlans: ["vlan20"],
+    protocols: "VLAN 20 Access Port, ICMP Echo Diagnostics",
+    status: "CONNECTED · PORT Fa0/3",
+    cli: `ENG-WS01:~$ ping -c 4 192.168.30.50
+PING 192.168.30.50 (192.168.30.50): 56 data bytes
+64 bytes from 192.168.30.50: icmp_seq=0 ttl=126 time=0.92 ms
+64 bytes from 192.168.30.50: icmp_seq=1 ttl=126 time=0.81 ms
+--- 192.168.30.50 ping statistics ---
+4 packets transmitted, 4 packets received, 0.0% packet loss`,
+    note: "Cross-VLAN test: traffic egresses VLAN 20, routes across CORE-SW01 SVIs, traverses OSPF Area 0, and reaches OPS-SRV01 in VLAN 30.",
   },
   "srv-ops": {
     id: "srv-ops",
-    name: "OPS-SRV01 (Operations)",
-    tier: "VLAN 30 Endpoint",
-    tierId: "access",
-    role: "Critical Operations Production Server",
-    ipInfo: "IP: 192.168.30.50/24 | Gateway: 192.168.30.1 (CORE-SW01 SVI)",
-    interfaces: "FastEthernet 0 connected to ACC-SW02 [Fa0/9]",
-    protocols: "VLAN 30 Server Segment, OSPF Destination",
-    diagnostic: "Received routed ICMP packets with 0% loss once Core Switch OSPF wildcard statement was repaired.",
+    name: "OPS-SRV01",
+    model: "Operations Server",
+    tier: "Endpoint (VLAN 30)",
+    role: "Production Operations & Monitoring Application Server",
+    interfaces: "192.168.30.50/24 (Default Gateway: 192.168.30.1)",
     vlans: ["vlan30"],
+    protocols: "VLAN 30 Access Port, SVI Gateway Destination",
+    status: "ONLINE · PORT Fa0/9",
+    cli: `OPS-SRV01:~$ ip route
+default via 192.168.30.1 dev eth0
+192.168.30.0/24 dev eth0 proto kernel scope link src 192.168.30.50
+OPS-SRV01:~$ systemctl status monitoring-agent
+● monitoring.service - Active (running)`,
+    note: "Server segment isolated in VLAN 30 to limit exposure to broadcast storms originating from desktop segments.",
   },
 };
 
-const VLAN_CONFIG = {
-  all: { label: "All VLANs", color: "var(--accent)" },
-  vlan10: { label: "VLAN 10: Management", color: "#f59e0b", subnet: "192.168.10.0/24" },
-  vlan20: { label: "VLAN 20: Engineering", color: "#06b6d4", subnet: "192.168.20.0/24" },
-  vlan30: { label: "VLAN 30: Operations", color: "#10b981", subnet: "192.168.30.0/24" },
-  transit: { label: "Transit: OSPF Area 0", color: "#8b5cf6", subnet: "10.0.0.0/30" },
-};
-
-const TIERS = [
-  { id: "all", label: "All Tiers" },
-  { id: "core", label: "Core Layer" },
-  { id: "distribution", label: "Distribution" },
-  { id: "access", label: "Access Layer" },
+const FILTERS = [
+  { id: "all", label: "Overview", color: "var(--text-secondary)" },
+  { id: "vlan10", label: "VLAN 10 (Mgmt)", color: "#f59e0b", subnet: "192.168.10.0/24" },
+  { id: "vlan20", label: "VLAN 20 (Eng)", color: "#38bdf8", subnet: "192.168.20.0/24" },
+  { id: "vlan30", label: "VLAN 30 (Ops)", color: "#34d399", subnet: "192.168.30.0/24" },
+  { id: "transit", label: "OSPF Transit (/30)", color: "#a855f7", subnet: "10.0.0.0/30" },
 ];
 
 export default function CampusTopology() {
-  const [activeVlan, setActiveVlan] = useState("all");
-  const [activeTier, setActiveTier] = useState("all");
+  const [activeFilter, setActiveFilter] = useState("all");
   const [selectedId, setSelectedId] = useState("core-sw01");
 
-  const selectedNode = NODES[selectedId] || NODES["core-sw01"];
+  const selectedNode = NODES_DATA[selectedId] || NODES_DATA["core-sw01"];
 
-  // Helper to determine node opacity/highlight
-  function isNodeVisible(node) {
-    if (activeTier !== "all" && node.tierId !== activeTier) return false;
-    if (activeVlan !== "all" && !node.vlans.includes(activeVlan)) return false;
-    return true;
+  function isHighlighted(vlans) {
+    if (activeFilter === "all") return true;
+    return vlans.includes(activeFilter);
   }
 
-  function isLinkVisible(vlans, tier) {
-    if (activeTier !== "all" && tier && tier !== activeTier) return false;
-    if (activeVlan !== "all") {
-      return vlans.includes(activeVlan);
-    }
-    return true;
+  function getLinkOpacity(vlans) {
+    if (activeFilter === "all") return 1;
+    return vlans.includes(activeFilter) ? 1 : 0.12;
+  }
+
+  function getNodeOpacity(node) {
+    if (activeFilter === "all") return 1;
+    return node.vlans.includes(activeFilter) ? 1 : 0.2;
   }
 
   return (
     <div className={styles.container}>
-      {/* Interactive Toolbar */}
-      <div className={styles.toolbar}>
-        {/* VLAN Filter */}
-        <div className={styles.controlGroup}>
-          <span className={styles.groupLabel}>VLAN / Segment:</span>
-          {Object.entries(VLAN_CONFIG).map(([key, config]) => {
-            const isActive = activeVlan === key;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setActiveVlan(key)}
-                className={`${styles.btn} ${isActive ? styles.btnActive : ""}`}
-                aria-pressed={isActive}
-              >
-                {key !== "all" && (
-                  <span
-                    className={styles.btnDot}
-                    style={{ backgroundColor: config.color }}
-                  />
-                )}
-                {config.label}
-              </button>
-            );
-          })}
+      {/* ─── Top Control Bar ────────────────────────────────────────────── */}
+      <div className={styles.headerBar}>
+        <div className={styles.titleArea}>
+          <span className={styles.topologyTitle}>3-Tier Campus Network Topology</span>
+          <span className={styles.statusIndicator}>
+            <span className={styles.statusPulse} aria-hidden="true" />
+            OSPF Area 0 · Converged
+          </span>
         </div>
 
-        {/* Tier Filter */}
-        <div className={styles.controlGroup}>
-          <span className={styles.groupLabel}>Tier:</span>
-          {TIERS.map((tier) => {
-            const isActive = activeTier === tier.id;
+        <div className={styles.pillGroup} role="tablist" aria-label="Topology Layer and VLAN Filters">
+          {FILTERS.map((f) => {
+            const isActive = activeFilter === f.id;
             return (
               <button
-                key={tier.id}
+                key={f.id}
                 type="button"
-                onClick={() => setActiveTier(tier.id)}
-                className={`${styles.btn} ${isActive ? styles.btnActive : ""}`}
-                aria-pressed={isActive}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveFilter(f.id)}
+                className={`${styles.pillBtn} ${isActive ? styles.pillBtnActive : ""}`}
+                style={isActive ? { borderColor: f.color, color: f.color } : undefined}
               >
-                {tier.label}
+                {f.id !== "all" && (
+                  <span
+                    className={styles.colorDot}
+                    style={{ backgroundColor: f.color }}
+                  />
+                )}
+                <span>{f.label}</span>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Responsive SVG Architecture Canvas */}
-      <div className={styles.svgCard}>
+      {/* ─── Vector Topology Canvas ─────────────────────────────────────── */}
+      <div className={styles.canvasWrapper}>
         <svg
-          viewBox="0 0 820 500"
+          viewBox="0 0 840 520"
           className={styles.svg}
           role="img"
-          aria-label="3-Tier Campus Network Architecture Diagram showing Core, Distribution, and Access Switching"
+          aria-label="Cisco 3-Tier Enterprise Network Topology Diagram"
         >
           <defs>
-            {/* Gradients */}
-            <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#1e293b" />
-              <stop offset="100%" stopColor="#0f172a" />
-            </linearGradient>
-            <linearGradient id="distGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#182234" />
-              <stop offset="100%" stopColor="#0f172a" />
-            </linearGradient>
-            <linearGradient id="accGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#182234" />
-              <stop offset="100%" stopColor="#0b1120" />
-            </linearGradient>
+            {/* Subtle Blueprint Dot Grid */}
+            <pattern id="dotGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="0.75" fill="#1e2638" />
+            </pattern>
 
-            {/* Glowing path filter */}
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
+            {/* Gradients */}
+            <linearGradient id="switchGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#1e2536" />
+              <stop offset="100%" stopColor="#111622" />
+            </linearGradient>
+            <linearGradient id="hostGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#161c28" />
+              <stop offset="100%" stopColor="#0d1117" />
+            </linearGradient>
           </defs>
 
-          {/* ─── TIER BACKGROUND ZONES ──────────────────────────────────── */}
-          {/* Core Layer Zone */}
-          <rect
-            x="20"
-            y="15"
-            width="780"
-            height="115"
-            rx="8"
-            fill="#141923"
-            fillOpacity={activeTier === "all" || activeTier === "core" ? "0.6" : "0.15"}
-            stroke="#2a3548"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-          />
-          <text x="35" y="40" fill="#64748b" fontFamily="var(--font-mono)" fontSize="11" fontWeight="600" letterSpacing="0.08em">
-            [ CORE LAYER ] · L3 Inter-VLAN Routing &amp; OSPF Area 0
-          </text>
+          {/* Background Grid */}
+          <rect width="840" height="520" fill="url(#dotGrid)" />
 
-          {/* Distribution Layer Zone */}
-          <rect
-            x="20"
-            y="145"
-            width="780"
-            height="115"
-            rx="8"
-            fill="#141923"
-            fillOpacity={activeTier === "all" || activeTier === "distribution" ? "0.6" : "0.15"}
-            stroke="#2a3548"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-          />
-          <text x="35" y="170" fill="#64748b" fontFamily="var(--font-mono)" fontSize="11" fontWeight="600" letterSpacing="0.08em">
-            [ DISTRIBUTION LAYER ] · 802.1Q Trunk Aggregation &amp; Security Boundary
-          </text>
+          {/* ─── TIER ANNOTATIONS (Left Guide Rails) ────────────────────── */}
+          <g opacity="0.7">
+            {/* Core Tier Header */}
+            <line x1="30" y1="20" x2="30" y2="120" stroke="#334155" strokeWidth="1.5" />
+            <text x="36" y="32" fill="#64748b" fontFamily="var(--font-mono)" fontSize="9" fontWeight="700" letterSpacing="0.08em">
+              CORE LAYER (L3)
+            </text>
+            <text x="36" y="44" fill="#475569" fontFamily="var(--font-mono)" fontSize="8">
+              OSPF Backbone &amp; SVI Gateways
+            </text>
 
-          {/* Access Layer Zone */}
-          <rect
-            x="20"
-            y="275"
-            width="780"
-            height="210"
-            rx="8"
-            fill="#141923"
-            fillOpacity={activeTier === "all" || activeTier === "access" ? "0.6" : "0.15"}
-            stroke="#2a3548"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-          />
-          <text x="35" y="300" fill="#64748b" fontFamily="var(--font-mono)" fontSize="11" fontWeight="600" letterSpacing="0.08em">
-            [ ACCESS LAYER &amp; CLIENT DROPS ] · PortFast, BPDU Guard, Isolated Broadcast Domains
-          </text>
+            {/* Dist Tier Header */}
+            <line x1="30" y1="155" x2="30" y2="250" stroke="#334155" strokeWidth="1.5" />
+            <text x="36" y="167" fill="#64748b" fontFamily="var(--font-mono)" fontSize="9" fontWeight="700" letterSpacing="0.08em">
+              DISTRIBUTION LAYER
+            </text>
+            <text x="36" y="179" fill="#475569" fontFamily="var(--font-mono)" fontSize="8">
+              802.1Q Aggregation · Native 99
+            </text>
 
-          {/* ─── PHYSICAL & LOGICAL LINKS ───────────────────────────────── */}
-          {/* Link: Core to Dist (Transit Link 10.0.0.0/30) */}
+            {/* Access Tier Header */}
+            <line x1="30" y1="285" x2="30" y2="495" stroke="#334155" strokeWidth="1.5" />
+            <text x="36" y="297" fill="#64748b" fontFamily="var(--font-mono)" fontSize="9" fontWeight="700" letterSpacing="0.08em">
+              ACCESS &amp; WORKSTATIONS
+            </text>
+            <text x="36" y="309" fill="#475569" fontFamily="var(--font-mono)" fontSize="8">
+              PortFast · BPDU Guard · VLAN Drops
+            </text>
+          </g>
+
+          {/* Subtle Horizontal Tier Separators */}
+          <line x1="18" y1="135" x2="822" y2="135" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1="18" y1="268" x2="822" y2="268" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
+
+          {/* ─── CABLING & LINKS ────────────────────────────────────────── */}
+
+          {/* 1. Core-to-Distribution Transit Link (Gi0/1 <-> Gi0/1) */}
           <g
-            className={styles.linkGroup}
+            className={styles.linkLine}
+            opacity={getLinkOpacity(["transit", "vlan10", "vlan20", "vlan30"])}
             onClick={() => setSelectedId("transit-link")}
             style={{ cursor: "pointer" }}
-            opacity={isLinkVisible(["transit", "vlan10", "vlan20", "vlan30"]) ? 1 : 0.15}
           >
             <line
-              x1="410"
-              y1="110"
-              x2="410"
+              x1="420"
+              y1="96"
+              x2="420"
               y2="175"
-              stroke={activeVlan === "transit" ? "#8b5cf6" : "#60a5fa"}
-              strokeWidth={activeVlan === "transit" || selectedId === "transit-link" ? "3.5" : "2"}
-              filter={activeVlan === "transit" ? "url(#glow)" : undefined}
+              stroke={activeFilter === "transit" ? "#c084fc" : "#3b82f6"}
+              strokeWidth={activeFilter === "transit" || selectedId === "transit-link" ? "3" : "1.8"}
+              strokeDasharray={activeFilter === "transit" ? "6 4" : undefined}
             />
-            {/* Transit Link Tag */}
-            <rect x="350" y="132" width="120" height="20" rx="4" fill="#0f172a" stroke="#475569" strokeWidth="1" />
-            <text x="410" y="146" fill="#93c5fd" fontFamily="var(--font-mono)" fontSize="10" textAnchor="middle">
-              10.0.0.0/30 (Gi0/1)
+            {/* Core Port Badge */}
+            <rect x="388" y="104" width="30" height="13" rx="2" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
+            <text x="403" y="113" fill="#94a3b8" textAnchor="middle" className={styles.portBadge}>Gi0/1</text>
+
+            {/* Dist Port Badge */}
+            <rect x="388" y="152" width="30" height="13" rx="2" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
+            <text x="403" y="161" fill="#94a3b8" textAnchor="middle" className={styles.portBadge}>Gi0/1</text>
+
+            {/* Transit Link Tag Pill */}
+            <rect x="428" y="126" width="112" height="18" rx="3" fill="#131822" stroke="#3b82f6" strokeWidth="0.8" />
+            <text x="484" y="138" fill="#93c5fd" fontFamily="var(--font-mono)" fontSize="8.5" textAnchor="middle" fontWeight="500">
+              10.0.0.0/30 (OSPF Area 0)
             </text>
           </g>
 
-          {/* Link: Dist to Access 01 (Trunk 802.1Q) */}
+          {/* 2. Trunk: DIST-SW01 (Gi0/2) to ACC-SW01 (Gi0/1) */}
           <g
-            className={styles.linkGroup}
-            opacity={isLinkVisible(["vlan10", "vlan20"]) ? 1 : 0.15}
+            className={styles.linkLine}
+            opacity={getLinkOpacity(["vlan10", "vlan20"])}
           >
-            <line
-              x1="350"
-              y1="230"
-              x2="240"
-              y2="320"
-              stroke={activeVlan === "vlan10" ? "#f59e0b" : activeVlan === "vlan20" ? "#06b6d4" : "#94a3b8"}
-              strokeWidth={activeVlan === "vlan10" || activeVlan === "vlan20" ? "3" : "2"}
-              strokeDasharray={activeVlan === "all" ? "4 2" : undefined}
+            <path
+              d="M 370 233 L 370 252 L 245 252 L 245 295"
+              fill="none"
+              stroke={activeFilter === "vlan10" ? "#f59e0b" : activeFilter === "vlan20" ? "#38bdf8" : "#475569"}
+              strokeWidth={activeFilter === "vlan10" || activeFilter === "vlan20" ? "2.5" : "1.5"}
             />
-            <text x="275" y="270" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="9">
-              802.1Q Trunk (Gi0/2)
+            {/* Port Badges */}
+            <rect x="348" y="236" width="30" height="13" rx="2" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
+            <text x="363" y="245" fill="#94a3b8" textAnchor="middle" className={styles.portBadge}>Gi0/2</text>
+
+            <rect x="230" y="278" width="30" height="13" rx="2" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
+            <text x="245" y="287" fill="#94a3b8" textAnchor="middle" className={styles.portBadge}>Gi0/1</text>
+
+            {/* Trunk Label */}
+            <rect x="262" y="244" width="92" height="16" rx="2" fill="#0b0f17" stroke="#334155" strokeWidth="0.7" />
+            <text x="308" y="255" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="8" textAnchor="middle">
+              Trunk (802.1Q / V99)
             </text>
           </g>
 
-          {/* Link: Dist to Access 02 (Trunk 802.1Q) */}
+          {/* 3. Trunk: DIST-SW01 (Gi0/3) to ACC-SW02 (Gi0/1) */}
           <g
-            className={styles.linkGroup}
-            opacity={isLinkVisible(["vlan30"]) ? 1 : 0.15}
+            className={styles.linkLine}
+            opacity={getLinkOpacity(["vlan30"])}
           >
-            <line
-              x1="470"
-              y1="230"
-              x2="580"
-              y2="320"
-              stroke={activeVlan === "vlan30" ? "#10b981" : "#94a3b8"}
-              strokeWidth={activeVlan === "vlan30" ? "3" : "2"}
-              strokeDasharray={activeVlan === "all" ? "4 2" : undefined}
+            <path
+              d="M 470 233 L 470 252 L 595 252 L 595 295"
+              fill="none"
+              stroke={activeFilter === "vlan30" ? "#34d399" : "#475569"}
+              strokeWidth={activeFilter === "vlan30" ? "2.5" : "1.5"}
             />
-            <text x="495" y="270" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="9">
-              802.1Q Trunk (Gi0/3)
+            {/* Port Badges */}
+            <rect x="462" y="236" width="30" height="13" rx="2" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
+            <text x="477" y="245" fill="#94a3b8" textAnchor="middle" className={styles.portBadge}>Gi0/3</text>
+
+            <rect x="580" y="278" width="30" height="13" rx="2" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
+            <text x="595" y="287" fill="#94a3b8" textAnchor="middle" className={styles.portBadge}>Gi0/1</text>
+
+            {/* Trunk Label */}
+            <rect x="488" y="244" width="92" height="16" rx="2" fill="#0b0f17" stroke="#334155" strokeWidth="0.7" />
+            <text x="534" y="255" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="8" textAnchor="middle">
+              Trunk (802.1Q / V99)
             </text>
           </g>
 
-          {/* Access Drops to Endpoints */}
-          {/* Drop: ACC-01 -> ADMIN-PC (VLAN 10) */}
-          <g opacity={isLinkVisible(["vlan10"]) ? 1 : 0.15}>
-            <line
-              x1="200"
-              y1="365"
-              x2="150"
-              y2="420"
+          {/* 4. Drop: ACC-SW01 (Fa0/1) -> ADMIN-PC01 (VLAN 10) */}
+          <g className={styles.linkLine} opacity={getLinkOpacity(["vlan10"])}>
+            <path
+              d="M 195 353 L 195 385 L 140 385 L 140 422"
+              fill="none"
               stroke="#f59e0b"
-              strokeWidth={activeVlan === "vlan10" ? "2.5" : "1.5"}
+              strokeWidth={activeFilter === "vlan10" ? "2.5" : "1.5"}
             />
-            <text x="155" y="390" fill="#f59e0b" fontFamily="var(--font-mono)" fontSize="9">
-              Fa0/1 [V10]
-            </text>
+            <rect x="180" y="358" width="30" height="13" rx="2" fill="#0f172a" stroke="#f59e0b" strokeWidth="0.8" />
+            <text x="195" y="367" fill="#fcd34d" textAnchor="middle" className={styles.portBadge}>Fa0/1</text>
+            <text x="145" y="398" fill="#f59e0b" fontFamily="var(--font-mono)" fontSize="8">VLAN 10</text>
           </g>
 
-          {/* Drop: ACC-01 -> ENG-WS01 (VLAN 20) */}
-          <g opacity={isLinkVisible(["vlan20"]) ? 1 : 0.15}>
+          {/* 5. Drop: ACC-SW01 (Fa0/3) -> ENG-WS01 (VLAN 20) */}
+          <g className={styles.linkLine} opacity={getLinkOpacity(["vlan20"])}>
+            <path
+              d="M 285 353 L 285 385 L 340 385 L 340 422"
+              fill="none"
+              stroke="#38bdf8"
+              strokeWidth={activeFilter === "vlan20" ? "2.5" : "1.5"}
+            />
+            <rect x="270" y="358" width="30" height="13" rx="2" fill="#0f172a" stroke="#38bdf8" strokeWidth="0.8" />
+            <text x="285" y="367" fill="#7dd3fc" textAnchor="middle" className={styles.portBadge}>Fa0/3</text>
+            <text x="315" y="398" fill="#38bdf8" fontFamily="var(--font-mono)" fontSize="8">VLAN 20</text>
+          </g>
+
+          {/* 6. Drop: ACC-SW02 (Fa0/9) -> OPS-SRV01 (VLAN 30) */}
+          <g className={styles.linkLine} opacity={getLinkOpacity(["vlan30"])}>
             <line
-              x1="260"
-              y1="365"
-              x2="320"
-              y2="420"
-              stroke="#06b6d4"
-              strokeWidth={activeVlan === "vlan20" ? "2.5" : "1.5"}
+              x1="595"
+              y1="353"
+              x2="595"
+              y2="422"
+              stroke="#34d399"
+              strokeWidth={activeFilter === "vlan30" ? "2.5" : "1.5"}
             />
-            <text x="295" y="395" fill="#06b6d4" fontFamily="var(--font-mono)" fontSize="9">
-              Fa0/3 [V20]
-            </text>
+            <rect x="580" y="362" width="30" height="13" rx="2" fill="#0f172a" stroke="#34d399" strokeWidth="0.8" />
+            <text x="595" y="371" fill="#6ee7b7" textAnchor="middle" className={styles.portBadge}>Fa0/9</text>
+            <text x="605" y="398" fill="#34d399" fontFamily="var(--font-mono)" fontSize="8">VLAN 30</text>
           </g>
 
-          {/* Drop: ACC-02 -> OPS-SRV01 (VLAN 30) */}
-          <g opacity={isLinkVisible(["vlan30"]) ? 1 : 0.15}>
-            <line
-              x1="580"
-              y1="365"
-              x2="580"
-              y2="420"
-              stroke="#10b981"
-              strokeWidth={activeVlan === "vlan30" ? "2.5" : "1.5"}
-            />
-            <text x="590" y="395" fill="#10b981" fontFamily="var(--font-mono)" fontSize="9">
-              Fa0/9 [V30]
-            </text>
-          </g>
+          {/* ─── HARDWARE DEVICES & WORKSTATIONS ─────────────────────────── */}
 
-          {/* ─── HARDWARE SWITCH NODES ───────────────────────────────────── */}
-
-          {/* 1. CORE-SW01 */}
+          {/* 1. CORE-SW01 (Cisco 3560) */}
           <g
-            className={`${styles.nodeGroup} ${selectedId === "core-sw01" ? styles.nodeSelected : ""}`}
+            className={`${styles.nodeGroup} ${selectedId === "core-sw01" ? styles.nodeGroupSelected : ""}`}
+            opacity={getNodeOpacity(NODES_DATA["core-sw01"])}
             onClick={() => setSelectedId("core-sw01")}
-            opacity={isNodeVisible(NODES["core-sw01"]) ? 1 : 0.25}
-          >
-            <rect
-              x="290"
-              y="45"
-              width="240"
-              height="65"
-              rx="6"
-              fill="url(#coreGrad)"
-              stroke={selectedId === "core-sw01" ? "var(--accent)" : "#3b82f6"}
-              strokeWidth={selectedId === "core-sw01" ? "2.5" : "1.5"}
-            />
-            {/* Device Icon indicator */}
-            <circle cx="315" cy="72" r="10" fill="#1e3a8a" stroke="#3b82f6" strokeWidth="1.5" />
-            <text x="315" y="76" fill="#93c5fd" fontFamily="var(--font-mono)" fontSize="11" textAnchor="middle" fontWeight="700">
-              L3
-            </text>
-            <text x="335" y="68" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="13" fontWeight="700">
-              CORE-SW01
-            </text>
-            <text x="335" y="84" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="10">
-              Cisco 3560 · OSPF RID: 1.1.1.1
-            </text>
-            <text x="335" y="98" fill="#60a5fa" fontFamily="var(--font-mono)" fontSize="9">
-              Default Gateways: SVI 10, 20, 30
-            </text>
-          </g>
-
-          {/* 2. DIST-SW01 */}
-          <g
-            className={`${styles.nodeGroup} ${selectedId === "dist-sw01" ? styles.nodeSelected : ""}`}
-            onClick={() => setSelectedId("dist-sw01")}
-            opacity={isNodeVisible(NODES["dist-sw01"]) ? 1 : 0.25}
           >
             <rect
               x="300"
+              y="38"
+              width="240"
+              height="58"
+              rx="4"
+              className={styles.nodeCard}
+              fill="url(#switchGrad)"
+              stroke="#2e3d56"
+              strokeWidth="1"
+            />
+            {/* Cisco L3 Routing Badge Icon */}
+            <g transform="translate(312, 53)">
+              <circle cx="14" cy="14" r="13" fill="#1e3a8a" stroke="#3b82f6" strokeWidth="1" />
+              {/* Crossed bidirectional arrows */}
+              <path d="M 6 14 L 22 14 M 14 6 L 14 22" stroke="#93c5fd" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M 9 11 L 6 14 L 9 17 M 19 11 L 22 14 L 19 17 M 11 9 L 14 6 L 17 9 M 11 19 L 14 22 L 17 19" fill="none" stroke="#93c5fd" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+            </g>
+            <text x="350" y="57" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="12" fontWeight="700">
+              CORE-SW01
+            </text>
+            <text x="350" y="70" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="9">
+              Cisco Catalyst 3560-24PS · RID: 1.1.1.1
+            </text>
+            <text x="350" y="83" fill="#60a5fa" fontFamily="var(--font-mono)" fontSize="8.5">
+              SVIs: 192.168.10.1 · .20.1 · .30.1
+            </text>
+          </g>
+
+          {/* 2. DIST-SW01 (Cisco 2960) */}
+          <g
+            className={`${styles.nodeGroup} ${selectedId === "dist-sw01" ? styles.nodeGroupSelected : ""}`}
+            opacity={getNodeOpacity(NODES_DATA["dist-sw01"])}
+            onClick={() => setSelectedId("dist-sw01")}
+          >
+            <rect
+              x="310"
               y="175"
               width="220"
-              height="60"
-              rx="6"
-              fill="url(#distGrad)"
-              stroke={selectedId === "dist-sw01" ? "var(--accent)" : "#475569"}
-              strokeWidth={selectedId === "dist-sw01" ? "2.5" : "1.5"}
+              height="58"
+              rx="4"
+              className={styles.nodeCard}
+              fill="url(#switchGrad)"
+              stroke="#2e3d56"
+              strokeWidth="1"
             />
-            <circle cx="325" cy="202" r="10" fill="#1e293b" stroke="#64748b" strokeWidth="1.5" />
-            <text x="325" y="206" fill="#cbd5e1" fontFamily="var(--font-mono)" fontSize="11" textAnchor="middle" fontWeight="700">
-              L2
-            </text>
-            <text x="345" y="198" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="13" fontWeight="700">
+            {/* Cisco L2 Switching Badge Icon */}
+            <g transform="translate(322, 190)">
+              <rect x="1" y="4" width="24" height="20" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
+              <path d="M 5 11 L 21 11 M 21 17 L 5 17" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M 8 9 L 5 11 L 8 13 M 18 15 L 21 17 L 18 19" fill="none" stroke="#cbd5e1" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+            </g>
+            <text x="356" y="195" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="12" fontWeight="700">
               DIST-SW01
             </text>
-            <text x="345" y="214" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="10">
-              Cisco 2960 · 802.1Q Trunks
+            <text x="356" y="208" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="9">
+              Cisco Catalyst 2960-24TT
             </text>
-            <text x="345" y="226" fill="#cbd5e1" fontFamily="var(--font-mono)" fontSize="9">
-              Native VLAN 99 Isolation
+            <text x="356" y="221" fill="#cbd5e1" fontFamily="var(--font-mono)" fontSize="8.5">
+              802.1Q Aggregation · Native VLAN 99
             </text>
           </g>
 
-          {/* 3. ACC-SW01 (Left) */}
+          {/* 3. ACC-SW01 (Access Floors 1-2) */}
           <g
-            className={`${styles.nodeGroup} ${selectedId === "acc-sw01" ? styles.nodeSelected : ""}`}
+            className={`${styles.nodeGroup} ${selectedId === "acc-sw01" ? styles.nodeGroupSelected : ""}`}
+            opacity={getNodeOpacity(NODES_DATA["acc-sw01"])}
             onClick={() => setSelectedId("acc-sw01")}
-            opacity={isNodeVisible(NODES["acc-sw01"]) ? 1 : 0.25}
           >
             <rect
-              x="140"
-              y="320"
-              width="190"
-              height="55"
-              rx="6"
-              fill="url(#accGrad)"
-              stroke={selectedId === "acc-sw01" ? "var(--accent)" : "#475569"}
-              strokeWidth={selectedId === "acc-sw01" ? "2.5" : "1.5"}
-            />
-            <text x="155" y="342" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="12" fontWeight="700">
-              ACC-SW01 (Floors 1-2)
-            </text>
-            <text x="155" y="358" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="10">
-              Access Ports: V10 &amp; V20
-            </text>
-          </g>
-
-          {/* 4. ACC-SW02 (Right) */}
-          <g
-            className={`${styles.nodeGroup} ${selectedId === "acc-sw02" ? styles.nodeSelected : ""}`}
-            onClick={() => setSelectedId("acc-sw02")}
-            opacity={isNodeVisible(NODES["acc-sw02"]) ? 1 : 0.25}
-          >
-            <rect
-              x="490"
-              y="320"
-              width="190"
-              height="55"
-              rx="6"
-              fill="url(#accGrad)"
-              stroke={selectedId === "acc-sw02" ? "var(--accent)" : "#475569"}
-              strokeWidth={selectedId === "acc-sw02" ? "2.5" : "1.5"}
-            />
-            <text x="505" y="342" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="12" fontWeight="700">
-              ACC-SW02 (Floor 3)
-            </text>
-            <text x="505" y="358" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="10">
-              Access Ports: V30 (Operations)
-            </text>
-          </g>
-
-          {/* ─── ENDPOINTS / WORKSTATIONS ────────────────────────────────── */}
-
-          {/* ADMIN-PC01 (VLAN 10) */}
-          <g
-            className={`${styles.nodeGroup} ${selectedId === "pc-mgmt" ? styles.nodeSelected : ""}`}
-            onClick={() => setSelectedId("pc-mgmt")}
-            opacity={isNodeVisible(NODES["pc-mgmt"]) ? 1 : 0.25}
-          >
-            <rect
-              x="70"
-              y="420"
-              width="145"
-              height="50"
+              x="145"
+              y="295"
+              width="200"
+              height="58"
               rx="4"
-              fill="#181510"
-              stroke="#f59e0b"
-              strokeWidth={selectedId === "pc-mgmt" ? "2" : "1"}
+              className={styles.nodeCard}
+              fill="url(#switchGrad)"
+              stroke="#2e3d56"
+              strokeWidth="1"
             />
-            <text x="80" y="440" fill="#fcd34d" fontFamily="var(--font-mono)" fontSize="11" fontWeight="700">
+            <g transform="translate(155, 310)">
+              <rect x="1" y="4" width="22" height="20" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
+              <path d="M 5 11 L 19 11 M 19 17 L 5 17" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" />
+            </g>
+            <text x="186" y="315" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="12" fontWeight="700">
+              ACC-SW01
+            </text>
+            <text x="186" y="328" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="9">
+              Floors 1 &amp; 2 (Mgmt + Eng)
+            </text>
+            <text x="186" y="341" fill="#cbd5e1" fontFamily="var(--font-mono)" fontSize="8.5">
+              PortFast &amp; BPDU Guard Enabled
+            </text>
+          </g>
+
+          {/* 4. ACC-SW02 (Access Floor 3 - Operations) */}
+          <g
+            className={`${styles.nodeGroup} ${selectedId === "acc-sw02" ? styles.nodeGroupSelected : ""}`}
+            opacity={getNodeOpacity(NODES_DATA["acc-sw02"])}
+            onClick={() => setSelectedId("acc-sw02")}
+          >
+            <rect
+              x="495"
+              y="295"
+              width="200"
+              height="58"
+              rx="4"
+              className={styles.nodeCard}
+              fill="url(#switchGrad)"
+              stroke="#2e3d56"
+              strokeWidth="1"
+            />
+            <g transform="translate(505, 310)">
+              <rect x="1" y="4" width="22" height="20" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
+              <path d="M 5 11 L 19 11 M 19 17 L 5 17" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" />
+            </g>
+            <text x="536" y="315" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="12" fontWeight="700">
+              ACC-SW02
+            </text>
+            <text x="536" y="328" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="9">
+              Floor 3 (Operations Server Farm)
+            </text>
+            <text x="536" y="341" fill="#cbd5e1" fontFamily="var(--font-mono)" fontSize="8.5">
+              Isolated Server Segment (VLAN 30)
+            </text>
+          </g>
+
+          {/* ─── ENDPOINT HOSTS ─────────────────────────────────────────── */}
+
+          {/* 5. ADMIN-PC01 (VLAN 10) */}
+          <g
+            className={`${styles.nodeGroup} ${selectedId === "pc-mgmt" ? styles.nodeGroupSelected : ""}`}
+            opacity={getNodeOpacity(NODES_DATA["pc-mgmt"])}
+            onClick={() => setSelectedId("pc-mgmt")}
+          >
+            <rect
+              x="65"
+              y="422"
+              width="150"
+              height="54"
+              rx="4"
+              className={styles.nodeCard}
+              fill="url(#hostGrad)"
+              stroke={activeFilter === "vlan10" || selectedId === "pc-mgmt" ? "#f59e0b" : "#334155"}
+              strokeWidth="1"
+            />
+            {/* Terminal Monitor Icon */}
+            <g transform="translate(75, 434)">
+              <rect x="1" y="1" width="18" height="14" rx="2" fill="#0f172a" stroke="#f59e0b" strokeWidth="1" />
+              <line x1="6" y1="18" x2="14" y2="18" stroke="#f59e0b" strokeWidth="1" />
+              <line x1="10" y1="15" x2="10" y2="18" stroke="#f59e0b" strokeWidth="1" />
+              <text x="4" y="10" fill="#f59e0b" fontFamily="var(--font-mono)" fontSize="7" fontWeight="bold">&gt;_</text>
+            </g>
+            <text x="104" y="441" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="11" fontWeight="700">
               ADMIN-PC01
             </text>
-            <text x="80" y="456" fill="#fde68a" fontFamily="var(--font-mono)" fontSize="9">
-              192.168.10.50 (VLAN 10)
+            <text x="104" y="454" fill="#f59e0b" fontFamily="var(--font-mono)" fontSize="9">
+              192.168.10.50
+            </text>
+            <text x="104" y="466" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="8">
+              GW: 192.168.10.1 (SVI)
             </text>
           </g>
 
-          {/* ENG-WS01 (VLAN 20) */}
+          {/* 6. ENG-WS01 (VLAN 20) */}
           <g
-            className={`${styles.nodeGroup} ${selectedId === "pc-eng" ? styles.nodeSelected : ""}`}
+            className={`${styles.nodeGroup} ${selectedId === "pc-eng" ? styles.nodeGroupSelected : ""}`}
+            opacity={getNodeOpacity(NODES_DATA["pc-eng"])}
             onClick={() => setSelectedId("pc-eng")}
-            opacity={isNodeVisible(NODES["pc-eng"]) ? 1 : 0.25}
           >
             <rect
-              x="250"
-              y="420"
-              width="145"
-              height="50"
+              x="265"
+              y="422"
+              width="150"
+              height="54"
               rx="4"
-              fill="#081820"
-              stroke="#06b6d4"
-              strokeWidth={selectedId === "pc-eng" ? "2" : "1"}
+              className={styles.nodeCard}
+              fill="url(#hostGrad)"
+              stroke={activeFilter === "vlan20" || selectedId === "pc-eng" ? "#38bdf8" : "#334155"}
+              strokeWidth="1"
             />
-            <text x="260" y="440" fill="#67e8f9" fontFamily="var(--font-mono)" fontSize="11" fontWeight="700">
+            <g transform="translate(275, 434)">
+              <rect x="1" y="1" width="18" height="14" rx="2" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
+              <line x1="6" y1="18" x2="14" y2="18" stroke="#38bdf8" strokeWidth="1" />
+              <line x1="10" y1="15" x2="10" y2="18" stroke="#38bdf8" strokeWidth="1" />
+              <text x="4" y="10" fill="#38bdf8" fontFamily="var(--font-mono)" fontSize="7" fontWeight="bold">&gt;_</text>
+            </g>
+            <text x="304" y="441" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="11" fontWeight="700">
               ENG-WS01
             </text>
-            <text x="260" y="456" fill="#a5f3fc" fontFamily="var(--font-mono)" fontSize="9">
-              192.168.20.50 (VLAN 20)
+            <text x="304" y="454" fill="#38bdf8" fontFamily="var(--font-mono)" fontSize="9">
+              192.168.20.50
+            </text>
+            <text x="304" y="466" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="8">
+              GW: 192.168.20.1 (SVI)
             </text>
           </g>
 
-          {/* OPS-SRV01 (VLAN 30) */}
+          {/* 7. OPS-SRV01 (VLAN 30) */}
           <g
-            className={`${styles.nodeGroup} ${selectedId === "srv-ops" ? styles.nodeSelected : ""}`}
+            className={`${styles.nodeGroup} ${selectedId === "srv-ops" ? styles.nodeGroupSelected : ""}`}
+            opacity={getNodeOpacity(NODES_DATA["srv-ops"])}
             onClick={() => setSelectedId("srv-ops")}
-            opacity={isNodeVisible(NODES["srv-ops"]) ? 1 : 0.25}
           >
             <rect
-              x="510"
-              y="420"
-              width="145"
-              height="50"
+              x="520"
+              y="422"
+              width="150"
+              height="54"
               rx="4"
-              fill="#0a1a14"
-              stroke="#10b981"
-              strokeWidth={selectedId === "srv-ops" ? "2" : "1"}
+              className={styles.nodeCard}
+              fill="url(#hostGrad)"
+              stroke={activeFilter === "vlan30" || selectedId === "srv-ops" ? "#34d399" : "#334155"}
+              strokeWidth="1"
             />
-            <text x="520" y="440" fill="#6ee7b7" fontFamily="var(--font-mono)" fontSize="11" fontWeight="700">
+            {/* Server Rack Unit Icon */}
+            <g transform="translate(530, 434)">
+              <rect x="1" y="1" width="18" height="6" rx="1" fill="#0f172a" stroke="#34d399" strokeWidth="0.8" />
+              <circle cx="5" cy="4" r="1" fill="#34d399" />
+              <circle cx="8" cy="4" r="1" fill="#34d399" />
+              <rect x="1" y="9" width="18" height="6" rx="1" fill="#0f172a" stroke="#34d399" strokeWidth="0.8" />
+              <circle cx="5" cy="12" r="1" fill="#34d399" />
+              <circle cx="8" cy="12" r="1" fill="#34d399" />
+            </g>
+            <text x="559" y="441" fill="#f8fafc" fontFamily="var(--font-mono)" fontSize="11" fontWeight="700">
               OPS-SRV01
             </text>
-            <text x="520" y="456" fill="#a7f3d0" fontFamily="var(--font-mono)" fontSize="9">
-              192.168.30.50 (VLAN 30)
+            <text x="559" y="454" fill="#34d399" fontFamily="var(--font-mono)" fontSize="9">
+              192.168.30.50
+            </text>
+            <text x="559" y="466" fill="#94a3b8" fontFamily="var(--font-mono)" fontSize="8">
+              GW: 192.168.30.1 (SVI)
             </text>
           </g>
         </svg>
       </div>
 
-      {/* Dynamic Inspector Panel */}
+      {/* ─── Operational Device & CLI Inspector ─────────────────────────── */}
       <div className={styles.inspector}>
-        <div className={styles.inspectorHeader}>
-          <div className={styles.inspectorTitleRow}>
-            <span className={styles.inspectorTitle}>{selectedNode.name}</span>
-            <span className={styles.inspectorTier}>{selectedNode.tier}</span>
+        <div className={styles.inspectorTop}>
+          <div className={styles.inspectorDevice}>
+            <span className={styles.inspectorDeviceName}>{selectedNode.name}</span>
+            <span className={styles.inspectorTierBadge}>{selectedNode.tier}</span>
+            {selectedNode.model && (
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-tertiary)" }}>
+                ({selectedNode.model})
+              </span>
+            )}
           </div>
-          <span className={styles.inspectorHint}>Click any node or link in the topology to inspect</span>
+          <span className={styles.inspectorStatus}>
+            <span className={styles.statusPulse} style={{ width: "5px", height: "5px" }} />
+            {selectedNode.status}
+          </span>
         </div>
 
-        <div className={styles.inspectorGrid}>
-          <div className={styles.inspectorField}>
-            <span className={styles.inspectorLabel}>Role &amp; Responsibilities</span>
-            <span className={styles.inspectorVal}>{selectedNode.role}</span>
+        <div className={styles.inspectorBody}>
+          {/* Specifications Column */}
+          <div className={styles.specsColumn}>
+            <div className={styles.specRow}>
+              <span className={styles.specLabel}>Architectural Role</span>
+              <span className={styles.specVal}>{selectedNode.role}</span>
+            </div>
+
+            <div className={styles.specRow}>
+              <span className={styles.specLabel}>Interface &amp; IP Addressing</span>
+              <span className={styles.specVal}>{selectedNode.interfaces}</span>
+            </div>
+
+            <div className={styles.specRow}>
+              <span className={styles.specLabel}>Protocols &amp; Standards</span>
+              <span className={styles.specVal}>{selectedNode.protocols}</span>
+            </div>
+
+            {selectedNode.note && (
+              <div className={styles.specRow} style={{ marginTop: "4px" }}>
+                <span className={styles.specLabel}>Engineering Postmortem Diagnostic</span>
+                <span className={styles.specVal} style={{ color: "var(--text-secondary)", fontStyle: "italic" }}>
+                  {selectedNode.note}
+                </span>
+              </div>
+            )}
           </div>
-          <div className={styles.inspectorField}>
-            <span className={styles.inspectorLabel}>Configured Interfaces &amp; IPs</span>
-            <span className={styles.inspectorVal}>{selectedNode.ipInfo}</span>
-          </div>
-          <div className={styles.inspectorField}>
-            <span className={styles.inspectorLabel}>Active Protocols &amp; Standards</span>
-            <span className={styles.inspectorVal}>{selectedNode.protocols}</span>
+
+          {/* Cisco CLI Running-Config Snippet */}
+          <div className={styles.cliColumn}>
+            <div className={styles.cliHeader}>
+              <span>Running-Config / Verification Log</span>
+              <span>Cisco IOS</span>
+            </div>
+            <pre className={styles.cliContent}>
+              <code>{selectedNode.cli}</code>
+            </pre>
           </div>
         </div>
-
-        {selectedNode.diagnostic && (
-          <div className={styles.inspectorDiagnostic}>
-            <span className={styles.diagnosticIcon} aria-hidden="true">!</span>
-            <span>
-              <strong>Diagnostic / Postmortem Note: </strong>
-              {selectedNode.diagnostic}
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -1,43 +1,77 @@
+/* ─── Campus Topology Architecture Canvas ────────────────────────── */
+
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
   width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
 }
 
-.toolbar {
+/* ─── Header & HUD Toolbar ────────────────────────────────────────── */
+
+.headerBar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-3);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
+  padding: 12px 16px;
+  background: var(--bg-root);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.controlGroup {
+.titleArea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.statusIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.statusPulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.topologyTitle {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Filter Pills ────────────────────────────────────────────────── */
+
+.pillGroup {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
+  gap: 6px;
 }
 
-.groupLabel {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-right: 4px;
-}
-
-.btn {
+.pillBtn {
   font-family: var(--font-mono);
   font-size: 11px;
   padding: 4px 10px;
-  background: var(--bg-root);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 4px;
   color: var(--text-secondary);
@@ -46,172 +80,230 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
-.btn:hover {
+.pillBtn:hover {
   color: var(--text-primary);
   border-color: var(--border-visible);
+  background: var(--bg-inset);
 }
 
-.btnActive {
-  color: var(--text-primary);
-  border-color: var(--accent);
-  background: var(--accent-subtle);
-  font-weight: 500;
+.pillBtnActive {
+  color: #ffffff !important;
+  font-weight: 600;
+  background: var(--bg-inset);
+  box-shadow: inset 0 0 0 1px currentColor;
 }
 
-.btnDot {
-  width: 7px;
-  height: 7px;
+.colorDot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  display: inline-block;
+  flex-shrink: 0;
 }
 
-.svgCard {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  overflow: hidden;
+/* ─── SVG Canvas Wrapper ─────────────────────────────────────────── */
+
+.canvasWrapper {
   position: relative;
-  box-shadow: var(--shadow-card);
+  width: 100%;
+  background: #090b0e;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .svg {
   width: 100%;
+  min-width: 680px;
   height: auto;
   display: block;
-  user-select: none;
 }
 
-/* SVG Interactive Nodes & Layers */
+/* ─── Node & Link Interactive Behaviors ──────────────────────────── */
+
 .nodeGroup {
   cursor: pointer;
-  transition: opacity 0.25s ease, transform 0.15s ease;
+  outline: none;
 }
 
-.nodeGroup:hover {
-  filter: brightness(1.15);
-}
-
-.nodeSelected rect,
-.nodeSelected circle {
-  stroke-width: 2.5px !important;
-}
-
-.linkGroup {
-  transition: opacity 0.25s ease, stroke-width 0.2s ease;
-}
-
-/* Dynamic Inspector Box */
-.inspector {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-visible);
-  border-radius: 6px;
-  padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+.nodeCard {
   transition: all 0.2s ease;
 }
 
-.inspectorHeader {
+.nodeGroup:hover .nodeCard {
+  stroke-width: 1.5px;
+  filter: brightness(1.2);
+}
+
+.nodeGroupSelected .nodeCard {
+  stroke-width: 2px !important;
+  stroke: var(--accent) !important;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+}
+
+.linkLine {
+  transition: opacity 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+}
+
+.portBadge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+/* ─── Bottom Device & CLI Inspector ──────────────────────────────── */
+
+.inspector {
+  background: var(--bg-root);
+  border-top: 1px solid var(--border-subtle);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.inspectorTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2);
   flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.inspectorTitleRow {
+.inspectorDevice {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 8px;
 }
 
-.inspectorTitle {
+.inspectorDeviceName {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.inspectorTier {
+.inspectorTierBadge {
   font-family: var(--font-mono);
   font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 3px;
   background: var(--bg-inset);
   color: var(--text-secondary);
   border: 1px solid var(--border-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.inspectorHint {
+.inspectorStatus {
   font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text-tertiary);
+  font-size: 11px;
+  color: #10b981;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.inspectorGrid {
+.inspectorBody {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-3);
-  background: var(--bg-root);
-  padding: var(--space-3);
-  border: 1px solid var(--border-subtle);
-  border-radius: 4px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-.inspectorField {
+.specsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.specRow {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.inspectorLabel {
+.specLabel {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text-tertiary);
   text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.specVal {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* ─── Terminal / Config Snippet Box ──────────────────────────────── */
+
+.cliColumn {
+  display: flex;
+  flex-direction: column;
+  background: #0d1117;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cliHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.inspectorVal {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-primary);
-  word-break: break-all;
-}
-
-.inspectorDiagnostic {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-2);
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--border-subtle);
-  font-family: var(--font-serif);
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.diagnosticIcon {
+.cliContent {
+  margin: 0;
+  padding: 10px 12px;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--status-warn);
-  font-weight: 700;
-  flex-shrink: 0;
-  margin-top: 1px;
+  line-height: 1.5;
+  color: #e6edf3;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.cliComment {
+  color: #7ee787;
+  display: block;
+  margin-top: 4px;
+}
+
+/* ─── Responsive Media Queries ───────────────────────────────────── */
+
+@media (max-width: 820px) {
+  .inspectorBody {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
-  .toolbar {
+  .headerBar {
     flex-direction: column;
     align-items: flex-start;
   }
-  
-  .inspectorGrid {
-    grid-template-columns: 1fr;
+
+  .pillGroup {
+    width: 100%;
+  }
+
+  .inspectorTop {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
