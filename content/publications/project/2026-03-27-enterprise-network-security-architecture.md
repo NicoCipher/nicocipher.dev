@@ -24,6 +24,11 @@ related:
   - "layer2-arp-default-gateway-validation"
   - "ipv4-subnetting-binary-logic"
 evidence:
+  - id: "campus-network-topology"
+    type: "diagram"
+    title: "Interactive 3-Tier Campus Network Topology & VLAN Segmentation"
+    interactiveId: "campus-topology"
+    caption: "Interactive 3-tier hierarchy: Core Layer (L3 SVI Routing & OSPF Area 0), Distribution Layer (802.1Q Trunking), and Access Layer (VLANs 10, 20, 30 with PortFast/BPDU Guard)."
   - id: "ospf-config"
     type: "config"
     title: "Cisco IOS Core Switch OSPF & SVI Configuration"
@@ -117,12 +122,14 @@ To fix this, companies use:
 
 ## 2. What I Set Out to Build
 
-I wanted to move beyond basic home-router setups and build an authentic corporate network topology in Cisco Packet Tracer:
+I modeled an enterprise campus network topology in Cisco Packet Tracer following Cisco's hierarchical 3-tier design principles:
 
-- **Core Layer (Cisco 3560 Multi-Layer Switch)**: The high-speed backbone. It handles inter-VLAN routing so departments can communicate when authorized.
-- **Distribution Layer (Cisco 2960 Switch)**: The policy manager. It aggregates connections from different floors and enforces trunking rules.
-- **Access Layer (Cisco 2960 Switches)**: Where end-user laptops and office workstations actually plug into wall jacks.
-- **OSPF Dynamic Routing**: Single-area OSPF (Area 0) so changes or severed links automatically recalculate paths in seconds.
+- **Core Layer (Cisco Catalyst 3560 Multi-Layer Switch)**: High-speed backbone handling inter-VLAN routing via SVIs and participating in single-area OSPF (Area 0).
+- **Distribution Layer (Cisco Catalyst 2960 Switch)**: Aggregation switch enforcing 802.1Q trunking boundaries and native VLAN isolation.
+- **Access Layer (Cisco Catalyst 2960 Switches)**: End-user access ports configured with Spanning Tree PortFast and BPDU Guard for workstation and server drops.
+- **OSPF Dynamic Routing**: Single-area OSPF (Area 0) over point-to-point `/30` routed links for sub-second failure convergence.
+
+> **Architecture Reference**: An interactive vector topology diagram mapping the 3 tiers, VLAN paths, and interface allocations is included in the **Technical Evidence & Logs** section below. Use the interactive filters to isolate specific VLAN paths and inspect individual switch configurations.
 
 ## 3. How I Built It
 

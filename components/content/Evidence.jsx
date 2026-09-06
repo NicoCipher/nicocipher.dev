@@ -7,6 +7,7 @@
 import styles from "./Evidence.module.css";
 import CopyButton from "./CopyButton";
 import ExpandablePre from "./ExpandablePre";
+import CampusTopology from "./topologies/CampusTopology";
 
 // ─── Terminal / Shell Log ──────────────────────────────────────────────────
 
@@ -31,6 +32,23 @@ function TerminalBlock({ item }) {
 // ─── Diagram / Architecture Image ─────────────────────────────────────────
 
 function DiagramBlock({ item }) {
+  if (item.interactiveId === "campus-topology") {
+    return (
+      <figure className={styles.card} data-type="diagram">
+        <div className={styles.cardHeader}>
+          <span className={styles.cardType}>interactive topology</span>
+          <span className={styles.cardTitle}>{item.title}</span>
+        </div>
+        <div style={{ padding: "var(--space-3)" }}>
+          <CampusTopology />
+        </div>
+        {item.caption && (
+          <figcaption className={styles.diagramCaption}>{item.caption}</figcaption>
+        )}
+      </figure>
+    );
+  }
+
   return (
     <figure className={styles.card} data-type="diagram">
       <div className={styles.cardHeader}>
