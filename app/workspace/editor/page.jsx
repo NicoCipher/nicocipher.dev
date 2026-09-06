@@ -38,6 +38,8 @@ function EditorContent() {
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // null | "saved" | "error"
+  const [formErrors, setFormErrors] = useState({});
+  const [saveErrorMessage, setSaveErrorMessage] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
 
   // Load existing publication for editing
@@ -52,8 +54,8 @@ function EditorContent() {
         setFilePath(path);
       })
       .catch((err) => {
-        alert(`Failed to load: ${err.message}`);
-        router.push("/workspace");
+        setSaveErrorMessage(`Failed to load: ${err.message}`);
+        setTimeout(() => router.push("/workspace"), 2500);
       })
       .finally(() => setLoading(false));
   }, [editPath, isNew, router]);
@@ -70,6 +72,7 @@ function EditorContent() {
       return next;
     });
     setSaveStatus(null);
+    setSaveErrorMessage(null);
   }, [isNew]);
 
   // Pre-fill body template on first mount for new publications
@@ -81,17 +84,28 @@ function EditorContent() {
   }, []);
 
   const handleSave = async () => {
+    const errors = {};
     if (!data.title?.trim()) {
-      alert("Title is required.");
-      return;
+      errors.title = "Title is required before publishing.";
     }
     if (!data.domain) {
-      alert("Domain is required.");
+      errors.domain = "Please select an engineering domain.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      if (errors.title) {
+        document.getElementById("meta-title")?.focus();
+      } else if (errors.domain) {
+        document.getElementById("meta-domain")?.focus();
+      }
       return;
     }
 
+    setFormErrors({});
     setSaving(true);
     setSaveStatus(null);
+    setSaveErrorMessage(null);
 
     try {
       const slug = data.slug || slugify(data.title);
@@ -121,7 +135,7 @@ function EditorContent() {
       }
     } catch (err) {
       setSaveStatus("error");
-      alert(`Save failed: ${err.message}`);
+      setSaveErrorMessage(`Save failed: ${err.message}`);
     } finally {
       setSaving(false);
     }
@@ -154,6 +168,13 @@ function EditorContent() {
         </div>
       </div>
 
+      {/* Save Error Notice */}
+      {saveErrorMessage && (
+        <div className={styles.deployNotice} style={{ background: "rgba(239, 68, 68, 0.15)", borderColor: "#ef4444", color: "#f87171" }} role="alert">
+          {saveErrorMessage}
+        </div>
+      )}
+
       {/* Deployment notice */}
       {saveStatus === "saved" && (
         <div className={styles.deployNotice}>
@@ -167,7 +188,7 @@ function EditorContent() {
         <div className={styles.formPanel} style={showPreview ? { display: "none" } : undefined}>
           {/* Metadata */}
           <section className={styles.section}>
-            <MetadataForm data={data} onChange={updateData} isNew={isNew} />
+            <MetadataForm data={data} onChange={updateData} isNew={isNew} errors={formErrors} />
           </section>
 
           {/* Tags & Technologies */}

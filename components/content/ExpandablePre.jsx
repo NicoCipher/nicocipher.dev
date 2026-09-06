@@ -18,8 +18,10 @@ export default function ExpandablePre({ content, className, codeClassName, label
       </pre>
       {isLong && (
         <button
+          type="button"
           className={styles.expandBtn}
           onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
         >
           {expanded ? `▲ Collapse (${lines.length} lines)` : `▼ Show all ${lines.length} lines`}
         </button>

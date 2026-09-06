@@ -115,47 +115,60 @@ export default function WorkspaceDashboard() {
           No publications yet. Click &quot;+ New Publication&quot; to create one.
         </div>
       ) : (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.th}>Type</th>
-              <th className={styles.th}>Title</th>
-              <th className={styles.th}>Date</th>
-              <th className={styles.th}>Status</th>
-              <th className={styles.th}>Domain</th>
-              <th className={styles.th}>Ev.</th>
-              <th className={styles.th}></th>
-            </tr>
-          </thead>
-          <tbody>
-            {publications.map((pub) => (
-              <tr
-                key={pub._path}
-                className={styles.row}
-                onClick={() => router.push(`/workspace/editor?path=${encodeURIComponent(pub._path)}`)}
-              >
-                <td className={styles.td}><span className={styles.typeBadge}>{pub.type}</span></td>
-                <td className={`${styles.td} ${styles.titleCell}`}>{pub.title}</td>
-                <td className={styles.td}>{pub.date}</td>
-                <td className={styles.td}>
-                  <span className={`${styles.statusDot} ${pub.status === "active" ? styles.statusActive : ""}`} />
-                  {pub.status}
-                </td>
-                <td className={styles.td}>{pub.domain}</td>
-                <td className={styles.td}>{pub.evidence?.length || 0}</td>
-                <td className={styles.td}>
-                  <button
-                    className={styles.deleteBtn}
-                    onClick={(e) => { e.stopPropagation(); setDeleteTarget(pub); }}
-                    title="Delete publication"
-                  >
-                    ×
-                  </button>
-                </td>
+        <div className="table-wrapper" role="region" tabIndex={0} aria-label="Publications table">
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.th}>Type</th>
+                <th className={styles.th}>Title</th>
+                <th className={styles.th}>Date</th>
+                <th className={styles.th}>Status</th>
+                <th className={styles.th}>Domain</th>
+                <th className={styles.th}>Ev.</th>
+                <th className={styles.th}><span className="visually-hidden">Actions</span></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {publications.map((pub) => (
+                <tr
+                  key={pub._path}
+                  className={styles.row}
+                  tabIndex={0}
+                  role="link"
+                  aria-label={`Edit publication: ${pub.title}`}
+                  onClick={() => router.push(`/workspace/editor?path=${encodeURIComponent(pub._path)}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      router.push(`/workspace/editor?path=${encodeURIComponent(pub._path)}`);
+                    }
+                  }}
+                >
+                  <td className={styles.td}><span className={styles.typeBadge}>{pub.type}</span></td>
+                  <td className={`${styles.td} ${styles.titleCell}`}>{pub.title}</td>
+                  <td className={styles.td}>{pub.date}</td>
+                  <td className={styles.td}>
+                    <span className={`${styles.statusDot} ${pub.status === "active" ? styles.statusActive : ""}`} />
+                    {pub.status}
+                  </td>
+                  <td className={styles.td}>{pub.domain}</td>
+                  <td className={styles.td}>{pub.evidence?.length || 0}</td>
+                  <td className={styles.td}>
+                    <button
+                      type="button"
+                      className={styles.deleteBtn}
+                      onClick={(e) => { e.stopPropagation(); setDeleteTarget(pub); }}
+                      aria-label={`Delete publication: ${pub.title}`}
+                      title="Delete publication"
+                    >
+                      ×
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -60,9 +60,16 @@ export default function CommandPalette({ searchIndex: index = [], onClose }) {
   const selectedRef = useRef(null);
   const router = useRouter();
 
-  // Focus input on mount
+  const triggerRef = useRef(null);
+
+  // Focus input on mount, restore focus to trigger on close
   useEffect(() => {
+    triggerRef.current = document.activeElement;
     inputRef.current?.focus();
+
+    return () => {
+      triggerRef.current?.focus();
+    };
   }, []);
 
   // Compute results

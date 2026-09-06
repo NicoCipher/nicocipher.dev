@@ -3,6 +3,7 @@ export default function robots() {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: "/workspace",
     },
     sitemap: "https://nicocipher.dev/sitemap.xml",
   };

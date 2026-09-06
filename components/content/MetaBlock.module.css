@@ -147,6 +147,21 @@
   border-color: var(--border-visible);
 }
 
+@media (max-width: 800px) and (min-width: 641px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .field {
+    flex: 1 1 calc(33.333% - 1px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .field:nth-child(3n) {
+    border-right: none;
+  }
+}
+
 @media (max-width: 640px) {
   .row {
     flex-direction: column;

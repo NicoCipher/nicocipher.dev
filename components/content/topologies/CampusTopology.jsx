@@ -214,6 +214,11 @@ export default function CampusTopology() {
         </div>
       </div>
 
+      {/* ─── Mobile Pan / Scroll Hint ──────────────────────────────────── */}
+      <div className={styles.mobilePanHint} aria-hidden="true">
+        <span>← Pan horizontally to inspect topology →</span>
+      </div>
+
       {/* ─── Vector Topology Canvas ─────────────────────────────────────── */}
       <div className={styles.canvasWrapper}>
         <svg
@@ -283,6 +288,11 @@ export default function CampusTopology() {
             className={styles.linkLine}
             opacity={getLinkOpacity(["transit", "vlan10", "vlan20", "vlan30"])}
             onClick={() => setSelectedId("transit-link")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("transit-link"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect Transit Link Gi0/1 (10.0.0.0/30 OSPF Backbone)"
+            aria-pressed={selectedId === "transit-link"}
             style={{ cursor: "pointer" }}
           >
             <line
@@ -407,6 +417,11 @@ export default function CampusTopology() {
             className={`${styles.nodeGroup} ${selectedId === "core-sw01" ? styles.nodeGroupSelected : ""}`}
             opacity={getNodeOpacity(NODES_DATA["core-sw01"])}
             onClick={() => setSelectedId("core-sw01")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("core-sw01"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect CORE-SW01 (Cisco Catalyst 3560 L3 Core)"
+            aria-pressed={selectedId === "core-sw01"}
           >
             <rect
               x="300"
@@ -442,6 +457,11 @@ export default function CampusTopology() {
             className={`${styles.nodeGroup} ${selectedId === "dist-sw01" ? styles.nodeGroupSelected : ""}`}
             opacity={getNodeOpacity(NODES_DATA["dist-sw01"])}
             onClick={() => setSelectedId("dist-sw01")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("dist-sw01"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect DIST-SW01 (Cisco Catalyst 2960 Distribution)"
+            aria-pressed={selectedId === "dist-sw01"}
           >
             <rect
               x="310"
@@ -476,6 +496,11 @@ export default function CampusTopology() {
             className={`${styles.nodeGroup} ${selectedId === "acc-sw01" ? styles.nodeGroupSelected : ""}`}
             opacity={getNodeOpacity(NODES_DATA["acc-sw01"])}
             onClick={() => setSelectedId("acc-sw01")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("acc-sw01"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect ACC-SW01 (Cisco Catalyst 2960 Access Floors 1 & 2)"
+            aria-pressed={selectedId === "acc-sw01"}
           >
             <rect
               x="145"
@@ -508,6 +533,11 @@ export default function CampusTopology() {
             className={`${styles.nodeGroup} ${selectedId === "acc-sw02" ? styles.nodeGroupSelected : ""}`}
             opacity={getNodeOpacity(NODES_DATA["acc-sw02"])}
             onClick={() => setSelectedId("acc-sw02")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("acc-sw02"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect ACC-SW02 (Cisco Catalyst 2960 Access Floor 3 Operations)"
+            aria-pressed={selectedId === "acc-sw02"}
           >
             <rect
               x="495"
@@ -542,6 +572,11 @@ export default function CampusTopology() {
             className={`${styles.nodeGroup} ${selectedId === "pc-mgmt" ? styles.nodeGroupSelected : ""}`}
             opacity={getNodeOpacity(NODES_DATA["pc-mgmt"])}
             onClick={() => setSelectedId("pc-mgmt")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("pc-mgmt"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect ADMIN-PC01 (VLAN 10 Management Workstation)"
+            aria-pressed={selectedId === "pc-mgmt"}
           >
             <rect
               x="65"
@@ -577,6 +612,11 @@ export default function CampusTopology() {
             className={`${styles.nodeGroup} ${selectedId === "pc-eng" ? styles.nodeGroupSelected : ""}`}
             opacity={getNodeOpacity(NODES_DATA["pc-eng"])}
             onClick={() => setSelectedId("pc-eng")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("pc-eng"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect ENG-WS01 (VLAN 20 Engineering Workstation)"
+            aria-pressed={selectedId === "pc-eng"}
           >
             <rect
               x="265"
@@ -611,6 +651,11 @@ export default function CampusTopology() {
             className={`${styles.nodeGroup} ${selectedId === "srv-ops" ? styles.nodeGroupSelected : ""}`}
             opacity={getNodeOpacity(NODES_DATA["srv-ops"])}
             onClick={() => setSelectedId("srv-ops")}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedId("srv-ops"); } }}
+            tabIndex={0}
+            role="button"
+            aria-label="Inspect OPS-SRV01 (VLAN 30 Operations Server)"
+            aria-pressed={selectedId === "srv-ops"}
           >
             <rect
               x="520"

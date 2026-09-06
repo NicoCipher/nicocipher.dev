@@ -26,7 +26,12 @@ export default function CopyButton({ text }) {
   }
 
   return (
-    <button className={styles.copyBtn} onClick={handleCopy} aria-label="Copy to clipboard">
+    <button
+      type="button"
+      className={styles.copyBtn}
+      onClick={handleCopy}
+      aria-label={copied ? "Copied code to clipboard" : "Copy code to clipboard"}
+    >
       {copied ? "Copied!" : "Copy"}
     </button>
   );

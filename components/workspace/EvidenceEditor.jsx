@@ -46,39 +46,85 @@ export default function EvidenceEditor({ evidence = [], onChange }) {
           <div className={styles.cardHeader}>
             <span className={styles.cardIndex}>#{idx + 1}</span>
             <div className={styles.cardActions}>
-              <button type="button" className={styles.actionBtn} onClick={() => moveUp(idx)} disabled={idx === 0}>↑</button>
-              <button type="button" className={styles.actionBtn} onClick={() => moveDown(idx)} disabled={idx === evidence.length - 1}>↓</button>
-              <button type="button" className={`${styles.actionBtn} ${styles.removeBtn}`} onClick={() => remove(idx)}>×</button>
+              <button
+                type="button"
+                className={styles.actionBtn}
+                onClick={() => moveUp(idx)}
+                disabled={idx === 0}
+                aria-label={`Move evidence item ${idx + 1} up`}
+              >
+                ↑
+              </button>
+              <button
+                type="button"
+                className={styles.actionBtn}
+                onClick={() => moveDown(idx)}
+                disabled={idx === evidence.length - 1}
+                aria-label={`Move evidence item ${idx + 1} down`}
+              >
+                ↓
+              </button>
+              <button
+                type="button"
+                className={`${styles.actionBtn} ${styles.removeBtn}`}
+                onClick={() => remove(idx)}
+                aria-label={`Remove evidence item ${idx + 1}: ${ev.title || "Untitled"}`}
+              >
+                ×
+              </button>
             </div>
           </div>
 
           <div className={styles.fieldRow}>
             <div className={styles.field}>
-              <label className={styles.fieldLabel}>Type</label>
-              <select className={styles.select} value={ev.type} onChange={(e) => update(idx, "type", e.target.value)}>
+              <label htmlFor={`ev-${idx}-type`} className={styles.fieldLabel}>Type</label>
+              <select
+                id={`ev-${idx}-type`}
+                className={styles.select}
+                value={ev.type}
+                onChange={(e) => update(idx, "type", e.target.value)}
+              >
                 {EVIDENCE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
             <div className={styles.field}>
-              <label className={styles.fieldLabel}>ID</label>
-              <input className={styles.input} value={ev.id || ""} onChange={(e) => update(idx, "id", e.target.value)} placeholder="unique-id" />
+              <label htmlFor={`ev-${idx}-id`} className={styles.fieldLabel}>ID</label>
+              <input
+                id={`ev-${idx}-id`}
+                className={styles.input}
+                value={ev.id || ""}
+                onChange={(e) => update(idx, "id", e.target.value)}
+                placeholder="unique-id"
+              />
             </div>
             <div className={styles.field}>
-              <label className={styles.fieldLabel}>Language</label>
-              <select className={styles.select} value={ev.language || "text"} onChange={(e) => update(idx, "language", e.target.value)}>
+              <label htmlFor={`ev-${idx}-lang`} className={styles.fieldLabel}>Language</label>
+              <select
+                id={`ev-${idx}-lang`}
+                className={styles.select}
+                value={ev.language || "text"}
+                onChange={(e) => update(idx, "language", e.target.value)}
+              >
                 {LANGUAGES.map((l) => <option key={l} value={l}>{l}</option>)}
               </select>
             </div>
           </div>
 
           <div className={styles.field}>
-            <label className={styles.fieldLabel}>Title</label>
-            <input className={styles.input} value={ev.title || ""} onChange={(e) => update(idx, "title", e.target.value)} placeholder="Evidence title" />
+            <label htmlFor={`ev-${idx}-title`} className={styles.fieldLabel}>Title</label>
+            <input
+              id={`ev-${idx}-title`}
+              className={styles.input}
+              value={ev.title || ""}
+              onChange={(e) => update(idx, "title", e.target.value)}
+              placeholder="Evidence title"
+            />
           </div>
 
           <div className={styles.field}>
-            <label className={styles.fieldLabel}>Content</label>
+            <label htmlFor={`ev-${idx}-content`} className={styles.fieldLabel}>Content</label>
             <textarea
+              id={`ev-${idx}-content`}
               className={styles.textarea}
               value={ev.content || ""}
               onChange={(e) => update(idx, "content", e.target.value)}

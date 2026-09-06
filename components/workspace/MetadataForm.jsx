@@ -7,7 +7,7 @@ const TYPES = ["project", "case-study", "lab", "research"];
 const STATUSES = ["complete", "active", "paused", "planned"];
 const DOMAINS = ["infrastructure", "networking", "security", "development", "creative"];
 
-export default function MetadataForm({ data, onChange, isNew = false }) {
+export default function MetadataForm({ data, onChange, isNew = false, errors = {} }) {
   const update = (field, value) => {
     const next = { ...data, [field]: value };
 
@@ -23,8 +23,9 @@ export default function MetadataForm({ data, onChange, isNew = false }) {
     <div className={styles.container}>
       <div className={styles.row}>
         <div className={styles.field}>
-          <label className={styles.label}>Type</label>
+          <label htmlFor="meta-type" className={styles.label}>Type</label>
           <select
+            id="meta-type"
             className={styles.select}
             value={data.type || "lab"}
             onChange={(e) => update("type", e.target.value)}
@@ -37,8 +38,9 @@ export default function MetadataForm({ data, onChange, isNew = false }) {
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Status</label>
+          <label htmlFor="meta-status" className={styles.label}>Status</label>
           <select
+            id="meta-status"
             className={styles.select}
             value={data.status || "complete"}
             onChange={(e) => update("status", e.target.value)}
@@ -50,34 +52,55 @@ export default function MetadataForm({ data, onChange, isNew = false }) {
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Domain</label>
+          <label htmlFor="meta-domain" className={styles.label}>
+            Domain <span aria-hidden="true" style={{ color: "var(--status-warn)" }}>*</span>
+          </label>
           <select
-            className={styles.select}
+            id="meta-domain"
+            className={`${styles.select} ${errors.domain ? styles.inputError : ""}`}
             value={data.domain || ""}
             onChange={(e) => update("domain", e.target.value)}
+            aria-invalid={Boolean(errors.domain)}
+            aria-describedby={errors.domain ? "domain-error" : undefined}
           >
             <option value="">Select...</option>
             {DOMAINS.map((d) => (
               <option key={d} value={d}>{d}</option>
             ))}
           </select>
+          {errors.domain && (
+            <span id="domain-error" className={styles.errorText} role="alert">
+              {errors.domain}
+            </span>
+          )}
         </div>
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label}>Title</label>
+        <label htmlFor="meta-title" className={styles.label}>
+          Title <span aria-hidden="true" style={{ color: "var(--status-warn)" }}>*</span>
+        </label>
         <input
-          className={styles.input}
+          id="meta-title"
+          className={`${styles.input} ${errors.title ? styles.inputError : ""}`}
           value={data.title || ""}
           onChange={(e) => update("title", e.target.value)}
           placeholder="Publication title"
+          aria-invalid={Boolean(errors.title)}
+          aria-describedby={errors.title ? "title-error" : undefined}
         />
+        {errors.title && (
+          <span id="title-error" className={styles.errorText} role="alert">
+            {errors.title}
+          </span>
+        )}
       </div>
 
       <div className={styles.row}>
         <div className={styles.field}>
-          <label className={styles.label}>Slug</label>
+          <label htmlFor="meta-slug" className={styles.label}>Slug</label>
           <input
+            id="meta-slug"
             className={styles.input}
             value={data.slug || ""}
             onChange={(e) => update("slug", e.target.value)}
@@ -87,8 +110,9 @@ export default function MetadataForm({ data, onChange, isNew = false }) {
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Date</label>
+          <label htmlFor="meta-date" className={styles.label}>Date</label>
           <input
+            id="meta-date"
             className={styles.input}
             type="date"
             value={data.date || ""}
@@ -97,8 +121,9 @@ export default function MetadataForm({ data, onChange, isNew = false }) {
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Effort</label>
+          <label htmlFor="meta-effort" className={styles.label}>Effort</label>
           <input
+            id="meta-effort"
             className={styles.input}
             value={data.effort || ""}
             onChange={(e) => update("effort", e.target.value)}
@@ -108,8 +133,9 @@ export default function MetadataForm({ data, onChange, isNew = false }) {
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label}>Summary</label>
+        <label htmlFor="meta-summary" className={styles.label}>Summary</label>
         <textarea
+          id="meta-summary"
           className={styles.textarea}
           value={data.summary || ""}
           onChange={(e) => update("summary", e.target.value)}
@@ -119,8 +145,9 @@ export default function MetadataForm({ data, onChange, isNew = false }) {
       </div>
 
       <div className={styles.checkRow}>
-        <label className={styles.checkLabel}>
+        <label htmlFor="meta-featured" className={styles.checkLabel}>
           <input
+            id="meta-featured"
             type="checkbox"
             checked={data.featured || false}
             onChange={(e) => update("featured", e.target.checked)}

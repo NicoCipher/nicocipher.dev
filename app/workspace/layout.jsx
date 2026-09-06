@@ -60,10 +60,6 @@ export default function WorkspaceLayout({ children }) {
 
   return (
     <div className={styles.workspace}>
-      <head>
-        <meta name="robots" content="noindex, nofollow" />
-        <title>Workspace — NICOCIPHER</title>
-      </head>
       <header className={styles.header}>
         <span className={styles.brand}>workspace</span>
         <span className={styles.user}>@{username}</span>

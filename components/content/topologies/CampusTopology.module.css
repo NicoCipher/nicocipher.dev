@@ -127,6 +127,11 @@
   outline: none;
 }
 
+.nodeGroup {
+  cursor: pointer;
+  outline: none;
+}
+
 .nodeCard {
   transition: all 0.2s ease;
 }
@@ -136,6 +141,12 @@
   filter: brightness(1.2);
 }
 
+.nodeGroup:focus-visible .nodeCard {
+  stroke: var(--accent) !important;
+  stroke-width: 2.5px !important;
+  stroke-dasharray: 4 2;
+}
+
 .nodeGroupSelected .nodeCard {
   stroke-width: 2px !important;
   stroke: var(--accent) !important;
@@ -143,7 +154,13 @@
 }
 
 .linkLine {
+  outline: none;
   transition: opacity 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+}
+
+.linkLine:focus-visible line {
+  stroke: var(--accent) !important;
+  stroke-width: 3px !important;
 }
 
 .portBadge {
@@ -305,5 +322,24 @@
   .inspectorTop {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+.mobilePanHint {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 6px var(--space-3);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 768px) {
+  .mobilePanHint {
+    display: flex;
   }
 }

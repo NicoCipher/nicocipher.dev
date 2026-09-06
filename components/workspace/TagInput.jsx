@@ -28,9 +28,11 @@ export default function TagInput({ label, values = [], onChange }) {
     }
   };
 
+  const inputId = `tag-input-${label.toLowerCase().replace(/\s+/g, "-")}`;
+
   return (
     <div className={styles.container}>
-      <label className={styles.label}>{label}</label>
+      <label htmlFor={inputId} className={styles.label}>{label}</label>
       <div className={styles.inputArea} onClick={() => inputRef.current?.focus()}>
         {values.map((tag) => (
           <span key={tag} className={styles.chip}>
@@ -46,6 +48,7 @@ export default function TagInput({ label, values = [], onChange }) {
           </span>
         ))}
         <input
+          id={inputId}
           ref={inputRef}
           type="text"
           className={styles.input}

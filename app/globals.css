@@ -364,6 +364,12 @@
   --content-max-width: 740px;
   --page-max-width: 980px;
 
+  /* Border Radiuses */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
   /* Motion */
   --duration-fast: 120ms;
   --duration-base: 200ms;
@@ -508,6 +514,29 @@ main:focus {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* === Accessible Table Wrapper === */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.table-wrapper:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.table-wrapper table {
+  width: 100%;
+  min-width: 500px;
+  border-collapse: collapse;
+  margin-bottom: 0 !important;
 }
 
 /* === Entrance Animation === */

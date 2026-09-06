@@ -47,7 +47,11 @@ export default function TokenGate({ onAuthenticated }) {
         </p>
 
         <form onSubmit={handleSubmit} className={styles.form}>
+          <label htmlFor="github-pat-token" className={styles.label}>
+            Personal Access Token
+          </label>
           <input
+            id="github-pat-token"
             type="password"
             className={styles.input}
             value={input}
@@ -55,8 +59,14 @@ export default function TokenGate({ onAuthenticated }) {
             placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
             autoComplete="off"
             spellCheck="false"
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? "token-error" : undefined}
           />
-          {error && <p className={styles.error}>{error}</p>}
+          {error && (
+            <p id="token-error" className={styles.error} role="alert" aria-live="polite">
+              {error}
+            </p>
+          )}
           <button type="submit" className={styles.submitBtn} disabled={loading || !input.trim()}>
             {loading ? "Verifying..." : "Connect"}
           </button>

@@ -62,6 +62,17 @@
   font-size: var(--text-sm);
 }
 
+.inputError {
+  border-color: var(--status-warn) !important;
+}
+
+.errorText {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--status-warn);
+  margin-top: 2px;
+}
+
 .checkRow {
   display: flex;
   align-items: center;
