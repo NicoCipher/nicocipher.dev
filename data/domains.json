@@ -2,40 +2,164 @@
   {
     "id": "infrastructure",
     "label": "Infrastructure & Systems",
+    "description": "Enterprise directory architectures, domain controllers, headless Linux administration, and virtualization.",
     "technologies": [
-      { "name": "Windows Server 2022", "context": "Active Directory, DNS, Kerberos, Domain Services" },
-      { "name": "Linux (Ubuntu Server)", "context": "SSSD integration, CLI administration, systemd services" },
-      { "name": "Virtualization", "context": "Hyper-V, VMware, isolated lab environments" },
-      { "name": "Identity & Access", "context": "PAM, Kerberos tickets, realm authentication" }
+      {
+        "name": "Windows Server 2022",
+        "context": "Active Directory Domain Services, DNS, Kerberos, Domain Controllers",
+        "verification": "Lab Verified",
+        "pubType": "lab",
+        "pubSlug": "domain-controller",
+        "pubTitle": "Standing Up a Windows Server 2022 Domain Controller",
+        "keywords": ["ad ds", "dns", "kerberos", "domain controller", "sysvol", "group policy"]
+      },
+      {
+        "name": "Linux (Ubuntu Server)",
+        "context": "SSSD integration, CLI administration, systemd service units, clustering",
+        "verification": "Production Hardened",
+        "pubType": "case-study",
+        "pubSlug": "linux-headless-service-deployment",
+        "pubTitle": "Deploying Software on Headless Linux: SSH & Clustering",
+        "keywords": ["ubuntu", "bash", "ssh", "scp", "systemd", "clustering", "linux"]
+      },
+      {
+        "name": "Virtualization",
+        "context": "Hyper-V & VMware isolated virtual lab environments and virtual switches",
+        "verification": "Lab Verified",
+        "pubType": "lab",
+        "pubSlug": "domain-controller",
+        "pubTitle": "Standing Up a Windows Server 2022 Domain Controller",
+        "keywords": ["hyper-v", "vmware", "vms", "virtual switch", "snapshots", "isolation"]
+      },
+      {
+        "name": "Identity & Access",
+        "context": "PAM modules, Kerberos ticket lifecycle, realmd Linux realm enrollment",
+        "verification": "Lab Verified",
+        "pubType": "lab",
+        "pubSlug": "ubuntu-active-directory-integration",
+        "pubTitle": "Connecting Ubuntu Linux to Windows Active Directory",
+        "keywords": ["pam", "kerberos", "realmd", "sssd", "ldap", "tickets", "kinit"]
+      }
     ]
   },
   {
     "id": "networking",
     "label": "Networking & Routing",
+    "description": "Multi-tier enterprise campus switching, dynamic routing protocols, 802.1Q VLAN trunking, and IP math.",
     "technologies": [
-      { "name": "Cisco IOS", "context": "3-tier enterprise campus switching, VLANs, trunking" },
-      { "name": "Dynamic Routing (OSPF)", "context": "Area 0 backbone, neighbor adjacencies, metric convergence" },
-      { "name": "TCP/IP & Subnetting", "context": "IPv4 CIDR, binary math, magic number allocation" },
-      { "name": "Layer 2 & ARP", "context": "MAC tables, broadcast domains, default gateway routing" }
+      {
+        "name": "Cisco IOS",
+        "context": "3-tier enterprise campus switching (Catalyst 3560/2960), VLANs, trunking",
+        "verification": "Lab Verified",
+        "pubType": "project",
+        "pubSlug": "enterprise-network-security-architecture",
+        "pubTitle": "Building an Enterprise Office Network: VLANs & OSPF",
+        "keywords": ["cisco", "catalyst", "cli", "switchport", "802.1q", "trunking", "ios"]
+      },
+      {
+        "name": "Dynamic Routing (OSPF)",
+        "context": "Area 0 backbone, neighbor adjacencies, SPF calculations, metric convergence",
+        "verification": "Lab Verified",
+        "pubType": "project",
+        "pubSlug": "enterprise-network-security-architecture",
+        "pubTitle": "Building an Enterprise Office Network: VLANs & OSPF",
+        "keywords": ["ospf", "routing", "area 0", "spf", "metric", "convergence", "lsa"]
+      },
+      {
+        "name": "TCP/IP & Subnetting",
+        "context": "IPv4 CIDR, variable-length subnet masks (VLSM), binary magic number allocation",
+        "verification": "Research Backed",
+        "pubType": "research",
+        "pubSlug": "ipv4-subnetting-binary-logic",
+        "pubTitle": "Subnetting Made Simple: Magic Number Shortcut",
+        "keywords": ["ipv4", "cidr", "vlsm", "subnetting", "magic number", "binary math"]
+      },
+      {
+        "name": "Layer 2 & ARP",
+        "context": "MAC address tables, broadcast domain isolation, default gateway forwarding logic",
+        "verification": "Lab Verified",
+        "pubType": "lab",
+        "pubSlug": "layer2-arp-default-gateway-validation",
+        "pubTitle": "Why Local Pings Fail: Testing Layer 2 ARP & Gateway",
+        "keywords": ["arp", "mac address", "broadcast", "default gateway", "icmp", "layer 2"]
+      }
     ]
   },
   {
     "id": "security",
     "label": "Cybersecurity & Hardening",
+    "description": "Defensive threat modeling, authentication session protection, access control lists, and security standards.",
     "technologies": [
-      { "name": "Threat Modeling", "context": "STRIDE methodology, attack surface analysis" },
-      { "name": "Session & Web Security", "context": "Pass-the-Cookie, HttpOnly/Secure flags, token hijacking" },
-      { "name": "Permissions & Access Control", "context": "Linux numeric/symbolic chmod, least privilege enforcement" },
-      { "name": "Security Frameworks", "context": "NIST CSF, defensible architecture, audit logging" }
+      {
+        "name": "Threat Modeling (STRIDE)",
+        "context": "STRIDE methodology, trust boundary analysis, attack surface decomposition",
+        "verification": "Security Tested",
+        "pubType": "research",
+        "pubSlug": "threat-modeling",
+        "pubTitle": "Applying STRIDE Threat Modeling to Web Auth",
+        "keywords": ["stride", "threat modeling", "spoofing", "tampering", "elevation of privilege"]
+      },
+      {
+        "name": "Session & Web Security",
+        "context": "Pass-the-Cookie attack defense, HttpOnly/Secure flags, SameSite token hijacking mitigation",
+        "verification": "Security Tested",
+        "pubType": "research",
+        "pubSlug": "session-cookie-authentication-mechanics",
+        "pubTitle": "Testing Pass-the-Cookie Attacks & Cookie Theft",
+        "keywords": ["cookies", "session security", "httponly", "samesite", "mfa bypass", "token"]
+      },
+      {
+        "name": "Permissions & Access Control",
+        "context": "Linux octal numeric & symbolic chmod translation, least privilege enforcement, UMASK",
+        "verification": "Production Hardened",
+        "pubType": "case-study",
+        "pubSlug": "linux-permissions",
+        "pubTitle": "chmod Numeric Modes vs Symbolic Translation",
+        "keywords": ["chmod", "permissions", "umask", "octal", "least privilege", "linux"]
+      },
+      {
+        "name": "Security Frameworks",
+        "context": "NIST CSF, defensible architecture principles, audit trail integrity, verification over assertion",
+        "verification": "Framework Applied",
+        "pubType": "research",
+        "pubSlug": "threat-modeling",
+        "pubTitle": "Applying STRIDE Threat Modeling to Web Auth",
+        "keywords": ["nist", "csf", "defensible architecture", "audit logs", "compliance"]
+      }
     ]
   },
   {
     "id": "development",
     "label": "Development & Tooling",
+    "description": "Automation scripts, zero-runtime overhead static web architecture, and reproducible documentation.",
     "technologies": [
-      { "name": "Bash & Shell Scripting", "context": "Headless staging, SCP pipelines, process automation" },
-      { "name": "Next.js 15 / React 19", "context": "Static site generation, zero-Tailwind scoped styling" },
-      { "name": "Technical Documentation", "context": "Root-cause postmortems, configuration runbooks" }
+      {
+        "name": "Bash & Shell Scripting",
+        "context": "Headless server staging, SCP automated pipelines, service maintenance loops",
+        "verification": "Production Hardened",
+        "pubType": "case-study",
+        "pubSlug": "linux-headless-service-deployment",
+        "pubTitle": "Deploying Software on Headless Linux: SSH & Clustering",
+        "keywords": ["bash", "shell", "scripts", "automation", "cron", "scp", "ssh"]
+      },
+      {
+        "name": "Next.js 15 / React 19",
+        "context": "Static site generation, zero-Tailwind scoped CSS modules, zero-dependency sanitizer",
+        "verification": "Production Hardened",
+        "pubType": "project",
+        "pubSlug": "nicocipher-portfolio",
+        "pubTitle": "Architecture of nicocipher.dev Portfolio",
+        "keywords": ["next.js", "react", "ssg", "css modules", "web engineering", "frontend"]
+      },
+      {
+        "name": "Technical Documentation",
+        "context": "Engineering postmortems, configuration runbooks, reproducible artifact schemas",
+        "verification": "Standard Practice",
+        "pubType": "project",
+        "pubSlug": "nicocipher-portfolio",
+        "pubTitle": "Architecture of nicocipher.dev Portfolio",
+        "keywords": ["markdown", "runbooks", "postmortems", "documentation", "evidence"]
+      }
     ]
   }
 ]
