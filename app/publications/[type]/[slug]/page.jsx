@@ -7,6 +7,7 @@ import MetaBlock from "@/components/content/MetaBlock";
 import EvidenceSection from "@/components/content/Evidence";
 import EntryNav from "@/components/content/EntryNav";
 import StatusBadge from "@/components/content/StatusBadge";
+import { safeJsonLd } from "@/lib/sanitize";
 import styles from "./page.module.css";
 
 export async function generateStaticParams() {
@@ -118,6 +119,25 @@ export default async function PublicationPage({ params }) {
       {/* Prev / Next Navigation */}
       <EntryNav prev={prev} next={next} />
 
+      {/* JSON-LD Technical Article Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            headline: pub.title,
+            description: pub.summary,
+            datePublished: pub.date,
+            author: {
+              "@type": "Person",
+              name: "Taiwo Olumide",
+              url: "https://nicocipher.dev",
+            },
+            keywords: pub.tags?.join(", "),
+          }),
+        }}
+      />
     </article>
   );
 }

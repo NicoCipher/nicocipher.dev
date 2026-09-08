@@ -5,6 +5,7 @@ import CurrentlyBlock from "@/components/home/CurrentlyBlock";
 import FeaturedPublications from "@/components/home/FeaturedPublications";
 import TerminalHero from "@/components/home/TerminalHero";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
+import { safeJsonLd } from "@/lib/sanitize";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -155,7 +156,7 @@ export default function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             "@context": "https://schema.org",
             "@type": "Person",
             name: profile.name,
