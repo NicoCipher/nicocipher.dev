@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { setToken, validateToken } from "@/lib/github";
+import { setToken, clearToken, validateToken } from "@/lib/github";
 import styles from "./TokenGate.module.css";
 
 export default function TokenGate({ onAuthenticated }) {
@@ -17,18 +17,23 @@ export default function TokenGate({ onAuthenticated }) {
     setLoading(true);
     setError(null);
 
-    // Temporarily set token for validation
-    setToken(trimmed);
-    const username = await validateToken();
+    try {
+      // Temporarily set token for validation
+      setToken(trimmed);
+      const username = await validateToken();
 
-    if (username) {
-      onAuthenticated(username);
-    } else {
-      setError("Invalid token — could not authenticate with GitHub.");
-      setToken("");
+      if (username) {
+        onAuthenticated(username);
+      } else {
+        setError("Invalid token — could not authenticate with GitHub.");
+        clearToken();
+      }
+    } catch (err) {
+      setError(err.message || "Invalid token — could not authenticate with GitHub.");
+      clearToken();
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
