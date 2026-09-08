@@ -1,12 +1,9 @@
 import Link from "next/link";
 import profile from "@/data/profile.json";
 import { getAllPublications } from "@/lib/publications";
-import TelemetryHUD from "@/components/home/TelemetryHUD";
-import AudienceLens from "@/components/home/AudienceLens";
 import CurrentlyBlock from "@/components/home/CurrentlyBlock";
 import FeaturedPublications from "@/components/home/FeaturedPublications";
 import TerminalHero from "@/components/home/TerminalHero";
-import ProtocolSandbox from "@/components/home/ProtocolSandbox";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import { safeJsonLd } from "@/lib/sanitize";
 import styles from "./page.module.css";
@@ -27,9 +24,6 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
 
-      {/* Real-Time Operational Telemetry HUD */}
-      <TelemetryHUD />
-
       {/* Identity Briefing */}
       <section className={styles.briefing}>
         <div className={styles.identityHeader}>
@@ -39,6 +33,12 @@ export default function HomePage() {
           </div>
           <p className={styles.role}>{profile.role}</p>
         </div>
+
+        <p className={styles.bio}>
+          Most security knowledge claims are assertions. Mine are documented with terminal output,
+          packet captures, and reproducible procedures. Everything published here started with
+          something breaking.
+        </p>
 
         <div className={styles.actionsRow}>
           <a
@@ -75,16 +75,10 @@ export default function HomePage() {
             <span className={styles.arrow} aria-hidden="true">→</span>
           </Link>
         </div>
-
-        {/* Audience Perspective Lens — Easing Technicality */}
-        <AudienceLens />
       </section>
 
       {/* Live Terminal Evidence — Instant Proof */}
       <TerminalHero />
-
-      {/* Interactive Protocol & Security Sandbox — Showcasing Craft & Direct Interaction */}
-      <ProtocolSandbox />
 
       {/* Verified Engineering Output Breakdown */}
       <section className={styles.statsSection} aria-label="Verified engineering output breakdown">
