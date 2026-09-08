@@ -8,6 +8,7 @@ import styles from "./Evidence.module.css";
 import CopyButton from "./CopyButton";
 import ExpandablePre from "./ExpandablePre";
 import CampusTopology from "./topologies/CampusTopology";
+import { sanitizeUrl } from "@/lib/sanitize";
 
 // ─── Terminal / Shell Log ──────────────────────────────────────────────────
 
@@ -49,6 +50,9 @@ function DiagramBlock({ item }) {
     );
   }
 
+  const safeSrc = sanitizeUrl(item.src);
+  const isBlockedSrc = safeSrc.startsWith("#blocked");
+
   return (
     <figure className={styles.card} data-type="diagram">
       <div className={styles.cardHeader}>
@@ -56,10 +60,10 @@ function DiagramBlock({ item }) {
         <span className={styles.cardTitle}>{item.title}</span>
       </div>
       <div className={styles.diagramWrapper}>
-        {item.src ? (
+        {safeSrc && !isBlockedSrc ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
-            src={item.src}
+            src={safeSrc}
             alt={item.caption || item.title}
             className={styles.diagramImage}
           />
@@ -120,6 +124,10 @@ function LogBlock({ item }) {
 // ─── Downloadable Artifact ─────────────────────────────────────────────────
 
 function ArtifactBlock({ item }) {
+  const safeDownloadUrl = sanitizeUrl(item.downloadUrl);
+  const isBlockedDownload = safeDownloadUrl.startsWith("#blocked");
+  const isExternal = safeDownloadUrl.startsWith("http");
+
   return (
     <div className={styles.card} data-type="artifact">
       <div className={styles.cardHeader}>
@@ -136,11 +144,13 @@ function ArtifactBlock({ item }) {
             )}
           </div>
         </div>
-        {item.downloadUrl ? (
+        {safeDownloadUrl && !isBlockedDownload ? (
           <a
-            href={item.downloadUrl}
+            href={safeDownloadUrl}
             className={styles.artifactDownload}
             download
+            rel={isExternal ? "noopener noreferrer" : undefined}
+            target={isExternal ? "_blank" : undefined}
             aria-label={`Download ${item.title}`}
           >
             Download

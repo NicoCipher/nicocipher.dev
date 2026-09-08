@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { marked } from "marked";
+import { sanitizeHtml } from "@/lib/sanitize";
 import styles from "./LivePreview.module.css";
 
 export default function LivePreview({ data = {} }) {
@@ -14,7 +15,7 @@ export default function LivePreview({ data = {} }) {
     timerRef.current = setTimeout(() => {
       try {
         const rendered = marked(body || "", { gfm: true, breaks: false });
-        setHtml(rendered);
+        setHtml(sanitizeHtml(rendered));
       } catch {
         setHtml("<p style='color: var(--status-warn)'>Markdown parse error</p>");
       }
