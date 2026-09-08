@@ -1,13 +1,37 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import profile from "@/data/profile.json";
+import { useToast } from "@/components/ui/Toast";
 import styles from "./page.module.css";
 
 export default function ResumePage() {
+  const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
+
   const handlePrint = () => {
     if (typeof window !== "undefined") {
       window.print();
+    }
+  };
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      showToast(`✓ Copied ${profile.email} to clipboard`);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = profile.email;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setCopied(true);
+      showToast(`✓ Copied ${profile.email} to clipboard`);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -19,6 +43,18 @@ export default function ResumePage() {
           ← Back to Portfolio
         </Link>
         <div className={styles.actionGroup}>
+          <span className={styles.printHint} aria-hidden="true">
+            1-page Letter/A4 optimized
+          </span>
+          <button
+            type="button"
+            className={styles.secondaryBtn}
+            onClick={handleCopyEmail}
+            aria-label="Copy email address"
+          >
+            <span>{copied ? "✓" : "✉"}</span>
+            <span>{copied ? "Email Copied!" : "Copy Email"}</span>
+          </button>
           <button
             type="button"
             className={styles.printBtn}
@@ -46,9 +82,15 @@ export default function ResumePage() {
           </div>
 
           <div className={styles.contactBar}>
-            <a href={`mailto:${profile.email}`} className={styles.contactItem}>
-              ✉ {profile.email}
-            </a>
+            <button
+              type="button"
+              onClick={handleCopyEmail}
+              className={`${styles.contactItem} ${styles.contactBtn}`}
+              title="Click to copy email address"
+            >
+              <span>✉ {profile.email}</span>
+              {copied && <span className={styles.copiedInline}>✓ copied</span>}
+            </button>
             <span aria-hidden="true">•</span>
             <a
               href={profile.github}

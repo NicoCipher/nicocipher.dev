@@ -228,6 +228,13 @@
   flex-shrink: 0;
 }
 
+.kind_quick-action {
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-weight: 600;
+}
+
 .kind_publication {
   background: var(--bg-inset);
   color: var(--text-secondary);
@@ -252,6 +259,19 @@
   font-weight: 500;
   color: var(--text-secondary);
   flex: 1;
+}
+
+.itemShortcut {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--accent);
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .readingTime {

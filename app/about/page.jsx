@@ -2,6 +2,7 @@ import Link from "next/link";
 import profile from "@/data/profile.json";
 import domains from "@/data/domains.json";
 import { getAllPublications } from "@/lib/publications";
+import CopyEmailButton from "@/components/content/CopyEmailButton";
 import styles from "./page.module.css";
 
 export const metadata = {
@@ -122,9 +123,7 @@ export default function AboutPage() {
         <div className={styles.contactGrid}>
           <div className={styles.contactItem}>
             <span className={styles.contactLabel}>Email</span>
-            <a href={`mailto:${profile.email}`} className={styles.contactValue}>
-              {profile.email}
-            </a>
+            <CopyEmailButton email={profile.email} />
           </div>
           {profile.github && (
             <div className={styles.contactItem}>

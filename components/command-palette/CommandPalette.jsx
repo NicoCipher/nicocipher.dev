@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { searchIndex } from "@/lib/searchClient";
+import { useToast } from "@/components/ui/Toast";
 import styles from "./CommandPalette.module.css";
 
 // ─── Highlight matched substring ───────────────────────────────────────────
@@ -26,7 +27,7 @@ function Highlight({ text, query }) {
 
 function groupResults(results) {
   const groups = {};
-  const ORDER = ["publication", "type-filter", "page", "theme", "font"];
+  const ORDER = ["quick-action", "publication", "page", "type-filter", "theme", "font"];
 
   for (const item of results) {
     if (!groups[item.kind]) groups[item.kind] = [];
@@ -36,6 +37,7 @@ function groupResults(results) {
   return ORDER.filter((k) => groups[k]).map((k) => ({
     kind: k,
     label:
+      k === "quick-action" ? "Quick Actions" :
       k === "publication" ? "Publications" :
       k === "type-filter" ? "Browse by Type" :
       k === "theme" ? "Themes" :
@@ -46,6 +48,7 @@ function groupResults(results) {
 }
 
 const KIND_LABELS = {
+  "quick-action": "Actions",
   "publication": "Publications",
   "type-filter": "Browse by Type",
   "page": "Pages",
@@ -59,6 +62,7 @@ export default function CommandPalette({ searchIndex: index = [], onClose }) {
   const inputRef = useRef(null);
   const selectedRef = useRef(null);
   const router = useRouter();
+  const { showToast } = useToast();
 
   const triggerRef = useRef(null);
 
@@ -92,21 +96,56 @@ export default function CommandPalette({ searchIndex: index = [], onClose }) {
   const navigate = useCallback(
     (item) => {
       if (item.action) {
-        // Theme/font action — apply directly
-        if (item.action.type === "theme") {
+        if (item.action.type === "navigate") {
+          router.push(item.action.url);
+        } else if (item.action.type === "copy-email") {
+          const val = item.action.value;
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              navigator.clipboard.writeText(val).catch(() => {
+                const ta = document.createElement("textarea");
+                ta.value = val;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                document.body.removeChild(ta);
+              });
+            } else {
+              const ta = document.createElement("textarea");
+              ta.value = val;
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand("copy");
+              document.body.removeChild(ta);
+            }
+          } catch {
+            // ignore fallback error
+          }
+          showToast(`✓ Copied ${val} to clipboard`);
+        } else if (item.action.type === "toggle-theme") {
+          const current = document.documentElement.getAttribute("data-theme") || "dark";
+          const next = current === "dark" ? "light" : "dark";
+          localStorage.setItem("nc-theme", next);
+          document.documentElement.setAttribute("data-theme", next);
+          showToast(`Switched theme to ${next}`);
+        } else if (item.action.type === "theme") {
           localStorage.setItem("nc-theme", item.action.value);
           document.documentElement.setAttribute("data-theme", item.action.value);
+          showToast(`Applied theme: ${item.action.value}`);
         } else if (item.action.type === "font") {
           localStorage.setItem("nc-font", item.action.value);
           document.documentElement.setAttribute("data-font", item.action.value);
+          showToast(`Applied font: ${item.action.value}`);
         }
         onClose();
         return;
       }
-      router.push(item.url);
+      if (item.url) {
+        router.push(item.url);
+      }
       onClose();
     },
-    [router, onClose]
+    [router, onClose, showToast]
   );
 
   const handleKeyDown = (e) => {
@@ -158,7 +197,7 @@ export default function CommandPalette({ searchIndex: index = [], onClose }) {
             id="palette-input"
             type="text"
             className={styles.input}
-            placeholder="Search publications, topics, technologies..."
+            placeholder="Type a command or search (e.g. > or resume, email, network)..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -229,6 +268,9 @@ export default function CommandPalette({ searchIndex: index = [], onClose }) {
                         <span className={styles.resultTitle}>
                           <Highlight text={item.title} query={normalizedQuery} />
                         </span>
+                        {item.shortcut && (
+                          <kbd className={styles.itemShortcut}>{item.shortcut}</kbd>
+                        )}
                         {item.readingTime && (
                           <span className={styles.readingTime}>{item.readingTime}</span>
                         )}

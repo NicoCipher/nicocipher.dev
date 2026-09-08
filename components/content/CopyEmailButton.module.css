@@ -1,0 +1,46 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.emailLink {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.emailLink:hover {
+  color: var(--accent);
+}
+
+.copyBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.copyBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+.copied {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  font-weight: 600;
+}

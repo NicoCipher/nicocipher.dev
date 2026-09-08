@@ -13,6 +13,7 @@ import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import SkipLink from "@/components/layout/SkipLink";
 import PaletteProvider from "@/components/command-palette/PaletteProvider";
+import { ToastProvider } from "@/components/ui/Toast";
 import { buildSearchIndex } from "@/lib/search";
 
 /* ── Fonts ─────────────────────────────────────────────────────── */
@@ -83,13 +84,15 @@ export default function RootLayout({ children }) {
           }}
         />
         <SkipLink />
-        <PaletteProvider searchIndex={searchIndex}>
-          <Nav />
-          <main id="main-content" tabIndex={-1}>
-            {children}
-          </main>
-          <Footer />
-        </PaletteProvider>
+        <ToastProvider>
+          <PaletteProvider searchIndex={searchIndex}>
+            <Nav />
+            <main id="main-content" tabIndex={-1}>
+              {children}
+            </main>
+            <Footer />
+          </PaletteProvider>
+        </ToastProvider>
       </body>
     </html>
   );
