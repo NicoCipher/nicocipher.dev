@@ -97,16 +97,16 @@
 }
 
 .actionPrimary {
-  color: #090b0e;
-  background: var(--text-primary);
-  border-color: var(--text-primary);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  border-color: var(--accent);
   font-weight: 600;
 }
 
 .actionPrimary:hover {
   background: var(--accent);
   border-color: var(--accent);
-  color: #090b0e;
+  color: #ffffff;
 }
 
 .arrow {

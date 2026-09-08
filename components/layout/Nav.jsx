@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePalette } from "@/components/command-palette/PaletteProvider";
-import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
+import { GitHubIcon, LinkedInIcon, SearchIcon } from "@/components/ui/Icons";
 import styles from "./Nav.module.css";
 
 export default function Nav() {
@@ -131,6 +131,8 @@ export default function Nav() {
           >
             <LinkedInIcon size={16} />
           </a>
+
+          {/* Desktop Palette Trigger */}
           <button
             type="button"
             onClick={openPalette}
@@ -138,8 +140,20 @@ export default function Nav() {
             aria-label="Search and command palette (Press / or Cmd+K)"
             title="Search & Command Palette (/)"
           >
+            <SearchIcon size={14} className={styles.triggerIcon} />
             <span className={styles.triggerLabel}>Search</span>
             <span className={styles.triggerKey} aria-hidden="true">[ / ]</span>
+          </button>
+
+          {/* Mobile Search Button */}
+          <button
+            type="button"
+            onClick={openPalette}
+            className={styles.mobileSearchBtn}
+            aria-label="Search and command palette"
+            title="Search"
+          >
+            <SearchIcon size={18} />
           </button>
 
           {/* Mobile Menu Toggle Button */}
@@ -149,7 +163,7 @@ export default function Nav() {
             className={styles.mobileMenuBtn}
             onClick={toggleMenu}
             aria-expanded={isMenuOpen}
-            aria-controls="mobile-nav-drawer"
+            aria-controls="mobile-nav-panel"
             aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           >
             <span className={styles.menuIconBox} aria-hidden="true">
@@ -160,7 +174,7 @@ export default function Nav() {
         </div>
       </div>
 
-      {/* Mobile Drawer Backdrop & Menu */}
+      {/* Mobile Menu Backdrop */}
       {isMenuOpen && (
         <div
           className={styles.mobileBackdrop}
@@ -172,30 +186,16 @@ export default function Nav() {
         />
       )}
 
+      {/* Mobile Navigation Dropdown Panel */}
       <div
-        id="mobile-nav-drawer"
+        id="mobile-nav-panel"
         ref={drawerRef}
-        className={`${styles.mobileDrawer} ${isMenuOpen ? styles.mobileDrawerOpen : ""}`}
+        className={`${styles.mobilePanel} ${isMenuOpen ? styles.mobilePanelOpen : ""}`}
         aria-hidden={!isMenuOpen}
         role="dialog"
         aria-modal="true"
         aria-label="Mobile Navigation"
       >
-        <div className={styles.drawerHeader}>
-          <span className={styles.drawerTitle}>Navigation</span>
-          <button
-            type="button"
-            className={styles.drawerCloseBtn}
-            onClick={() => {
-              setIsMenuOpen(false);
-              menuButtonRef.current?.focus();
-            }}
-            aria-label="Close navigation menu"
-          >
-            ✕
-          </button>
-        </div>
-
         <nav className={styles.mobileNav} aria-label="Mobile primary navigation">
           <Link
             ref={firstLinkRef}
@@ -204,7 +204,8 @@ export default function Nav() {
             aria-current={isHome ? "page" : undefined}
             onClick={() => setIsMenuOpen(false)}
           >
-            Home
+            <span className={styles.mobileLinkPrefix}>&gt;</span>
+            <span>Home</span>
           </Link>
           {links.map((link) => {
             const isActive = pathname.startsWith(link.href);
@@ -216,13 +217,14 @@ export default function Nav() {
                 aria-current={isActive ? "page" : undefined}
                 onClick={() => setIsMenuOpen(false)}
               >
-                {link.label}
+                <span className={styles.mobileLinkPrefix}>&gt;</span>
+                <span>{link.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className={styles.drawerFooter}>
+        <div className={styles.mobilePanelFooter}>
           <button
             type="button"
             className={styles.mobilePaletteBtn}
@@ -230,8 +232,12 @@ export default function Nav() {
               setIsMenuOpen(false);
               openPalette();
             }}
+            aria-label="Open command palette"
           >
-            <span>Search & Command Palette</span>
+            <div className={styles.mobilePaletteLeft}>
+              <SearchIcon size={15} />
+              <span>Command Palette</span>
+            </div>
             <kbd className={styles.mobileKbd}>/</kbd>
           </button>
 
@@ -241,6 +247,7 @@ export default function Nav() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.mobileSocialLink}
+              aria-label="GitHub Profile (opens in new tab)"
             >
               <GitHubIcon size={16} />
               <span>GitHub</span>
@@ -250,10 +257,16 @@ export default function Nav() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.mobileSocialLink}
+              aria-label="LinkedIn Profile (opens in new tab)"
             >
               <LinkedInIcon size={16} />
               <span>LinkedIn</span>
             </a>
+          </div>
+
+          <div className={styles.mobileStatusBadge}>
+            <span className={styles.statusDot} aria-hidden="true" />
+            <span>10 Verified Artifacts &bull; CCNA &bull; Security+</span>
           </div>
         </div>
       </div>
