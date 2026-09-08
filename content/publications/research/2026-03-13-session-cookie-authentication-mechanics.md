@@ -20,6 +20,10 @@ tags:
   - "Web Security"
   - "Cyber Defense"
 featured: false
+briefing:
+  objective: "Simulate Pass-the-Cookie replay attacks and analyze cookie flag protections against unauthorized credential-less session hijacking."
+  environment: "Chromium Sandboxed Profiles · Burp Suite Community · HTTP Protocol RFC 6265bis"
+  outcome: "Identified session hijacking vulnerability vectors; demonstrated neutralization via SameSite=Strict and HttpOnly flags."
 related:
   - "threat-modeling"
 evidence:

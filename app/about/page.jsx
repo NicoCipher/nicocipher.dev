@@ -152,6 +152,12 @@ export default function AboutPage() {
               </a>
             </div>
           )}
+          <div className={styles.contactItem}>
+            <span className={styles.contactLabel}>Resume</span>
+            <Link href="/resume" className={styles.contactValue}>
+              View &amp; Print CV (PDF) →
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -174,8 +180,8 @@ export default function AboutPage() {
             <span className={styles.colophonValue}>CSS Modules + Custom Properties</span>
           </div>
           <div className={styles.colophonItem}>
-            <span className={styles.colophonLabel}>Fonts</span>
-            <span className={styles.colophonValue}>8 configurable pairings (Instrument Sans, Geist, Inter, IBM Plex, and more)</span>
+            <span className={styles.colophonLabel}>Typography</span>
+            <span className={styles.colophonValue}>Monospace Accents + High-Legibility Sans</span>
           </div>
           <div className={styles.colophonItem}>
             <span className={styles.colophonLabel}>Dependencies</span>

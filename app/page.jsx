@@ -68,6 +68,13 @@ export default function HomePage() {
             <span>Email</span>
           </a>
           <Link
+            href="/resume"
+            className={styles.actionBtn}
+            aria-label="View and print professional resume"
+          >
+            <span>Resume (CV)</span>
+          </Link>
+          <Link
             href="/publications"
             className={`${styles.actionBtn} ${styles.actionPrimary}`}
           >

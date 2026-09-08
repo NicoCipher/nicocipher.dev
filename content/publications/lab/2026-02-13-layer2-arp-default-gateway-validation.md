@@ -20,6 +20,10 @@ tags:
   - "Subnetting"
   - "Troubleshooting"
 featured: false
+briefing:
+  objective: "Validate Layer 2 broadcast domain resolution and disprove default gateway requirements for local subnet communications."
+  environment: "Cisco Packet Tracer 8.x · 2960 Catalyst Switch · ICMP / ARP Frame Dissection"
+  outcome: "Demonstrated 0% packet loss intra-subnet with 0.0.0.0 gateway; isolated broadcast drop mechanics across subnet boundaries."
 related:
   - "ipv4-subnetting-binary-logic"
   - "enterprise-network-security-architecture"

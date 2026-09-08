@@ -8,7 +8,7 @@ import styles from "@/app/publications/page.module.css";
 
 const VALID_TYPES = ["project", "case-study", "lab", "research"];
 
-const FILTERS = [
+const TYPE_FILTERS = [
   { id: "all",        label: "All Work"      },
   { id: "project",    label: "Projects"      },
   { id: "case-study", label: "Case Studies"  },
@@ -16,19 +16,36 @@ const FILTERS = [
   { id: "research",   label: "Research Notes"},
 ];
 
-export default function PublicationsClient({ publications, initialType = "all" }) {
-  const [selected, setSelected] = useState(initialType);
+const DOMAIN_FILTERS = [
+  { id: "all",            label: "All Domains"    },
+  { id: "networking",     label: "Networking"     },
+  { id: "infrastructure", label: "Infrastructure" },
+  { id: "security",       label: "Cybersecurity"  },
+  { id: "development",    label: "Development"    },
+];
+
+export default function PublicationsClient({
+  publications,
+  initialType = "all",
+  initialDomain = "all",
+}) {
+  const [selectedType, setSelectedType] = useState(initialType);
+  const [selectedDomain, setSelectedDomain] = useState(initialDomain);
   const [searchQuery, setSearchQuery] = useState("");
   const [isPending, startTransition] = useTransition();
   const searchInputRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
 
-  // Filter by category and search query
+  // Filter by category, engineering domain, and search query
   const filtered = useMemo(() => {
     return publications.filter((p) => {
-      const matchesType = selected === "all" || p.type === selected;
+      const matchesType = selectedType === "all" || p.type === selectedType;
       if (!matchesType) return false;
+
+      const matchesDomain =
+        selectedDomain === "all" || p.domain?.toLowerCase() === selectedDomain;
+      if (!matchesDomain) return false;
 
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase().trim();
@@ -41,25 +58,54 @@ export default function PublicationsClient({ publications, initialType = "all" }
 
       return inTitle || inSummary || inTags || inTech || inDomain;
     });
-  }, [publications, selected, searchQuery]);
+  }, [publications, selectedType, selectedDomain, searchQuery]);
 
-  const counts = useMemo(() => {
-    return VALID_TYPES.reduce((acc, t) => {
-      acc[t] = publications.filter((p) => p.type === t).length;
+  const typeCounts = useMemo(() => {
+    return TYPE_FILTERS.reduce((acc, f) => {
+      if (f.id === "all") {
+        acc[f.id] = publications.length;
+      } else {
+        acc[f.id] = publications.filter((p) => p.type === f.id).length;
+      }
       return acc;
     }, {});
   }, [publications]);
 
-  function select(id) {
-    setSelected(id);
+  const domainCounts = useMemo(() => {
+    return DOMAIN_FILTERS.reduce((acc, f) => {
+      if (f.id === "all") {
+        acc[f.id] = publications.length;
+      } else {
+        acc[f.id] = publications.filter((p) => p.domain?.toLowerCase() === f.id).length;
+      }
+      return acc;
+    }, {});
+  }, [publications]);
+
+  function updateUrl(newType, newDomain) {
     startTransition(() => {
-      const url = id === "all" ? pathname : `${pathname}?type=${id}`;
+      const params = new URLSearchParams();
+      if (newType !== "all") params.set("type", newType);
+      if (newDomain !== "all") params.set("domain", newDomain);
+      const qs = params.toString();
+      const url = qs ? `${pathname}?${qs}` : pathname;
       router.replace(url, { scroll: false });
     });
   }
 
+  function selectType(id) {
+    setSelectedType(id);
+    updateUrl(id, selectedDomain);
+  }
+
+  function selectDomain(id) {
+    setSelectedDomain(id);
+    updateUrl(selectedType, id);
+  }
+
   function resetFilters() {
-    setSelected("all");
+    setSelectedType("all");
+    setSelectedDomain("all");
     setSearchQuery("");
     startTransition(() => {
       router.replace(pathname, { scroll: false });
@@ -67,11 +113,12 @@ export default function PublicationsClient({ publications, initialType = "all" }
     searchInputRef.current?.focus();
   }
 
-  const isFiltered = selected !== "all" || searchQuery.trim() !== "";
+  const isFiltered =
+    selectedType !== "all" || selectedDomain !== "all" || searchQuery.trim() !== "";
 
   return (
     <div className={styles.wrapper}>
-      {/* Controls Bar: Search & Type Filter Toolbar */}
+      {/* Controls Bar: Search & Dual Filter Toolbar */}
       <div className={styles.controlsBar}>
         {/* Search Input */}
         <div className={styles.searchWrapper}>
@@ -109,30 +156,57 @@ export default function PublicationsClient({ publications, initialType = "all" }
         </div>
 
         {/* Type Filter Buttons */}
-        <div className={styles.filters} role="toolbar" aria-label="Filter publications by type">
-          {FILTERS.map((f) => {
-            const count = f.id === "all" ? publications.length : (counts[f.id] ?? 0);
-            const isActive = selected === f.id;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => select(f.id)}
-                className={`${styles.filterBtn} ${isActive ? styles.filterActive : ""}`}
-                aria-pressed={isActive}
-              >
-                <span>{f.label}</span>
-                <span className={styles.filterCount} aria-hidden="true">{count}</span>
-              </button>
-            );
-          })}
+        <div className={styles.filterGroup}>
+          <span className={styles.filterGroupLabel}>Format</span>
+          <div className={styles.filters} role="toolbar" aria-label="Filter publications by format">
+            {TYPE_FILTERS.map((f) => {
+              const count = typeCounts[f.id] ?? 0;
+              const isActive = selectedType === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => selectType(f.id)}
+                  className={`${styles.filterBtn} ${isActive ? styles.filterActive : ""}`}
+                  aria-pressed={isActive}
+                >
+                  <span>{f.label}</span>
+                  <span className={styles.filterCount} aria-hidden="true">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Domain Filter Buttons */}
+        <div className={styles.filterGroup}>
+          <span className={styles.filterGroupLabel}>Engineering Domain</span>
+          <div className={styles.filters} role="toolbar" aria-label="Filter publications by domain">
+            {DOMAIN_FILTERS.map((f) => {
+              const count = domainCounts[f.id] ?? 0;
+              const isActive = selectedDomain === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => selectDomain(f.id)}
+                  className={`${styles.filterBtn} ${isActive ? styles.filterActive : ""}`}
+                  aria-pressed={isActive}
+                >
+                  <span>{f.label}</span>
+                  <span className={styles.filterCount} aria-hidden="true">{count}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* Screen Reader Live Results Announcer */}
       <div className="visually-hidden" aria-live="polite" aria-atomic="true">
         Showing {filtered.length} publication{filtered.length === 1 ? "" : "s"}
-        {selected !== "all" ? ` for ${selected}` : ""}
+        {selectedType !== "all" ? ` for format ${selectedType}` : ""}
+        {selectedDomain !== "all" ? ` in domain ${selectedDomain}` : ""}
         {searchQuery ? ` matching "${searchQuery}"` : ""}.
       </div>
 
@@ -160,7 +234,8 @@ export default function PublicationsClient({ publications, initialType = "all" }
           <p className={styles.emptyMessage}>
             No publications matched your current filter criteria
             {searchQuery ? ` ("${searchQuery}")` : ""}
-            {selected !== "all" ? ` in category "${selected}"` : ""}.
+            {selectedType !== "all" ? ` in format "${selectedType}"` : ""}
+            {selectedDomain !== "all" ? ` in domain "${selectedDomain}"` : ""}.
           </p>
           <div className={styles.emptyActions}>
             <button

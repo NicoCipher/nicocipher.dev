@@ -9,10 +9,12 @@ export const metadata = {
 };
 
 const VALID_TYPES = ["project", "case-study", "lab", "research"];
+const VALID_DOMAINS = ["networking", "infrastructure", "security", "development"];
 
 export default async function PublicationsIndexPage({ searchParams }) {
   const params = await searchParams;
   const initialType = VALID_TYPES.includes(params?.type) ? params.type : "all";
+  const initialDomain = VALID_DOMAINS.includes(params?.domain) ? params.domain : "all";
   const allPubs = getAllPublications();
 
   return (
@@ -25,7 +27,11 @@ export default async function PublicationsIndexPage({ searchParams }) {
       </header>
 
       {/* Client component handles instant filtering + URL sync */}
-      <PublicationsClient publications={allPubs} initialType={initialType} />
+      <PublicationsClient
+        publications={allPubs}
+        initialType={initialType}
+        initialDomain={initialDomain}
+      />
     </div>
   );
 }

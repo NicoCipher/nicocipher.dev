@@ -23,10 +23,19 @@ tags:
   - "DNS"
   - "Authentication"
 featured: true
+briefing:
+  objective: "Integrate headless Ubuntu Linux servers into a Windows Server 2022 Active Directory domain for centralized Kerberos & SSSD authentication."
+  environment: "Ubuntu Server 22.04 LTS · Windows Server 2022 DC · SSSD · Kerberos 5 · PAM · DNS SRV"
+  outcome: "Deterministic domain user logon, automated home directory provisioning, and zero DNS discovery timeouts."
 related:
   - "domain-controller"
   - "linux-permissions"
 evidence:
+  - id: "ad-topology"
+    type: "diagram"
+    title: "Interactive Active Directory & SSSD Authentication Flow"
+    interactiveId: "ad-topology"
+    caption: "Interactive architecture flow: DNS SRV resolution, Kerberos KDC ticket-granting, SSSD LDAP identity lookups, and PAM session provisioning."
   - id: "realm-list"
     type: "terminal"
     title: "Realmd Active Directory Enrollment Verification"

@@ -8,6 +8,7 @@ import styles from "./Evidence.module.css";
 import CopyButton from "./CopyButton";
 import ExpandablePre from "./ExpandablePre";
 import CampusTopology from "./topologies/CampusTopology";
+import ActiveDirectoryTopology from "./topologies/ActiveDirectoryTopology";
 import { sanitizeUrl } from "@/lib/sanitize";
 
 // ─── Terminal / Shell Log ──────────────────────────────────────────────────
@@ -42,6 +43,23 @@ function DiagramBlock({ item }) {
         </div>
         <div style={{ padding: "var(--space-3)" }}>
           <CampusTopology />
+        </div>
+        {item.caption && (
+          <figcaption className={styles.diagramCaption}>{item.caption}</figcaption>
+        )}
+      </figure>
+    );
+  }
+
+  if (item.interactiveId === "ad-topology") {
+    return (
+      <figure className={styles.card} data-type="diagram">
+        <div className={styles.cardHeader}>
+          <span className={styles.cardType}>interactive architecture</span>
+          <span className={styles.cardTitle}>{item.title}</span>
+        </div>
+        <div style={{ padding: "var(--space-3)" }}>
+          <ActiveDirectoryTopology />
         </div>
         {item.caption && (
           <figcaption className={styles.diagramCaption}>{item.caption}</figcaption>

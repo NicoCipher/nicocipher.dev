@@ -565,3 +565,12 @@ main:focus {
     scroll-behavior: auto !important;
   }
 }
+
+/* === Print Styles === */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 10pt !important;
+  }
+}

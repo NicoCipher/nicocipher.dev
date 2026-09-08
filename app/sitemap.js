@@ -37,6 +37,12 @@ export default function sitemap() {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    {
+      url: `${BASE_URL}/resume`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
   ];
 
   return [...staticPages, ...publicationEntries];

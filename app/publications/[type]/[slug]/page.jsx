@@ -7,6 +7,7 @@ import MetaBlock from "@/components/content/MetaBlock";
 import EvidenceSection from "@/components/content/Evidence";
 import EntryNav from "@/components/content/EntryNav";
 import StatusBadge from "@/components/content/StatusBadge";
+import ExecutiveBriefing from "@/components/content/ExecutiveBriefing";
 import { safeJsonLd } from "@/lib/sanitize";
 import styles from "./page.module.css";
 
@@ -70,7 +71,10 @@ export default async function PublicationPage({ params }) {
       {/* Structured Metadata */}
       <MetaBlock pub={pub} />
 
-      {/* Publication Body & Executive Summary */}
+      {/* Executive Briefing */}
+      <ExecutiveBriefing pub={pub} />
+
+      {/* Publication Body & Technical Breakdown */}
       <div
         className={styles.prose}
         dangerouslySetInnerHTML={{ __html: pub.html }}

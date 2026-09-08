@@ -20,6 +20,10 @@ tags:
   - "VLANs"
   - "Network Security"
 featured: true
+briefing:
+  objective: "Design and implement a resilient 3-tier campus LAN infrastructure with isolated broadcast domains and dynamic L3 routing."
+  environment: "Cisco Catalyst 3560 Core & 2960 Access Switches · Cisco IOS 15.x · OSPF Area 0 · Packet Tracer"
+  outcome: "Zero broadcast leakage across isolated VLANs; sub-second OSPF convergence across redundant distribution trunks."
 related:
   - "layer2-arp-default-gateway-validation"
   - "ipv4-subnetting-binary-logic"
